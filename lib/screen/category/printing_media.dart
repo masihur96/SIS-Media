@@ -35,41 +35,65 @@ class _PrintingMediaState extends State<PrintingMedia> {
   TextEditingController _director = TextEditingController();
   TextEditingController _position = TextEditingController();
 
-  Widget PrintMediaWidget() {
+  Widget PrintMediaWidget(Size size) {
     return Container(
-        child: Column(
-          children: <Widget>[
-            _textFormBuilderForPrintMedia('Name'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Address'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('PABX'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('E-mail'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Web'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('FAX'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Phone(T&T)'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Mobile'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Contact'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('FaceBook'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Editor'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Business Type'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Director'),
-            SizedBox(height: 20),
-            _textFormBuilderForPrintMedia('Position'),
-            SizedBox(height: 20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForPrintMedia('Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Address'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('PABX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('E-mail'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Web'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('FAX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Phone(T&T)'),
 
-          ],
-        ));
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForPrintMedia('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('FaceBook'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Editor'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Business Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Director'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Position'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
   Widget _textFormBuilderForPrintMedia(String hint) {
     return TextFormField(
@@ -170,12 +194,13 @@ class _PrintingMediaState extends State<PrintingMedia> {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     return  Container(
+        width:dataProvider.pageWidth(size),
+        height: size.height,
         color: Color(0xffedf7fd),
         child: Column(
           children: <Widget>[
             Container(
-              width: size.width < 1200 ? 0.0 : size.width * .8,
-              height: size.height * .8,
+              height: size.height*.913,
               child: DefaultTabController(
                 length: _ktabs.length,
                 child: Scaffold(
@@ -273,21 +298,26 @@ class _PrintingMediaState extends State<PrintingMedia> {
 
       ) =>
       Container(
-        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        height: size.height,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Text(
-                  "Print Media",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    "Print Media",
+                    style: TextStyle(
+                        fontSize: size.height*.04,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -295,13 +325,13 @@ class _PrintingMediaState extends State<PrintingMedia> {
                         alignment: Alignment.bottomRight,
                         children: [
                           imageUrl.isEmpty ? CircleAvatar(
-                            radius: 48,
+                            radius: size.height*.09,
                             backgroundColor: Colors.white,
                             child: Icon(Icons.account_box),
 
                           ): Container(
-                            height: 100,
-                            width: 100,
+                              height: size.height*.1,
+                              width: size.height*.1,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
@@ -316,14 +346,13 @@ class _PrintingMediaState extends State<PrintingMedia> {
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20.0),
                         width: size.width * .5,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text("Please Select Your Sub-Category :"),
                             SizedBox(
-                              width: 10,
+                              width: size.height*.04,
                             ),
                             DropdownButton<String>(
                               value: dropdownValue,
@@ -343,7 +372,6 @@ class _PrintingMediaState extends State<PrintingMedia> {
                               },
                             ),
 
-                            SizedBox(width: 5,),
                             Text("Status : "),
                             Expanded(
                               child: DropdownButton<String>(
@@ -371,8 +399,8 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     ],
                   ),
                 ),
-                PrintMediaWidget(),
-
+                PrintMediaWidget(size),
+                SizedBox(height: size.height*.04,),
                     _isLoading?
                     Container(
                       child: fadingCircle)

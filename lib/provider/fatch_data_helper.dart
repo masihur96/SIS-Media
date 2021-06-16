@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:flutter/material.dart';
+import 'package:media_directory_admin/widgets/notificastion.dart';
 
 
 class FatchDataHelper{
@@ -34,5 +35,26 @@ class FatchDataHelper{
     }catch(error){
       return [];
     }
+  }
+
+  Future<bool> deleteData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('FilmMediaData').doc(id).delete();
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+}
+
+Future<bool> updateData(Map<String, String> mapData, BuildContext context)async{
+  try{
+    await FirebaseFirestore.instance.
+    collection('FilmMediaData').doc(mapData['id']).update(mapData);
+    return true;
+  }catch(error){
+    showToast(error.toString());
+    return false;
   }
 }

@@ -260,25 +260,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
           error = null;
         });
       });
-      // reader1.onLoadEnd.listen((event) async {
-      //   // setState(() {
-      //   //   image = reader.result;
-      //   // });
-      //   FirebaseStorage fs = FirebaseStorage.instance;
-      //   var snapshot = await fs
-      //       .ref()
-      //       .child(dataProvider.subCategory)
-      //       .child(uuid)
-      //       .putBlob(file);
-      //
-      //   //Get DownloadLink
-      //   final String downloadUrl =
-      //   Uri.parse(await snapshot.ref.getDownloadURL()).toString();
-      //   setState(() {
-      //     imageUrl = downloadUrl;
-      //   });
-      //
-      // });
     });
   }
 
@@ -298,23 +279,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       });
     });
   }
-
-  // String? imageUrlarabic;
-  // void openPicker(DataProvider dataProvider) async{
-  //   final result = await FilePicker.platform.pickFiles(allowMultiple: false); //you can also access the multiple image or any file
-  //   if(result != null){
-  //    Uint8List? uploadFile =  result.files.single.bytes;
-  //   Reference reference = FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
-  //   final uploadTask = reference.putData(uploadFile!);
-  //   uploadTask.whenComplete(() async{
-  //     String image = await uploadTask.snapshot.ref.getDownloadURL();
-  //     print(image);
-  //     setState(() {
-  //       imageUrlarabic= image;
-  //     });
-  //     } );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -618,6 +582,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                     ),
                   ),
                 ),
+
+                SizedBox(height: size.height*.04,),
                 _isLoading
                     ? Container(height: size.height*.06, child: fadingCircle)
                     : ElevatedButton(

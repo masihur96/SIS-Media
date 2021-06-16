@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
@@ -37,45 +35,69 @@ class _NewMediaState extends State<NewMedia> {
   TextEditingController _designation = TextEditingController();
   TextEditingController _deathList = TextEditingController();
   TextEditingController _youtubeChannel = TextEditingController();
-  Widget NewMediaWidget() {
+  Widget NewMediaWidget(Size size) {
     return Container(
-        child: Column(
-          children: <Widget>[
-            _textFormBuilderForNewMedia('Name'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Address'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('PABX'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('E-mail'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Web'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('FAX'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Phone(T&T)'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Mobile'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Contact'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('FaceBook'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Editor'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Birth Date'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Death Date'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Designation'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Death List'),
-            SizedBox(height: 20),
-            _textFormBuilderForNewMedia('Youtube Channel'),
-            SizedBox(height: 20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForNewMedia('Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Address'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('PABX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('E-mail'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Web'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('FAX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Phone(T&T)'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Mobile'),
 
-          ],
-        ));
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForNewMedia('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('FaceBook'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Editor'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Birth Date'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Death Date'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Designation'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Death List'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Youtube Channel'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
   Widget _textFormBuilderForNewMedia(String hint) {
     return TextFormField(
@@ -185,12 +207,13 @@ class _NewMediaState extends State<NewMedia> {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     return  Container(
+        width:dataProvider.pageWidth(size),
+        height: size.height,
         color: Color(0xffedf7fd),
         child: Column(
           children: <Widget>[
             Container(
-              width: size.width < 1200 ? 0.0 : size.width * .8,
-              height: size.height * .8,
+              height: size.height*.913,
               child: DefaultTabController(
                 length: _ktabs.length,
                 child: Scaffold(
@@ -249,7 +272,6 @@ class _NewMediaState extends State<NewMedia> {
                             elevation: 0,
                             dropdownColor: Colors.white,
                             style: TextStyle(color: Colors.black),
-
                             items: newMedia.map((itemValue) {
                               return DropdownMenuItem<String>(
                                 value: itemValue,
@@ -289,7 +311,8 @@ class _NewMediaState extends State<NewMedia> {
       FirebaseProvider firebaseProvider,
       ) =>
       Container(
-        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        height: size.height,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -298,12 +321,13 @@ class _NewMediaState extends State<NewMedia> {
                 Text(
                   "New Media",
                   style: TextStyle(
-                      fontSize: 30,
+                      fontSize: size.height*.04,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey),
+                      color: Colors.grey
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -311,13 +335,13 @@ class _NewMediaState extends State<NewMedia> {
                         alignment: Alignment.bottomRight,
                         children: [
                           imageUrl.isEmpty ? CircleAvatar(
-                            radius: 48,
+                            radius: size.height*.09,
                             backgroundColor: Colors.white,
                             child: Icon(Icons.account_box),
 
                           ): Container(
-                            height: 100,
-                            width: 100,
+                              height: size.height*.1,
+                              width: size.height*.1,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
@@ -387,8 +411,8 @@ class _NewMediaState extends State<NewMedia> {
                     ],
                   ),
                 ),
-                NewMediaWidget(),
-
+                NewMediaWidget(size),
+                SizedBox(height: size.height*.04,),
                 _isLoading?
                 Container(
                     child: fadingCircle)

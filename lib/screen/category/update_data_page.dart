@@ -7,6 +7,8 @@ import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 class UpdateDataPage extends StatefulWidget {
   String id;
   String name;
@@ -48,11 +50,7 @@ class UpdateDataPage extends StatefulWidget {
   @override
   _UpdateDataPageState createState() => _UpdateDataPageState();
 }
-
-
-
 class _UpdateDataPageState extends State<UpdateDataPage> {
-
   TextEditingController _name = TextEditingController(text:'');
   TextEditingController _address = TextEditingController(text:'');
   TextEditingController _pabx = TextEditingController(text:'');
@@ -74,15 +72,15 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
   bool _isLoading=false;
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
-  String? uuid ;
   var file;
+  String imageUrl = '';
   String? error;
   String name='';
-  String? statusValue;
+  String statusValue='Public';
   @override
   void initState() {
     super.initState();
-     statusValue = widget.status;
+    // statusValue = widget.status;
     _name.text = widget.name;
     _address.text = widget.address;
     _pabx.text = widget.pabx;
@@ -101,110 +99,130 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
+    final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
-
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
-      height: size.height,
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  "Film Media",
-                  style: TextStyle(
-                      fontSize: size.height*.04,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        data==null ? CircleAvatar(
-                          radius: size.height*.09,
-                          backgroundColor: Colors.white,
-                          child: Image.network(widget.image),
-                        ): Container(
-                          height: size.height*.1,
-                          width: size.height*.1,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.memory(data!,fit: BoxFit.fill,),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              uploadToStorage(dataProvider);
-                            },
-                            icon:
-                            Icon(Icons.camera_alt, color: Colors.black54))
-                      ],
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          height: size.height,
+          width: size.width,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      "Film Media",
+                      style: TextStyle(
+                          fontSize: size.height*.04,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
                     ),
-                    Container(
-                      width: size.width * .2,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Stack(
+                        alignment: Alignment.bottomRight,
                         children: [
-                          Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                          DropdownButton<String>(
-                            value: statusValue,
-                            elevation: 0,
-                            dropdownColor: Colors.white,
-                            style: TextStyle(color: Colors.black),
-                            items: staatus.map((itemValue) {
-                              return DropdownMenuItem<String>(
-                                value: itemValue,
-                                child: Text(itemValue),
-                              );
-                            }).toList(),
-                            onChanged: (newValue) {
-                              setState(() {
-                                statusValue = newValue!;
-                              });
-                            },
+                          data==null ? CircleAvatar(
+                            radius: size.height*.09,
+                            backgroundColor: Colors.white,
+                            child: Image.network(widget.image),
+                          ): Container(
+                            height: size.height*.1,
+                            width: size.height*.1,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.memory(data!,fit: BoxFit.fill,),
                           ),
+                          IconButton(
+                              onPressed: () {
+                                uploadToStorage(dataProvider);
+                              },
+                              icon:
+                              Icon(Icons.camera_alt, color: Colors.black54))
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              commonCategoryFild(size),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                            DropdownButton<String>(
+                              value: statusValue,
+                              elevation: 0,
+                              dropdownColor: Colors.white,
+                              style: TextStyle(color: Colors.black),
+                              items: staatus.map((itemValue) {
+                                return DropdownMenuItem<String>(
+                                  value: itemValue,
+                                  child: Text(itemValue),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  statusValue = newValue!;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  commonCategoryFild(size),
 
-              SizedBox(height: size.height*.04,),
+                  SizedBox(height: size.height*.04,),
 
-              if (_isLoading) Container(
-                  height: size.height*.06,
-                  child: fadingCircle) else ElevatedButton( onPressed: () {
-                uuid = Uuid().v1();
-              //  uploadPhoto(dataProvider, firebaseProvider);
-                setState(() {
-                  data=null;
-                });
-              },
-                  child: Text(
-                    'Submit Data',
-                    style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                  )
+                  if (_isLoading) Container(
+                      height: size.height*.06,
+                      child: fadingCircle) else ElevatedButton( onPressed: () {
+                     uploadPhoto(dataProvider, firebaseProvider);
+                     Navigator.pop(context,true);
+                  },
+                      child: Text(
+                        'Update Data',
+                        style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
+                      )
+                  ),
+                  SizedBox(height: size.height*.04,),
+                ],
               ),
-              SizedBox(height: size.height*.04,),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+    firebase_storage.Reference storageReference =
+    firebase_storage.FirebaseStorage.instance.ref().child('FilmMediaData').child(widget.id);
+    if(file==null){
+      _submitData(dataProvider,firebaseProvider,);
+    }else{
+      firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+      firebase_storage.TaskSnapshot taskSnapshot;
+      storageUploadTask.then((value) {
+        taskSnapshot = value;
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+          final downloadUrl = newImageDownloadUrl;
+          setState((){
+            imageUrl = downloadUrl;
+          });
+          _submitData(dataProvider,firebaseProvider,);
+        });
+      });
 
+    }
+
+  }
   uploadToStorage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
@@ -227,22 +245,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
       });
     });
   }
-  // Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-  //   firebase_storage.Reference storageReference =
-  //   firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
-  //   firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
-  //   firebase_storage.TaskSnapshot taskSnapshot;
-  //   storageUploadTask.then((value) {
-  //     taskSnapshot = value;
-  //     taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
-  //       final downloadUrl = newImageDownloadUrl;
-  //       setState((){
-  //         imageUrl = downloadUrl;
-  //       });
-  //       _submitData(dataProvider,firebaseProvider,);
-  //     });
-  //   });
-  // }
+
   Widget commonCategoryFild(Size size) {
     return Container(
       child: Column(
@@ -251,7 +254,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width*.4,
+                width: size.width*.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -273,7 +276,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
                 ),
               ),
               Container(
-                width: size.width*.4,
+                width: size.width*.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -329,4 +332,43 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
       decoration: InputDecoration(hintText: hint),
     );
   }
+
+  Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
+    DateTime date = DateTime.now();
+    String dateData = '${date.month}-${date.day}-${date.year}';
+    if(statusValue.isNotEmpty){
+      setState(()=> _isLoading=true);
+      Map<String,String> map ={
+        'name': _name.text,
+        'phone': _phonet_t.text,
+        'address': _address.text,
+        'pabx': _pabx.text,
+        'email': _email.text,
+        'web': _web.text,
+        'fax': _fax.text,
+        'mobile': _mobile.text,
+        'contact': _contact.text,
+        'facebook': _facebook.text,
+        'designation': _designation.text,
+        'hallname': _hallname.text,
+        'date': dateData,
+        'id': widget.id,
+        'image': imageUrl,
+        'status': statusValue.toLowerCase(),
+        // 'category': dataProvider.subCategory,
+
+      };
+      await firebaseProvider.addFilmMediaData(map).then((value){
+        if(value){
+          setState(()=> _isLoading=false);
+          showToast('Successfylly Updated');
+        } else {
+          setState(()=> _isLoading=false);
+          showToast('Failed');
+        }
+      });
+    }else showToast("Select Status");
+  }
+
+
 }

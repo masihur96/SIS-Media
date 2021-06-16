@@ -42,53 +42,78 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   TextEditingController _ddgProgram = TextEditingController();
   TextEditingController _ddgNews = TextEditingController();
 
-  Widget AudioMediaFild() {
+  Widget AudioMediaFild(Size size) {
     return Container(
       child: Column(
         children: [
-          _textFormBuilderForAudio('Name'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Address'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('PABX'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('E-mail'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Web'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('FAX'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Phone(T&T)'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Mobile'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Contact'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('FaceBook'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Chief Enginear'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Director'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Regional Station'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Sales Contact'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Whats App'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Hotline Number'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Business Type'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('Channel Name'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('DDG (Program)'),
-          SizedBox(height: 20),
-          _textFormBuilderForAudio('DDG (News)'),
-          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForAudio('Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Address'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('PABX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('E-mail'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Web'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('FAX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Phone(T&T)'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('FaceBook'),
+
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForAudio('Chief Enginear'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Director'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Regional Station'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Sales Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Whats App'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Hotline Number'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Business Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('Channel Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('DDG (Program)'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForAudio('DDG (News)'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
+
   }
 
   Widget _textFormBuilderForAudio(String hint) {
@@ -214,12 +239,12 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     return Container(
+        width:dataProvider.pageWidth(size),
         color: Color(0xffedf7fd),
         child: Column(
           children: <Widget>[
             Container(
-              width: size.width < 1200 ? 0.0 : size.width * .8,
-              height: size.height * .8,
+              height: size.height*.913,
               child: DefaultTabController(
                 length: _ktabs.length,
                 child: Scaffold(
@@ -321,21 +346,25 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
       DataProvider dataProvider,
       ) =>
       Container(
-        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Text(
-                  "Audio Media",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                    "Audio Media",
+                    style: TextStyle(
+                        fontSize: size.height*.04,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -479,12 +508,12 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        AudioMediaFild()
+                        AudioMediaFild(size)
                       ],
                     ),
                   ),
                 ),
-
+                SizedBox(height: size.height*.04,),
                 _isLoading?Container(
                     height: 50.0,
                     child: fadingCircle)

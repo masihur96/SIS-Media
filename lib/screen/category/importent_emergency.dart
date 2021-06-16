@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'dart:html' as html;
-
 import 'package:uuid/uuid.dart';
 
 class ImportentEmergency extends StatefulWidget {
@@ -36,40 +34,64 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   TextEditingController _position = TextEditingController(text:'');
   TextEditingController _businessType = TextEditingController(text:'');
 
-  Widget ImportMediaWidget() {
+  Widget ImportMediaWidget(Size size) {
     return Container(
-        child: Column(
-          children: <Widget>[
-            _textFormBuilderForImport('Name'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Address'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('PABX'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('E-mail'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Web'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('FAX'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Phone(T&T)'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Mobile'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Contact'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('FaceBook'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Corporate Office'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Head Office'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Position'),
-            SizedBox(height: 20),
-            _textFormBuilderForImport('Business Type'),
-            SizedBox(height: 20),
-          ],
-        ));
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForImport('Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Address'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('PABX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('E-mail'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Web'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('FAX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Phone(T&T)'),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width: size.width*.4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForImport('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('FaceBook'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Corporate Office'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Head Office'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Position'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Business Type'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
   Widget _textFormBuilderForImport(String hint) {
     return TextFormField(
@@ -170,11 +192,12 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     return Container(
         color: Color(0xffedf7fd),
+        width:dataProvider.pageWidth(size),
+        height: size.height,
         child: Column(
           children: <Widget>[
             Container(
-              width: size.width < 1200 ? 0.0 : size.width * .8,
-              height: size.height * .8,
+              height: size.height*.913,
               child: DefaultTabController(
                 length: _ktabs.length,
                 child: Scaffold(
@@ -269,7 +292,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
 
       ) =>
       Container(
-        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        height: size.height,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -278,9 +302,10 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                 Text(
                   "Importent & Emergency",
                   style: TextStyle(
-                      fontSize: 30,
+                      fontSize: size.height*.04,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey),
+                      color: Colors.grey
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -289,13 +314,13 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       alignment: Alignment.bottomRight,
                       children: [
                         imageUrl.isEmpty ? CircleAvatar(
-                          radius: 48,
+                          radius: size.height*.09,
                           backgroundColor: Colors.white,
                           child: Icon(Icons.account_box),
 
                         ): Container(
-                          height: 100,
-                          width: 100,
+                          height: size.height*.1,
+                          width: size.height*.1,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
@@ -310,7 +335,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20.0),
                       width: size.width * .5,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -368,7 +392,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                     ],
                   ),
                 ),
-                ImportMediaWidget(),
+                ImportMediaWidget(size),
 
                 _isLoading?
                 Container(

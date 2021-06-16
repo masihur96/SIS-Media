@@ -9,6 +9,7 @@ import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/update_data_page.dart';
+import 'package:media_directory_admin/screen/category/update_data_page.dart';
 import '../../widgets/notificastion.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:provider/provider.dart';
@@ -143,14 +144,15 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   String? error;
   List films = Variables().getFilmMediaList();
 
-
   FatchDataHelper _databaseHelper = FatchDataHelper();
    List<FilmMediaModel> _dataList  = [];
+
    @override
   void initState() {
     super.initState();
     _getDataFromDatabase();
   }
+
   Future<void> _getDataFromDatabase()async{
     await _databaseHelper.fetchData().then((result){
       if(result.isNotEmpty){
@@ -170,6 +172,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     });
   }
   String? uuid ;
+  // String? currentName;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -281,22 +284,23 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
               child: new ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: _dataList.length,
-                itemBuilder: (context,index){
+                itemBuilder: (context, index){
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1,color: Colors.grey),
-                        borderRadius: BorderRadius.all(Radius.circular(5))
+                          border: Border.all(width: 1,color: Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(5))
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+
                           Container(
                               width: size.height*.15,
                               height: size.height*.16,
-                              child: Image.network(_dataList[index].image,fit: BoxFit.cover)
+                              child: _dataList[index].image.isEmpty? Icon(Icons.people_alt_outlined):Image.network(_dataList[index].image,fit: BoxFit.cover)
                           ),
                           Container(
                             width: size.width*.5,
@@ -366,6 +370,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                                           status: _dataList[index].status,
 
                                         )));
+
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.green,
@@ -379,9 +384,21 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                                 SizedBox(height: 5,),
 
                                 ElevatedButton(
-
                                   child: Text('Delete'),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    setState(()=> _isLoading=true);
+                                    _databaseHelper.deleteData(_dataList[index].id, context).then((value){
+                                      if(value==true){
+                                        _getDataFromDatabase();
+                                        setState(()=> _isLoading=false);
+                                        showToast('Data deleted successful');
+                                      }else{
+                                        setState(()=> _isLoading=false);
+                                        showToast('Data delete unsuccessful');
+                                      }
+                                    });
+
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.redAccent,
                                       padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
@@ -401,10 +418,12 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
               ),
             ),
           ),
-        )
+        ),
+
           ],
         ),
       );
+
 
   Widget _insetFilmUI(
     Size size,
@@ -427,13 +446,14 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                     style: TextStyle(
                         fontSize: size.height*.04,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey),
+                        color: Colors.grey
+                    ),
                   ),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Stack(
                         alignment: Alignment.bottomRight,
@@ -496,6 +516,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+
                             DropdownButton<String>(
                               value: statusValue,
                               elevation: 0,
@@ -565,26 +586,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
         });
       });
 
-      //uploadtostprage
-      // reader1.onLoadEnd.listen((event) async {
-      //   // setState(() {
-      //   //   image = reader.result;
-      //   // });
-      //   FirebaseStorage fs = FirebaseStorage.instance;
-      //   var snapshot = await fs
-      //       .ref()
-      //       .child(dataProvider.subCategory)
-      //       .child(uuid)
-      //       .putBlob(file);
-      //
-      //   //Get DownloadLink
-      //   final String downloadUrl =
-      //   Uri.parse(await snapshot.ref.getDownloadURL()).toString();
-      //   setState(() {
-      //     imageUrl = downloadUrl;
-      //   });
-      //
-      // });
+
     });
   }
 
@@ -655,7 +657,5 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     _designation.clear();
     _hallname.clear();
   }
-
-
 }
 
