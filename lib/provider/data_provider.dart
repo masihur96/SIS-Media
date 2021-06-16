@@ -10,6 +10,7 @@ import '../screen/category/film_media_screen.dart';
 import '../screen/category/television_media_screen.dart';
 
 class DataProvider extends ChangeNotifier {
+
   String _category = '';
   String _subCategory = '';
   String get category => _category;

@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.glamworlditltd.sismedia_admin">
    <application
+       android:requestLegacyExternalStorage="true"
         android:label="media_directory_admin"
         android:icon="@mipmap/ic_launcher">
         <activity

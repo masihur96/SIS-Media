@@ -4,6 +4,8 @@ import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:provider/provider.dart';
 class SideBar extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;

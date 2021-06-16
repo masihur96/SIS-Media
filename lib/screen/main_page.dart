@@ -26,50 +26,46 @@ class _MainPageState extends State<MainPage> {
           color: Colors.black, //change your color here
         ),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: AssetImage("images/atnbanglalogo.jpg"),
-
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius:size.height*.04,
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage("images/atnbanglalogo.jpg"),
+                  ),
+                  SizedBox(width: size.height*.04,),
+                  Row(children: [
+                    Text("Media",style: TextStyle(fontSize: size.height*.03,fontWeight: FontWeight.w700,color: Colors.blue),),
+                    Text(" Directory",style: TextStyle(fontSize: size.height*.03,fontWeight: FontWeight.w700,color: Colors.redAccent),),
+                  ],),
+                ],
+              ),
             ),
-            SizedBox(width: 10,),
-            Row(children: [
-              Text("Media",style: TextStyle(fontSize: size.height*.03,fontWeight: FontWeight.w700,color: Colors.blue),),
-              Text(" Directory",style: TextStyle(fontSize: size.height*.03,fontWeight: FontWeight.w700,color: Colors.redAccent),),
-            ],),
-            SizedBox(width: size.width*.25,),
             Align(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 child: Text(dataProvider.pageHeader(),style: TextStyle(fontSize: size.height*.025,fontWeight: FontWeight.w700,color: Colors.grey),)),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                border: Border.all(width: size.height*.004,color: Colors.grey),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                child: Center(child: Text("Logout",style: TextStyle(fontSize: size.height*.025,color: Colors.black),)),
+              ),
+            ),
           ],
         ),
-
         elevation: 0,
         backgroundColor: Colors.white,
-        actions: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              border: Border.all(width: 2,color: Colors.grey),
-            ),
-
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-              child: Center(child: Text("Logout",style: TextStyle(fontSize: size.height*.025,color: Colors.black),)),
-            ),
-          ),
-          SizedBox(width: size.width*.04,),
-
-
-        ],
-
       ),
-
       drawer: size.width<1200? NavigationDrawer():null,
       body:_bodyUI(size,dataProvider) ,
-
     );
   }
 }

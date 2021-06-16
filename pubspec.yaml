@@ -25,12 +25,17 @@ dependencies:
     sdk: flutter
   provider:
   font_awesome_flutter:
-  image_picker:
-  image_picker_web_redux:
   cloud_firestore:
   uuid:
   fluttertoast:
   flutter_spinkit:
+  firebase_storage:
+  firebase_core: ^1.2.1
+  file_picker: ^3.0.0
+  image_picker_web_redux:
+  image_picker: ^0.8.0+3
+
+
 
 
   # The following adds the Cupertino Icons font to your application.

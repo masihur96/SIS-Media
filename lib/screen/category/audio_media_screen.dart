@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:image_picker_web_redux/image_picker_web_redux.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/radio_widget.dart';
@@ -137,19 +140,6 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   var  _image;
   // final picker = ImagePicker();
 
-  Future _getImage() async {
-
-    html.File imageFile =
-    await ImagePickerWeb.getImage(outputType: ImageType.file);
-
-    if (imageFile != null) {
-
-      setState(() {
-        _image = imageFile;
-      });
-    }
-
-  }
 
   String dropdownValue = "FM Radio Channel";
   String kendrodropdownValue = "Dhaka Kendro";
@@ -159,6 +149,51 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
     'Private'
   ];
   String statusValue = "Public";
+  final String uuid = Uuid().v1();
+  String name='';
+  String? error;
+  Uint8List? data;
+  String imageUrl = '';
+  var file;
+  uploadToStorage(DataProvider dataProvider) async {
+    html.FileUploadInputElement input = html.FileUploadInputElement()
+      ..accept = 'image/*';
+    input.click();
+    input.onChange.listen((event) {
+      file = input.files!.first;
+      final reader1 =   html.FileReader();
+      reader1.readAsDataUrl(input.files![0]);
+      reader1.onError.listen((err) => setState((){
+        error = err.toString();
+      }) );
+      reader1.onLoad.first.then((res){
+        final encoded = reader1.result as String;
+        final stripped = encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+        setState(() {
+          name = input.files![0].name;
+          data  =base64.decode(stripped);
+          error = null;
+        });
+      });
+    });
+  }
+
+  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+    firebase_storage.Reference storageReference =
+    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
+    firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+    firebase_storage.TaskSnapshot taskSnapshot;
+    storageUploadTask.then((value) {
+      taskSnapshot = value;
+      taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+        final downloadUrl = newImageDownloadUrl;
+        _submitData(dataProvider,firebaseProvider);
+        setState((){
+          imageUrl = downloadUrl;
+        });
+      });
+    });
+  }
   final _ktabs = <Tab>[
     const Tab(text: 'All Data',),
     const Tab(text: 'Insert Data',),
@@ -307,20 +342,25 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                       Stack(
                         alignment: Alignment.bottomRight,
                         children: [
-                          Container(
+                          imageUrl.isEmpty ? CircleAvatar(
+                            radius: 48,
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.account_box),
+
+                          ): Container(
                             height: 100,
                             width: 100,
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(50)),
-                              color: Colors.grey,
+                              shape: BoxShape.circle,
                             ),
-                            child: _image!=null? Image.file(_image): Icon(Icons.people),
-
+                            child:  imageUrl==null? Icon(Icons.image): Image.network(imageUrl,fit: BoxFit.fill,),
                           ),
                           IconButton(
-                              onPressed: ()=> _getImage(),
-                              icon: Icon(Icons.camera_alt, color: Colors.black54))
+                              onPressed: () {
+                                uploadToStorage(dataProvider);
+                              },
+                              icon:
+                              Icon(Icons.camera_alt, color: Colors.black54))
                         ],
                       ),
                       Container(
@@ -451,8 +491,11 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                : ElevatedButton(
                     onPressed: ()  {
 
-                      _submitData(dataProvider,firebaseProvider);
+                      uploadPhoto(dataProvider,firebaseProvider);
 
+                      setState(() {
+                        data=null;
+                      });
                     },
                     child: Text(
                       'Insert Data',
@@ -468,7 +511,6 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider) async{
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
-    String uuid = Uuid().v1();
     if(statusValue.isNotEmpty){
       setState(()=> _isLoading=true);
       Map<String,String> map ={

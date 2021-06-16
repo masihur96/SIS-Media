@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:media_directory_admin/model/film_media_model.dart';
 import '../widgets/notificastion.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseProvider extends ChangeNotifier {
-
 
   Future<bool> addFilmMediaData(Map<String, String> map) async {
     try {
@@ -65,7 +65,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> addNewMediaData(Map<String, String> map) async {
     try {
       await FirebaseFirestore.instance
-          .collection("PrintMediaData")
+          .collection("NewMediaData")
           .doc(map['id'])
           .set(map);
 
@@ -79,7 +79,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> addImportentEmergencyData(Map<String, String> map) async {
     try {
       await FirebaseFirestore.instance
-          .collection("Importent & Emergency")
+          .collection("ImportentEmergency")
           .doc(map['id'])
           .set(map);
 
@@ -89,6 +89,9 @@ class FirebaseProvider extends ChangeNotifier {
       return false;
     }
   }
+
+
+
 
 
 }

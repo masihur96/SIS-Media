@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class FilmMediaModel{
 
-  String Id;
+  String id;
   String name;
   String address;
   String pabx;
@@ -14,25 +14,29 @@ class FilmMediaModel{
   String contact;
   String facebook;
   String designation;
-  String hallName;
-  String imageUrl;
+  String hallname;
+  String image;
   String status;
+  String date;
 
   FilmMediaModel(
-      this.Id,
-      this.name,
-      this.address,
-      this.pabx,
-      this.email,
-      this.web,
-      this.fax,
-      this.phone,
-      this.mobile,
-      this.contact,
-      this.facebook,
-      this.designation,
-      this.hallName,
-      this.imageUrl,
-      this.status
-      );
+  {
+    required this.id,
+    required this.name,
+    required this.address,
+    required this.pabx,
+    required this.email,
+    required this.web,
+    required this.fax,
+    required this.phone,
+    required this.mobile,
+    required this.contact,
+    required this.facebook,
+    required this.designation,
+    required this.hallname,
+    required this.image,
+    required this.status,
+    required this.date
+}
+);
 }
