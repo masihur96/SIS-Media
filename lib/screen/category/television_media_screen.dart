@@ -50,172 +50,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   TextEditingController _channelName = TextEditingController(text: '');
   TextEditingController _houseName = TextEditingController(text: '');
 
-  Widget TelevisionMediaFild(Size size) {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: size.width*.4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      _textFormBuilderForTelevision('Name'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Address'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('PABX'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('email'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Web'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Fax'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Phone(T&T)'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Mobile'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Contact'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Facebook'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Unit 1'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Unit 2'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Unit 3'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Unit 4'),
-
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: size.width*.4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      _textFormBuilderForTelevision('Business Type'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Camera'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Mac Pro'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Branch Office'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Programs'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Training Course'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Shooting Facilities'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Location'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Artist Type'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Representative'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Designation / Position'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Company Name'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Regional Sales Office'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Channel Name'),
-
-                    ],
-                  ),
-                ),
-              ),
-
-
-            ],
-          ),
-          Container(
-            width: size.width*.4,
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                _textFormBuilderForTelevision('House Name'),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _textFormBuilderForTelevision(String hint) {
-    return TextFormField(
-      controller: hint == 'Name'
-          ? _name
-          : hint == 'Address'
-              ? _address
-              : hint == 'PABX'
-                  ? _PABX
-                  : hint == 'email'
-                      ? _email
-                      : hint == 'Web'
-                          ? _web
-                          : hint == 'Fax'
-                              ? _fax
-                              : hint == 'Phone(T&T)'
-                                  ? _phonet_t
-                                  : hint == 'Mobile'
-                                      ? _mobile
-                                      : hint == 'Contact'
-                                          ? _caontact
-                                          : hint == 'Facebook'
-                                              ? _facebook
-                                              : hint == 'Business Type'
-                                                  ? _business_type
-                                                  : hint == 'Camera'
-                                                      ? _camera
-                                                      : hint == 'Unit 1'
-                                                          ? _unit1
-                                                          : hint == 'Unit 2'
-                                                              ? _unit2
-                                                              : hint == 'Unit 3'
-                                                                  ? _unit3
-                                                                  : hint ==
-                                                                          'Unit 4'
-                                                                      ? _unit4
-                                                                      : hint ==
-                                                                              'Mac Pro'
-                                                                          ? _mac_pro
-                                                                          : hint == 'Branch Office'
-                                                                              ? _branch_office
-                                                                              : hint == 'Programs'
-                                                                                  ? _programs
-                                                                                  : hint == 'Training Course'
-                                                                                      ? _training
-                                                                                      : hint == 'Shooting Facilities'
-                                                                                          ? _shooting
-                                                                                          : hint == 'Location'
-                                                                                              ? _location
-                                                                                              : hint == 'Artist Type'
-                                                                                                  ? _artist_type
-                                                                                                  : hint == 'Representative'
-                                                                                                      ? _representative
-                                                                                                      : hint == 'Designation / Position'
-                                                                                                          ? _designation
-                                                                                                          : hint == 'Company Name'
-                                                                                                              ? _company_name
-                                                                                                              : hint == 'Regional Sales Office'
-                                                                                                                  ? _regionalSalesOffice
-                                                                                                                  : hint == 'Channel Name'
-                                                                                                                      ? _channelName
-                                                                                                                      : _houseName,
-      decoration: InputDecoration(hintText: hint),
-    );
-  }
-
   final _ktabs = <Tab>[
     const Tab(text: 'All Data',),
     const Tab(text: 'Insert Data',),
@@ -240,45 +74,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   Uint8List? data;
   String imageUrl = '';
   var file;
-  uploadToStorage(DataProvider dataProvider) async {
-    html.FileUploadInputElement input = html.FileUploadInputElement()
-      ..accept = 'image/*';
-    input.click();
-    input.onChange.listen((event) {
-      file = input.files!.first;
-      final reader1 =   html.FileReader();
-      reader1.readAsDataUrl(input.files![0]);
-      reader1.onError.listen((err) => setState((){
-        error = err.toString();
-      }) );
-      reader1.onLoad.first.then((res){
-        final encoded = reader1.result as String;
-        final stripped = encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
-        setState(() {
-          name = input.files![0].name;
-          data  =base64.decode(stripped);
-          error = null;
-        });
-      });
-    });
-  }
-
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    firebase_storage.Reference storageReference =
-    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
-    firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
-    firebase_storage.TaskSnapshot taskSnapshot;
-    storageUploadTask.then((value) {
-      taskSnapshot = value;
-      taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
-        final downloadUrl = newImageDownloadUrl;
-        _submitData(dataProvider,firebaseProvider);
-        setState((){
-          imageUrl = downloadUrl;
-        });
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -443,16 +238,13 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                       ),
                       Container(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          width: size.width * .4,
+                          width: size.width * .5,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
-                                SizedBox(
-                                  width: size.height*.04,
-                                ),
+                                Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025),),
                                 DropdownButton<String>(
                                   value: dropdownValue,
                                   elevation: 0,
@@ -692,5 +484,210 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     _regionalSalesOffice.clear();
     _channelName.clear();
     _houseName.clear();
+  }
+
+  uploadToStorage(DataProvider dataProvider) async {
+    html.FileUploadInputElement input = html.FileUploadInputElement()
+      ..accept = 'image/*';
+    input.click();
+    input.onChange.listen((event) {
+      file = input.files!.first;
+      final reader1 =   html.FileReader();
+      reader1.readAsDataUrl(input.files![0]);
+      reader1.onError.listen((err) => setState((){
+        error = err.toString();
+      }) );
+      reader1.onLoad.first.then((res){
+        final encoded = reader1.result as String;
+        final stripped = encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+        setState(() {
+          name = input.files![0].name;
+          data  =base64.decode(stripped);
+          error = null;
+        });
+      });
+    });
+  }
+
+  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+    firebase_storage.Reference storageReference =
+    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
+    firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+    firebase_storage.TaskSnapshot taskSnapshot;
+    storageUploadTask.then((value) {
+      taskSnapshot = value;
+      taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+        final downloadUrl = newImageDownloadUrl;
+        _submitData(dataProvider,firebaseProvider);
+        setState((){
+          imageUrl = downloadUrl;
+        });
+      });
+    });
+  }
+
+
+  Widget TelevisionMediaFild(Size size) {
+    return Container(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width:  size.width>1200? size.width*.4: size.width *.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForTelevision('Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Address'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('PABX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('email'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Web'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Fax'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Phone(T&T)'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Facebook'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Unit 1'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Unit 2'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Unit 3'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Unit 4'),
+
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width:  size.width>1200? size.width*.4: size.width *.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForTelevision('Business Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Camera'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Mac Pro'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Branch Office'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Programs'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Training Course'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Shooting Facilities'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Location'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Artist Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Representative'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Designation / Position'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Company Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Regional Sales Office'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Channel Name'),
+
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            width: size.width*.4,
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                _textFormBuilderForTelevision('House Name'),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _textFormBuilderForTelevision(String hint) {
+    return TextFormField(
+      controller: hint == 'Name'
+          ? _name
+          : hint == 'Address'
+          ? _address
+          : hint == 'PABX'
+          ? _PABX
+          : hint == 'email'
+          ? _email
+          : hint == 'Web'
+          ? _web
+          : hint == 'Fax'
+          ? _fax
+          : hint == 'Phone(T&T)'
+          ? _phonet_t
+          : hint == 'Mobile'
+          ? _mobile
+          : hint == 'Contact'
+          ? _caontact
+          : hint == 'Facebook'
+          ? _facebook
+          : hint == 'Business Type'
+          ? _business_type
+          : hint == 'Camera'
+          ? _camera
+          : hint == 'Unit 1'
+          ? _unit1
+          : hint == 'Unit 2'
+          ? _unit2
+          : hint == 'Unit 3'
+          ? _unit3
+          : hint ==
+          'Unit 4'
+          ? _unit4
+          : hint ==
+          'Mac Pro'
+          ? _mac_pro
+          : hint == 'Branch Office'
+          ? _branch_office
+          : hint == 'Programs'
+          ? _programs
+          : hint == 'Training Course'
+          ? _training
+          : hint == 'Shooting Facilities'
+          ? _shooting
+          : hint == 'Location'
+          ? _location
+          : hint == 'Artist Type'
+          ? _artist_type
+          : hint == 'Representative'
+          ? _representative
+          : hint == 'Designation / Position'
+          ? _designation
+          : hint == 'Company Name'
+          ? _company_name
+          : hint == 'Regional Sales Office'
+          ? _regionalSalesOffice
+          : hint == 'Channel Name'
+          ? _channelName
+          : _houseName,
+      decoration: InputDecoration(hintText: hint),
+    );
   }
 }

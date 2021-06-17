@@ -34,92 +34,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   TextEditingController _facebook = TextEditingController(text:'');
   TextEditingController _designation = TextEditingController(text:'');
   TextEditingController _hallname = TextEditingController(text:'');
-  Widget commonCategoryFild(Size size) {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: size.width*.4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Name'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Address'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('PABX'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('E-mail'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Web'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('FAX'),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: size.width*.4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Phone(T&T)'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Mobile'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Contact'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('FaceBook'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Designation'),
-                      SizedBox(height: size.height*.04),
-                      _textFormBuilder('Hall Name'),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-  Widget _textFormBuilder(String hint) {
-    return TextFormField(
-      controller: hint == 'Name'
-          ? _name
-          : hint == 'Address'
-          ? _address
-          : hint == 'PABX'
-          ? _pabx
-          : hint == 'E-mail'
-          ? _email
-          : hint == 'Web'
-          ? _web
-          : hint == 'FAX'
-          ? _fax
-          : hint == 'Phone(T&T)'
-          ? _phonet_t
-          : hint == 'Mobile'
-          ? _mobile
-          : hint == 'Contact'
-          ? _contact
-          : hint == 'FaceBook'
-          ? _facebook
-          : hint == 'Designation'
-          ? _designation
-          : _hallname,
 
-      decoration: InputDecoration(hintText: hint),
-    );
-  }
 
 
   final _ktabs = <Tab>[
@@ -134,43 +49,21 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     'Public',
     'Private'
   ];
-
   String statusValue = "Public";
   String name='';
-
   Uint8List? data;
   String imageUrl = '';
    var file;
   String? error;
   List films = Variables().getFilmMediaList();
-
   FatchDataHelper _databaseHelper = FatchDataHelper();
    List<FilmMediaModel> _dataList  = [];
-
    @override
   void initState() {
     super.initState();
     _getDataFromDatabase();
   }
 
-  Future<void> _getDataFromDatabase()async{
-    await _databaseHelper.fetchData().then((result){
-      if(result.isNotEmpty){
-        setState(() {
-          _dataList.clear();
-          _dataList=result;
-          _isLoading=false;
-          showToast("Data  Get Successful");
-        });
-      }else{
-        setState(() {
-          _dataList.clear();
-          _isLoading=false;
-          showToast('Failed to fetch data');
-        });
-      }
-    });
-  }
   String? uuid ;
   // String? currentName;
   @override
@@ -178,7 +71,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     final Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
-
     return Container(
         color: Color(0xffedf7fd),
         width:dataProvider.pageWidth(size),
@@ -225,6 +117,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       Container(
         padding: const EdgeInsets.all(10.0),
         height: size.height,
+        width: size.width,
         child: Column(
           children: <Widget>[
             SingleChildScrollView(
@@ -300,7 +193,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                           Container(
                               width: size.height*.15,
                               height: size.height*.16,
-                              child: _dataList[index].image.isEmpty? Icon(Icons.people_alt_outlined):Image.network(_dataList[index].image,fit: BoxFit.cover)
+                              child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
                           ),
                           Container(
                             width: size.width*.5,
@@ -434,6 +327,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         height: size.height,
+        width: size.width,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -585,26 +479,30 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
           error = null;
         });
       });
-
-
     });
   }
 
   Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    firebase_storage.Reference storageReference =
-    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
-    firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
-    firebase_storage.TaskSnapshot taskSnapshot;
-    storageUploadTask.then((value) {
-      taskSnapshot = value;
-      taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
-        final downloadUrl = newImageDownloadUrl;
-        setState((){
-          imageUrl = downloadUrl;
+
+    if(data==null){
+      _submitData(dataProvider,firebaseProvider,);
+    }else {
+      firebase_storage.Reference storageReference =
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
+      firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+      firebase_storage.TaskSnapshot taskSnapshot;
+      storageUploadTask.then((value) {
+        taskSnapshot = value;
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+          final downloadUrl = newImageDownloadUrl;
+          setState((){
+            imageUrl = downloadUrl;
+          });
+          _submitData(dataProvider,firebaseProvider,);
         });
-        _submitData(dataProvider,firebaseProvider,);
       });
-    });
+    }
+
   }
   Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
     DateTime date = DateTime.now();
@@ -657,5 +555,111 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     _designation.clear();
     _hallname.clear();
   }
+  Widget commonCategoryFild(Size size) {
+    return Container(
+
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width:  size.width>1200? size.width*.4: size.width *.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Name'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Address'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('PABX'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('E-mail'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Web'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('FAX'),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width:  size.width>1200? size.width*.4: size.width *.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Phone(T&T)'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Mobile'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Contact'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('FaceBook'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Designation'),
+                      SizedBox(height: size.height*.04),
+                      _textFormBuilder('Hall Name'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _textFormBuilder(String hint) {
+    return TextFormField(
+      controller: hint == 'Name'
+          ? _name
+          : hint == 'Address'
+          ? _address
+          : hint == 'PABX'
+          ? _pabx
+          : hint == 'E-mail'
+          ? _email
+          : hint == 'Web'
+          ? _web
+          : hint == 'FAX'
+          ? _fax
+          : hint == 'Phone(T&T)'
+          ? _phonet_t
+          : hint == 'Mobile'
+          ? _mobile
+          : hint == 'Contact'
+          ? _contact
+          : hint == 'FaceBook'
+          ? _facebook
+          : hint == 'Designation'
+          ? _designation
+          : _hallname,
+
+      decoration: InputDecoration(hintText: hint),
+    );
+  }
+  Future<void> _getDataFromDatabase()async{
+    await _databaseHelper.fetchData().then((result){
+      if(result.isNotEmpty){
+        setState(() {
+          _dataList.clear();
+          _dataList=result;
+          _isLoading=false;
+          showToast("Data  Get Successful");
+        });
+      }else{
+        setState(() {
+          _dataList.clear();
+          _isLoading=false;
+          showToast('Failed to fetch data');
+        });
+      }
+    });
+  }
+
 }
 

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
+import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -77,6 +78,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
   String? error;
   String name='';
   String statusValue='Public';
+  FatchDataHelper _fatchDataHelper = new FatchDataHelper();
   @override
   void initState() {
     super.initState();
@@ -101,6 +103,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -184,8 +187,12 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
                   if (_isLoading) Container(
                       height: size.height*.06,
                       child: fadingCircle) else ElevatedButton( onPressed: () {
+
                      uploadPhoto(dataProvider, firebaseProvider);
                      Navigator.pop(context,true);
+
+
+                     showToast(imageUrl);
                   },
                       child: Text(
                         'Update Data',
@@ -202,20 +209,26 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
     );
   }
   Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    firebase_storage.Reference storageReference =
-    firebase_storage.FirebaseStorage.instance.ref().child('FilmMediaData').child(widget.id);
-    if(file==null){
+    if(data==null){
+      setState(() {
+        imageUrl = widget.image;
+      });
       _submitData(dataProvider,firebaseProvider,);
     }else{
+      firebase_storage.Reference storageReference =
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(widget.id);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
           final downloadUrl = newImageDownloadUrl;
-          setState((){
+
+          setState(() {
             imageUrl = downloadUrl;
           });
+
+
           _submitData(dataProvider,firebaseProvider,);
         });
       });
@@ -338,7 +351,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
     String dateData = '${date.month}-${date.day}-${date.year}';
     if(statusValue.isNotEmpty){
       setState(()=> _isLoading=true);
-      Map<String,String> map ={
+      Map<String,String> mapData ={
         'name': _name.text,
         'phone': _phonet_t.text,
         'address': _address.text,
@@ -358,15 +371,29 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
         // 'category': dataProvider.subCategory,
 
       };
-      await firebaseProvider.addFilmMediaData(map).then((value){
+      setState(()=>_isLoading=true);
+      await firebaseProvider.updateData(mapData, context).then((value){
         if(value){
-          setState(()=> _isLoading=false);
-          showToast('Successfylly Updated');
-        } else {
-          setState(()=> _isLoading=false);
-          showToast('Failed');
+          setState(()=>_isLoading=false);
+          showToast('Data updated successful');
+
+        }
+        else{
+          setState(()=>_isLoading=false);
+          showToast('Data update failed!');
+
         }
       });
+
+      // await firebaseProvider.addFilmMediaData(map).then((value){
+      //   if(value){
+      //     setState(()=> _isLoading=false);
+      //     showToast('Successfylly Updated');
+      //   } else {
+      //     setState(()=> _isLoading=false);
+      //     showToast('Failed');
+      //   }
+      // });
     }else showToast("Select Status");
   }
 

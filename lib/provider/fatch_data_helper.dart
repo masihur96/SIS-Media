@@ -46,15 +46,16 @@ class FatchDataHelper{
       return false;
     }
   }
-}
 
-Future<bool> updateData(Map<String, String> mapData, BuildContext context)async{
-  try{
-    await FirebaseFirestore.instance.
-    collection('FilmMediaData').doc(mapData['id']).update(mapData);
-    return true;
-  }catch(error){
-    showToast(error.toString());
-    return false;
+  Future<bool> updateData(Map<String, String> map, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.
+      collection('FilmMediaData').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
   }
 }
+
