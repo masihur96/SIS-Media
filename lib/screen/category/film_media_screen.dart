@@ -14,6 +14,7 @@ import '../../widgets/notificastion.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class FilmMediaScreen extends StatefulWidget {
   @override
@@ -34,8 +35,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   TextEditingController _facebook = TextEditingController(text:'');
   TextEditingController _designation = TextEditingController(text:'');
   TextEditingController _hallname = TextEditingController(text:'');
-
-
 
   final _ktabs = <Tab>[
     const Tab(text: 'All Data',),
@@ -63,7 +62,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     super.initState();
     _getDataFromDatabase();
   }
-
   String? uuid ;
   // String? currentName;
   @override
@@ -204,33 +202,33 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                                 _dataList[index].name.isEmpty?Container():
                                 Text(_dataList[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
                                 _dataList[index].address.isEmpty?Container():
-                                Text(_dataList[index].address ,style: TextStyle(fontSize: 12,)),
+                                Text('Address: ${_dataList[index].address}',style: TextStyle(fontSize: 12,)),
                                 _dataList[index].pabx.isEmpty?Container():
-                                Text(_dataList[index].pabx,style: TextStyle(fontSize: 12),),
+                                Text('PABX: ${_dataList[index].pabx}',style: TextStyle(fontSize: 12),),
                                 _dataList[index].email.isEmpty?Container():
-                                Text(_dataList[index].email,style: TextStyle(fontSize: 12,)),
+                                Text('E-mail: ${_dataList[index].email}',style: TextStyle(fontSize: 12,)),
                                 _dataList[index].web.isEmpty?Container():
-                                Text(_dataList[index].web,style: TextStyle(fontSize: 12,)),
+                                Text('Web: ${_dataList[index].web}',style: TextStyle(fontSize: 12,)),
                                 _dataList[index].fax.isEmpty?Container():
-                                Text(_dataList[index].fax,style: TextStyle(fontSize: 12)),
+                                Text('Fax: ${_dataList[index].fax}',style: TextStyle(fontSize: 12)),
                                 _dataList[index].phone.isEmpty?Container():
-                                Text(_dataList[index].phone,style: TextStyle(fontSize: 12,),),
+                                Text('Phone: ${_dataList[index].phone}',style: TextStyle(fontSize: 12,),),
                                 _dataList[index].mobile.isEmpty?Container():
-                                Text(_dataList[index].mobile,style: TextStyle(fontSize: 12,),),
+                                Text('Mobile: ${_dataList[index].mobile}',style: TextStyle(fontSize: 12,),),
                                 _dataList[index].contact.isEmpty?Container():
-                                Text(_dataList[index].contact,style: TextStyle(fontSize: 12,),),
+                                Text('Contact: ${_dataList[index].contact}',style: TextStyle(fontSize: 12,),),
                                 _dataList[index].facebook.isEmpty?Container():
-                                Text(_dataList[index].facebook,style: TextStyle(fontSize: 12,),),
+                                Text('Facebook: ${_dataList[index].facebook}',style: TextStyle(fontSize: 12,),),
                                 _dataList[index].designation.isEmpty?Container():
-                                Text(_dataList[index].designation,style: TextStyle(fontSize: 12),),
+                                Text('Designation: ${_dataList[index].designation}',style: TextStyle(fontSize: 12),),
                                 _dataList[index].hallname.isEmpty?Container():
-                                Text(_dataList[index].hallname,style: TextStyle(fontSize: 12,),),
+                                Text('Hall Name: ${_dataList[index].hallname}',style: TextStyle(fontSize: 12,),),
                                 // _dataList[index].id.isEmpty?Container():
                                 // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
                                 _dataList[index].status.isEmpty?Container():
-                                Text(_dataList[index].status,style: TextStyle(fontSize: 12,),),
+                                Text('Status: ${_dataList[index].status}',style: TextStyle(fontSize: 12,),),
                                 _dataList[index].date.isEmpty?Container():
-                                Text(_dataList[index].date,style: TextStyle(fontSize: 12,),),
+                                Text('Date: ${_dataList[index].date}',style: TextStyle(fontSize: 12,),),
                               ],
                             ),
                           ),
@@ -240,7 +238,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-
                                 ElevatedButton(
                                   child: Text('Update'),
                                   onPressed: () {
@@ -279,18 +276,48 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                                 ElevatedButton(
                                   child: Text('Delete'),
                                   onPressed: () {
-                                    setState(()=> _isLoading=true);
-                                    _databaseHelper.deleteData(_dataList[index].id, context).then((value){
-                                      if(value==true){
-                                        _getDataFromDatabase();
-                                        setState(()=> _isLoading=false);
-                                        showToast('Data deleted successful');
-                                      }else{
-                                        setState(()=> _isLoading=false);
-                                        showToast('Data delete unsuccessful');
-                                      }
-                                    });
-
+                                    Alert(
+                                      context: context,
+                                      type: AlertType.warning,
+                                      title: "Confirmation Alert",
+                                      desc: "Are you confirm to delete this item ?",
+                                      buttons: [
+                                        DialogButton(
+                                          child: Text(
+                                            "Cancel",
+                                            style: TextStyle(color: Colors.white, fontSize: 20),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            },
+                                          color: Color.fromRGBO(0, 179, 134, 1.0),
+                                        ),
+                                        DialogButton(
+                                          child: Text(
+                                            "OK",
+                                            style: TextStyle(color: Colors.white, fontSize: 20),
+                                          ),
+                                          onPressed: () {
+                                            setState(()=> _isLoading=true);
+                                            _databaseHelper.deleteData(_dataList[index].id, context).then((value){
+                                              if(value==true){
+                                                _getDataFromDatabase();
+                                                setState(()=> _isLoading=false);
+                                                Navigator.pop(context);
+                                                showToast('Data deleted successful');
+                                              }else{
+                                                setState(()=> _isLoading=false);
+                                                showToast('Data delete unsuccessful');
+                                              }
+                                            });
+                                          },
+                                          gradient: LinearGradient(colors: [
+                                            Color.fromRGBO(116, 116, 191, 1.0),
+                                            Color.fromRGBO(52, 138, 199, 1.0)
+                                          ]),
+                                        )
+                                      ],
+                                    ).show();
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.redAccent,
@@ -504,6 +531,8 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     }
 
   }
+
+
   Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';

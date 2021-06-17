@@ -189,10 +189,10 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
                       child: fadingCircle) else ElevatedButton( onPressed: () {
 
                      uploadPhoto(dataProvider, firebaseProvider);
-                     Navigator.pop(context,true);
+                   //  Navigator.pop(context,true);
 
 
-                     showToast(imageUrl);
+                    // showToast(imageUrl);
                   },
                       child: Text(
                         'Update Data',
@@ -223,12 +223,10 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
           final downloadUrl = newImageDownloadUrl;
-
+          showToast(downloadUrl);
           setState(() {
             imageUrl = downloadUrl;
           });
-
-
           _submitData(dataProvider,firebaseProvider,);
         });
       });
@@ -258,7 +256,46 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
       });
     });
   }
+  Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
+    DateTime date = DateTime.now();
+    String dateData = '${date.month}-${date.day}-${date.year}';
+    if(statusValue.isNotEmpty){
+      setState(()=> _isLoading=true);
+      Map<String,String> mapData ={
+        'name': _name.text,
+        'phone': _phonet_t.text,
+        'address': _address.text,
+        'pabx': _pabx.text,
+        'email': _email.text,
+        'web': _web.text,
+        'fax': _fax.text,
+        'mobile': _mobile.text,
+        'contact': _contact.text,
+        'facebook': _facebook.text,
+        'designation': _designation.text,
+        'hallname': _hallname.text,
+        'date': dateData,
+        'id': widget.id,
+        'image': imageUrl,
+        'status': statusValue.toLowerCase(),
+        // 'category': dataProvider.subCategory,
 
+      };
+      setState(()=>_isLoading=true);
+      await firebaseProvider.updateData(mapData, context).then((value){
+        if(value){
+          setState(()=>_isLoading=false);
+          Navigator.pop(context,true);
+          showToast('Data updated successful');
+        }
+        else{
+          setState(()=>_isLoading=false);
+          showToast('Data update failed!');
+
+        }
+      });
+    }else showToast("Select Status");
+  }
   Widget commonCategoryFild(Size size) {
     return Container(
       child: Column(
@@ -346,56 +383,7 @@ class _UpdateDataPageState extends State<UpdateDataPage> {
     );
   }
 
-  Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
-    DateTime date = DateTime.now();
-    String dateData = '${date.month}-${date.day}-${date.year}';
-    if(statusValue.isNotEmpty){
-      setState(()=> _isLoading=true);
-      Map<String,String> mapData ={
-        'name': _name.text,
-        'phone': _phonet_t.text,
-        'address': _address.text,
-        'pabx': _pabx.text,
-        'email': _email.text,
-        'web': _web.text,
-        'fax': _fax.text,
-        'mobile': _mobile.text,
-        'contact': _contact.text,
-        'facebook': _facebook.text,
-        'designation': _designation.text,
-        'hallname': _hallname.text,
-        'date': dateData,
-        'id': widget.id,
-        'image': imageUrl,
-        'status': statusValue.toLowerCase(),
-        // 'category': dataProvider.subCategory,
 
-      };
-      setState(()=>_isLoading=true);
-      await firebaseProvider.updateData(mapData, context).then((value){
-        if(value){
-          setState(()=>_isLoading=false);
-          showToast('Data updated successful');
-
-        }
-        else{
-          setState(()=>_isLoading=false);
-          showToast('Data update failed!');
-
-        }
-      });
-
-      // await firebaseProvider.addFilmMediaData(map).then((value){
-      //   if(value){
-      //     setState(()=> _isLoading=false);
-      //     showToast('Successfylly Updated');
-      //   } else {
-      //     setState(()=> _isLoading=false);
-      //     showToast('Failed');
-      //   }
-      // });
-    }else showToast("Select Status");
-  }
 
 
 }

@@ -101,6 +101,17 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateFilmMediaData(Map<String, String> map, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.
+      collection('TelevisionMediaData').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+
 
 
 }

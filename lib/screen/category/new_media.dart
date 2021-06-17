@@ -118,13 +118,13 @@ class _NewMediaState extends State<NewMedia> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      width: size.width * .6,
+                      width: size.width * .5,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text("Please Select Your Sub-Category :"),
+                            Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025)),
                             SizedBox(
                               width: 10,
                             ),
@@ -150,7 +150,7 @@ class _NewMediaState extends State<NewMedia> {
                       ),
                     ),
                     Container(
-                      width: size.width * .3,
+                      width: size.width * .2,
                       child: TextField(
                         decoration: InputDecoration(
                             hintText: "Please Search your Query",
@@ -225,12 +225,8 @@ class _NewMediaState extends State<NewMedia> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
+                              Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025)),
 
-
-                              Text("Please Select Your Sub-Category :"),
-                              SizedBox(
-                                width: 10,
-                              ),
                               DropdownButton<String>(
                                 value: dropdownValue,
                                 elevation: 0,
