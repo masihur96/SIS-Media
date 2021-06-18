@@ -63,6 +63,10 @@ class _NewMediaState extends State<NewMedia> {
   List newMedia = Variables().getNewMediaList();
   FatchDataHelper _databaseHelper = FatchDataHelper();
   List<NewMediaModel> _dataList  = [];
+  void initState() {
+    super.initState();
+    _getDataFromDatabase();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

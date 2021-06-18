@@ -62,7 +62,10 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
 
   FatchDataHelper _databaseHelper = FatchDataHelper();
   List<ImportentEmergencyModel> _dataList  = [];
-
+  void initState() {
+    super.initState();
+    _getDataFromDatabase();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

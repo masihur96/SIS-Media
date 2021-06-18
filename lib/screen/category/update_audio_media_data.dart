@@ -174,7 +174,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
+                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
                           ),
                           IconButton(
                               onPressed: () {

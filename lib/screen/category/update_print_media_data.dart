@@ -127,7 +127,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
-                      "Film Media",
+                      "Print Media",
                       style: TextStyle(
                           fontSize: size.height*.04,
                           fontWeight: FontWeight.bold,
@@ -223,7 +223,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width>1200? size.width: size.width *.5,
+                width: size.width *.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -246,7 +246,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
                 ),
               ),
               Container(
-                width:  size.width>1200? size.width: size.width *.5,
+                width: size.width *.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

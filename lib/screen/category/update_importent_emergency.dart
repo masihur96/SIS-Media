@@ -122,7 +122,7 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
                           data==null ? CircleAvatar(
                             radius: size.height*.09,
                             backgroundColor: Colors.white,
-                            child: Image.network(widget.image),
+                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
                           ): Container(
                             height: size.height*.1,
                             width: size.height*.1,
@@ -265,7 +265,7 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width>1200? size.width*.4: size.width *.5,
+                width:  size.width *.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -288,7 +288,7 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
                 ),
               ),
               Container(
-                width:  size.width>1200? size.width*.4: size.width *.5,
+                width: size.width *.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

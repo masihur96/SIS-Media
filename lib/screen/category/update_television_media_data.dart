@@ -205,7 +205,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                           data==null ? CircleAvatar(
                             radius: size.height*.09,
                             backgroundColor: Colors.white,
-                            child: Image.network(widget.image),
+                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
                           ): Container(
                             height: size.height*.1,
                             width: size.height*.1,
