@@ -9,9 +9,7 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class UpdateAdioData extends StatefulWidget {
-
-  String id;
+class UpdateImportentEmergencyData extends StatefulWidget {
   String name;
   String address;
   String pabx;
@@ -23,24 +21,18 @@ class UpdateAdioData extends StatefulWidget {
   String contact;
   String facebook;
   String image;
-  String chiefEngineer;
-  String director;
-  String regionalStation;
-  String salesContact;
-  String whatApp;
-  String hotlineNumber;
+  String corporateOffice;
+  String headOffice;
+  String position;
   String businessType;
-  String channelName;
+  String id;
   String status;
   String date;
-  String ddgNews;
-  String ddgprogram;
 
-  UpdateAdioData(
+  UpdateImportentEmergencyData(
       {
-        required this.id,
         required this.name,
-        required  this.address,
+        required this.address,
         required this.pabx,
         required this.email,
         required this.web,
@@ -50,26 +42,20 @@ class UpdateAdioData extends StatefulWidget {
         required this.contact,
         required this.facebook,
         required this.image,
-        required this.chiefEngineer,
-        required this.director,
-        required this.regionalStation,
-        required this.salesContact,
-        required this.whatApp,
-        required this.hotlineNumber,
+        required this.corporateOffice,
+        required this.headOffice,
+        required this.position,
         required this.businessType,
-        required this.channelName,
+        required this.id,
         required this.status,
-        required this.date,
-        required this.ddgNews,
-        required this.ddgprogram
-      }
-      );
+        required this.date
+      });
+
   @override
-  _UpdateAdioDataState createState() => _UpdateAdioDataState();
+  _UpdateImportentEmergencyDataState createState() => _UpdateImportentEmergencyDataState();
 }
 
-class _UpdateAdioDataState extends State<UpdateAdioData> {
-
+class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyData> {
   bool _isLoading=false;
   TextEditingController _name = TextEditingController(text:'');
   TextEditingController _address = TextEditingController(text:'');
@@ -81,42 +67,10 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   TextEditingController _mobile = TextEditingController(text:'');
   TextEditingController _contact = TextEditingController(text:'');
   TextEditingController _facebook = TextEditingController(text:'');
-  TextEditingController _chief_enginear = TextEditingController();
-  TextEditingController _director = TextEditingController();
-  TextEditingController _regional_station = TextEditingController();
-  TextEditingController _sales_contact = TextEditingController();
-  TextEditingController _whats_app = TextEditingController();
-  TextEditingController _hotline_number = TextEditingController();
-  TextEditingController _business_type = TextEditingController();
-  TextEditingController _channelName = TextEditingController();
-  TextEditingController _ddgProgram = TextEditingController();
-  TextEditingController _ddgNews = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _name.text = widget.name;
-    _address.text = widget.address;
-    _PABX.text = widget.pabx;
-    _email.text = widget.email;
-    _web.text = widget.web;
-    _fax.text = widget.fax;
-    _phonet_t.text = widget.phone;
-    _mobile.text = widget.mobile;
-    _contact.text = widget.contact;
-    _facebook.text = widget.facebook;
-    _chief_enginear.text = widget.chiefEngineer;
-    _director.text = widget.director;
-    _regional_station.text = widget.regionalStation;
-    _sales_contact.text = widget.salesContact;
-    _whats_app.text = widget.whatApp;
-    _hotline_number.text = widget.hotlineNumber;
-    _business_type.text = widget.businessType;
-    _channelName.text = widget.channelName;
-    _ddgNews.text = widget.ddgNews;
-    _ddgProgram.text = widget.ddgprogram;
-  }
-
+  TextEditingController _corporateOffice = TextEditingController(text:'');
+  TextEditingController _headOffice = TextEditingController(text:'');
+  TextEditingController _position = TextEditingController(text:'');
+  TextEditingController _businessType = TextEditingController(text:'');
 
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
@@ -130,6 +84,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   ];
   String statusValue='Public';
   FatchDataHelper _fatchDataHelper = new FatchDataHelper();
+
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
@@ -211,7 +166,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                       )
                     ],
                   ),
-                  AudioMediaFild(size),
+                  ImportMediaWidget(size),
 
                   SizedBox(height: size.height*.04,),
 
@@ -239,7 +194,6 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
       ),
     );
   }
-
   uploadToStorage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
@@ -279,23 +233,16 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         'contact': _contact.text,
         'facebook': _facebook.text,
         'image': imageUrl,
-        'chiefEngineer':_chief_enginear.text,
-        'director':_director.text,
-        'regionalStation':_regional_station.text,
-        'salesContact':_sales_contact.text,
-        'whatsApp':_whats_app.text,
-        'hotlineNumber':_hotline_number.text,
-        'businessType': _business_type.text,
-        'channelName': _channelName.text,
+        'corporateOffice': _corporateOffice.text,
+        'headOffice': _headOffice.text,
+        'position': _position.text,
+        'businessType': _businessType.text,
         'id': widget.id,
-        'status': statusValue.toLowerCase(),
         'date': dateData,
-        'ddgProgram': _ddgProgram.text,
-        'ddgNews': _ddgNews.text,
-
+        'status': statusValue.toLowerCase(),
       };
       setState(()=>_isLoading=true);
-      await firebaseProvider.updateAudioMediaData(mapData, context).then((value){
+      await firebaseProvider.updateImportentEmergencyData(mapData, context).then((value){
         if(value){
           setState(()=>_isLoading=false);
           Navigator.pop(context,true);
@@ -310,7 +257,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     }else showToast("Select Status");
   }
 
-  Widget AudioMediaFild(Size size) {
+  Widget ImportMediaWidget(Size size) {
     return Container(
       child: Column(
         children: [
@@ -318,60 +265,47 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width*.5,
+                width:  size.width>1200? size.width*.4: size.width *.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      _textFormBuilderForAudio('Name'),
+                      _textFormBuilderForImport('Name'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Address'),
+                      _textFormBuilderForImport('Address'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('PABX'),
+                      _textFormBuilderForImport('PABX'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('E-mail'),
+                      _textFormBuilderForImport('E-mail'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Web'),
+                      _textFormBuilderForImport('Web'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('FAX'),
+                      _textFormBuilderForImport('FAX'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Phone(T&T)'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Mobile'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Contact'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('FaceBook'),
-
+                      _textFormBuilderForImport('Phone(T&T)'),
                     ],
                   ),
                 ),
               ),
               Container(
-                width:  size.width*.5,
+                width:  size.width>1200? size.width*.4: size.width *.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      _textFormBuilderForAudio('Chief Enginear'),
+                      _textFormBuilderForImport('Mobile'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Director'),
+                      _textFormBuilderForImport('Contact'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Regional Station'),
+                      _textFormBuilderForImport('FaceBook'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Sales Contact'),
+                      _textFormBuilderForImport('Corporate Office'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Whats App'),
+                      _textFormBuilderForImport('Head Office'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Hotline Number'),
+                      _textFormBuilderForImport('Position'),
                       SizedBox(height: 20),
-                      _textFormBuilderForAudio('Business Type'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Channel Name'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('DDG (Program)'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('DDG (News)'),
+                      _textFormBuilderForImport('Business Type'),
                     ],
                   ),
                 ),
@@ -381,9 +315,8 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         ],
       ),
     );
-
   }
-  Widget _textFormBuilderForAudio(String hint) {
+  Widget _textFormBuilderForImport(String hint) {
     return TextFormField(
       controller: hint == 'Name'
           ? _name
@@ -405,26 +338,13 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
           ? _contact
           : hint == 'FaceBook'
           ? _facebook
-          : hint == 'Chief Enginear'
-          ? _chief_enginear
-          : hint == 'Director'
-          ? _director
-          : hint == 'Regional Station'
-          ? _regional_station
-          : hint == 'Sales Contact'
-          ? _sales_contact
-          : hint == 'Whats App'
-          ? _whats_app
-          : hint == 'Hotline Number'
-          ? _hotline_number
-          : hint == 'Business Type'
-          ? _business_type
-          : hint == 'Channel Name'
-          ? _channelName
-          : hint == 'DDG (Program)'
-          ? _ddgProgram
-          : _ddgNews,
-
+          : hint == 'Corporate Office'
+          ? _corporateOffice
+          : hint == 'Head Office'
+          ? _headOffice
+          : hint == 'Position'
+          ? _position
+          : _businessType,
       decoration: InputDecoration(hintText: hint),
     );
   }
@@ -454,4 +374,6 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     }
 
   }
+
 }
+

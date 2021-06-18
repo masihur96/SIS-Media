@@ -3,11 +3,15 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
+import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/screen/category/update_importent_emergency.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:html' as html;
 import 'package:uuid/uuid.dart';
 
@@ -40,7 +44,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     'Private'
   ];
   String statusValue = "Public";
-  final String uuid = Uuid().v1();
+  String? uuid;
   String name='';
   String? error;
   Uint8List? data;
@@ -55,6 +59,10 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   ];
   final _formKey = GlobalKey<FormState>();
   List importentEmergency = Variables().getImportentEmergencyList();
+
+  FatchDataHelper _databaseHelper = FatchDataHelper();
+  List<ImportentEmergencyModel> _dataList  = [];
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -155,7 +163,187 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                 ),
               ),
             ),
-            Center(child: Align(alignment: Alignment.center, child: Text("Show All Data"))),
+            Expanded(
+              child: SizedBox(
+                height: 500.0,
+                child: RefreshIndicator(
+                  backgroundColor: Colors.white,
+                  onRefresh: ()async{
+                    await _getDataFromDatabase();
+                  },
+                  child: new ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: _dataList.length,
+                    itemBuilder: (context, index){
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 1,color: Colors.grey),
+                              borderRadius: BorderRadius.all(Radius.circular(5))
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              Container(
+                                  width: size.height*.15,
+                                  height: size.height*.16,
+                                  child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
+                              ),
+                              Container(
+                                width: size.width*.5,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _dataList[index].name.isEmpty?Container():
+                                    Text(_dataList[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                                    _dataList[index].address.isEmpty?Container():
+                                    Text('Address: ${_dataList[index].address}',style: TextStyle(fontSize: 12,)),
+                                    _dataList[index].pabx.isEmpty?Container():
+                                    Text('PABX: ${_dataList[index].pabx}',style: TextStyle(fontSize: 12),),
+                                    _dataList[index].email.isEmpty?Container():
+                                    Text('E-mail: ${_dataList[index].email}',style: TextStyle(fontSize: 12,)),
+                                    _dataList[index].web.isEmpty?Container():
+                                    Text('Web: ${_dataList[index].web}',style: TextStyle(fontSize: 12,)),
+                                    _dataList[index].fax.isEmpty?Container():
+                                    Text('Fax: ${_dataList[index].fax}',style: TextStyle(fontSize: 12)),
+                                    _dataList[index].phone.isEmpty?Container():
+                                    Text('Phone: ${_dataList[index].phone}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].mobile.isEmpty?Container():
+                                    Text('Mobile: ${_dataList[index].mobile}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].contact.isEmpty?Container():
+                                    Text('Contact: ${_dataList[index].contact}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].facebook.isEmpty?Container():
+                                    Text('Facebook: ${_dataList[index].facebook}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].corporateOffice.isEmpty?Container():
+                                    Text('Corporate Office: ${_dataList[index].corporateOffice}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].headOffice.isEmpty?Container():
+                                    Text('Head Office: ${_dataList[index].headOffice}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].position.isEmpty?Container():
+                                    Text('Position: ${_dataList[index].position}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].businessType.isEmpty?Container():
+                                    Text('Business Type: ${_dataList[index].businessType}',style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].status.isEmpty?Container():
+                                    Text('Status: ${_dataList[index].status}',style: TextStyle(fontSize: 12,),),
+                                    // _dataList[index].id.isEmpty?Container():
+                                    // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
+                                    _dataList[index].date.isEmpty?Container():
+                                    Text('Date: ${_dataList[index].date}',style: TextStyle(fontSize: 12,),),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: size.width*.1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                      child: Text('Update'),
+                                      onPressed: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                            UpdateImportentEmergencyData(
+                                              name: _dataList[index].name,
+                                              address: _dataList[index].address,
+                                              pabx: _dataList[index].pabx,
+                                              email: _dataList[index].email,
+                                              web: _dataList[index].web,
+                                              fax: _dataList[index].fax,
+                                              phone: _dataList[index].phone,
+                                              mobile: _dataList[index].mobile,
+                                              contact: _dataList[index].contact,
+                                              facebook: _dataList[index].facebook,
+                                              image: _dataList[index].image,
+                                              corporateOffice: _dataList[index].corporateOffice,
+                                              headOffice: _dataList[index].headOffice,
+                                              position: _dataList[index].position,
+                                              businessType: _dataList[index].businessType,
+                                              id: _dataList[index].id,
+                                              status: _dataList[index].status,
+                                              date: _dataList[index].date,
+                                            )));
+
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.green,
+                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                          textStyle: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+
+
+                                    SizedBox(height: 5,),
+
+                                    ElevatedButton(
+                                      child: Text('Delete'),
+                                      onPressed: () {
+                                        Alert(
+                                          context: context,
+                                          type: AlertType.warning,
+                                          title: "Confirmation Alert",
+                                          desc: "Are you confirm to delete this item ?",
+                                          buttons: [
+                                            DialogButton(
+                                              child: Text(
+                                                "Cancel",
+                                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              color: Color.fromRGBO(0, 179, 134, 1.0),
+                                            ),
+                                            DialogButton(
+                                              child: Text(
+                                                "OK",
+                                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                              ),
+                                              onPressed: () {
+                                                setState(()=> _isLoading=true);
+                                                _databaseHelper.deleteImportentEmergencyData(_dataList[index].id, context).then((value){
+                                                  if(value==true){
+                                                    _getDataFromDatabase();
+                                                    setState(()=> _isLoading=false);
+                                                    Navigator.pop(context);
+                                                    showToast('Data deleted successful');
+                                                  }else{
+                                                    setState(()=> _isLoading=false);
+                                                    showToast('Data delete unsuccessful');
+                                                  }
+                                                });
+                                              },
+                                              gradient: LinearGradient(colors: [
+                                                Color.fromRGBO(116, 116, 191, 1.0),
+                                                Color.fromRGBO(52, 138, 199, 1.0)
+                                              ]),
+                                            )
+                                          ],
+                                        ).show();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.redAccent,
+                                          padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                                          textStyle: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       );
@@ -188,18 +376,17 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        imageUrl.isEmpty ? CircleAvatar(
+                        data==null ? CircleAvatar(
                           radius: size.height*.09,
                           backgroundColor: Colors.white,
                           child: Icon(Icons.account_box),
-
                         ): Container(
                           height: size.height*.1,
                           width: size.height*.1,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                           ),
-                          child:  imageUrl==null? Icon(Icons.image): Image.network(imageUrl,fit: BoxFit.fill,),
+                          child: Image.memory(data!,fit: BoxFit.fill,),
                         ),
                         IconButton(
                             onPressed: () {
@@ -278,6 +465,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                     child: fadingCircle)
                     : ElevatedButton(
                     onPressed: () async {
+                      uuid = Uuid().v1();
                       uploadPhoto(dataProvider,firebaseProvider);
                       setState(() {
                         data=null;
@@ -308,12 +496,12 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         'mobile': _mobile.text,
         'contact': _contact.text,
         'facebook': _facebook.text,
-        'image': '',
+        'image': imageUrl,
         'corporateOffice': _corporateOffice.text,
         'headOffice': _headOffice.text,
         'position': _position.text,
         'businessType': _businessType.text,
-        'id': uuid,
+        'id': uuid!,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'date': dateData,
@@ -468,19 +656,42 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     });
   }
   Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    firebase_storage.Reference storageReference =
-    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
-    firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
-    firebase_storage.TaskSnapshot taskSnapshot;
-    storageUploadTask.then((value) {
-      taskSnapshot = value;
-      taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
-        final downloadUrl = newImageDownloadUrl;
-        _submitData(dataProvider,firebaseProvider);
-        setState((){
-          imageUrl = downloadUrl;
+    if(data==null){
+      _submitData(dataProvider,firebaseProvider,);
+    }else {
+      firebase_storage.Reference storageReference =
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
+      firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+      firebase_storage.TaskSnapshot taskSnapshot;
+      storageUploadTask.then((value) {
+        taskSnapshot = value;
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+          final downloadUrl = newImageDownloadUrl;
+          setState((){
+            imageUrl = downloadUrl;
+          });
+          _submitData(dataProvider,firebaseProvider,);
         });
       });
+    }
+  }
+
+  Future<void> _getDataFromDatabase()async{
+    await _databaseHelper.fetchImportentEmergencyData().then((result){
+      if(result.isNotEmpty){
+        setState(() {
+          _dataList.clear();
+          _dataList=result;
+          _isLoading=false;
+          showToast("Data  Get Successful");
+        });
+      }else{
+        setState(() {
+          _dataList.clear();
+          _isLoading=false;
+          showToast('Failed to fetch data');
+        });
+      }
     });
   }
 

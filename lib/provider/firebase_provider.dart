@@ -101,7 +101,7 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateFilmMediaData(Map<String, String> map, BuildContext context)async{
+  Future<bool> updateTelevisionMediaData(Map<String, String> map, BuildContext context)async{
     try{
       await FirebaseFirestore.instance.
       collection('TelevisionMediaData').doc(map['id']).update(map);
@@ -111,7 +111,45 @@ class FirebaseProvider extends ChangeNotifier {
       return false;
     }
   }
-
-
+  Future<bool> updateAudioMediaData(Map<String, String> map, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.
+      collection('AudioMediaData').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> updateImportentEmergencyData(Map<String, String> map, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.
+      collection('ImportentEmergency').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> updateNewMediaData(Map<String, String> map, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.
+      collection('NewMediaData').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> updatePrintMediaData(Map<String, String> map, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.
+      collection('PrintMediaData').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
 
 }

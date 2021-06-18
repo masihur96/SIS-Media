@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
-import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -132,7 +131,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
   String? error;
   String name='';
   String statusValue='Public';
-  FatchDataHelper _fatchDataHelper = new FatchDataHelper();
+  //FatchDataHelper _fatchDataHelper = new FatchDataHelper();
   @override
   void initState() {
     super.initState();
@@ -370,7 +369,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
 
       };
       setState(()=>_isLoading=true);
-      await firebaseProvider.updateFilmMediaData(mapData, context).then((value){
+      await firebaseProvider.updateTelevisionMediaData(mapData, context).then((value){
         if(value){
           setState(()=>_isLoading=false);
           Navigator.pop(context,true);
@@ -392,7 +391,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width>1200? size.width*.4: size.width *.5,
+                width:  size.width*.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -430,7 +429,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                 ),
               ),
               Container(
-                width:  size.width>1200? size.width*.4: size.width *.5,
+                width:  size.width*.5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

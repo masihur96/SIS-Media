@@ -9,9 +9,8 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class UpdateAdioData extends StatefulWidget {
+class UpdatePrintMedia extends StatefulWidget {
 
-  String id;
   String name;
   String address;
   String pabx;
@@ -23,24 +22,18 @@ class UpdateAdioData extends StatefulWidget {
   String contact;
   String facebook;
   String image;
-  String chiefEngineer;
-  String director;
-  String regionalStation;
-  String salesContact;
-  String whatApp;
-  String hotlineNumber;
+  String editor;
   String businessType;
-  String channelName;
+  String director;
+  String position;
+  String id;
   String status;
   String date;
-  String ddgNews;
-  String ddgprogram;
 
-  UpdateAdioData(
+  UpdatePrintMedia(
       {
-        required this.id,
         required this.name,
-        required  this.address,
+        required this.address,
         required this.pabx,
         required this.email,
         required this.web,
@@ -50,26 +43,22 @@ class UpdateAdioData extends StatefulWidget {
         required this.contact,
         required this.facebook,
         required this.image,
-        required this.chiefEngineer,
-        required this.director,
-        required this.regionalStation,
-        required this.salesContact,
-        required this.whatApp,
-        required this.hotlineNumber,
+        required this.editor,
         required this.businessType,
-        required this.channelName,
+        required this.director,
+        required this.position,
+        required this.id,
         required this.status,
-        required this.date,
-        required this.ddgNews,
-        required this.ddgprogram
+        required this.date
       }
+
       );
+
   @override
-  _UpdateAdioDataState createState() => _UpdateAdioDataState();
+  _UpdatePrintMediaState createState() => _UpdatePrintMediaState();
 }
 
-class _UpdateAdioDataState extends State<UpdateAdioData> {
-
+class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   bool _isLoading=false;
   TextEditingController _name = TextEditingController(text:'');
   TextEditingController _address = TextEditingController(text:'');
@@ -81,16 +70,10 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   TextEditingController _mobile = TextEditingController(text:'');
   TextEditingController _contact = TextEditingController(text:'');
   TextEditingController _facebook = TextEditingController(text:'');
-  TextEditingController _chief_enginear = TextEditingController();
-  TextEditingController _director = TextEditingController();
-  TextEditingController _regional_station = TextEditingController();
-  TextEditingController _sales_contact = TextEditingController();
-  TextEditingController _whats_app = TextEditingController();
-  TextEditingController _hotline_number = TextEditingController();
+  TextEditingController _editor = TextEditingController();
   TextEditingController _business_type = TextEditingController();
-  TextEditingController _channelName = TextEditingController();
-  TextEditingController _ddgProgram = TextEditingController();
-  TextEditingController _ddgNews = TextEditingController();
+  TextEditingController _director = TextEditingController();
+  TextEditingController _position = TextEditingController();
 
   @override
   void initState() {
@@ -105,18 +88,11 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     _mobile.text = widget.mobile;
     _contact.text = widget.contact;
     _facebook.text = widget.facebook;
-    _chief_enginear.text = widget.chiefEngineer;
-    _director.text = widget.director;
-    _regional_station.text = widget.regionalStation;
-    _sales_contact.text = widget.salesContact;
-    _whats_app.text = widget.whatApp;
-    _hotline_number.text = widget.hotlineNumber;
+    _editor.text = widget.editor;
     _business_type.text = widget.businessType;
-    _channelName.text = widget.channelName;
-    _ddgNews.text = widget.ddgNews;
-    _ddgProgram.text = widget.ddgprogram;
+    _director.text = widget.director;
+    _position.text = widget.position;
   }
-
 
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
@@ -167,7 +143,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                           data==null ? CircleAvatar(
                             radius: size.height*.09,
                             backgroundColor: Colors.white,
-                            child: Image.network(widget.image),
+                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
                           ): Container(
                             height: size.height*.1,
                             width: size.height*.1,
@@ -211,7 +187,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                       )
                     ],
                   ),
-                  AudioMediaFild(size),
+                  PrintMediaWidget(size),
 
                   SizedBox(height: size.height*.04,),
 
@@ -239,7 +215,97 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
       ),
     );
   }
-
+  Widget PrintMediaWidget(Size size) {
+    return Container(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width:  size.width>1200? size.width: size.width *.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForPrintMedia('Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Address'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('PABX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('E-mail'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Web'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('FAX'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Phone(T&T)'),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                width:  size.width>1200? size.width: size.width *.5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _textFormBuilderForPrintMedia('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('FaceBook'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Editor'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Business Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Director'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Position'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _textFormBuilderForPrintMedia(String hint) {
+    return TextFormField(
+      controller: hint == 'Name'
+          ? _name
+          : hint == 'Address'
+          ? _address
+          : hint == 'PABX'
+          ? _PABX
+          : hint == 'E-mail'
+          ? _email
+          : hint == 'Web'
+          ? _web
+          : hint == 'FAX'
+          ? _fax
+          : hint == 'Phone(T&T)'
+          ? _phonet_t
+          : hint == 'Mobile'
+          ? _mobile
+          : hint == 'Contact'
+          ? _contact
+          : hint == 'FaceBook'
+          ? _facebook
+          : hint == 'Editor'
+          ? _editor
+          : hint == 'Business Type'
+          ? _business_type
+          : hint == 'Director'
+          ? _director
+          : _position,
+      decoration: InputDecoration(hintText: hint),
+    );
+  }
   uploadToStorage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
@@ -279,23 +345,16 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         'contact': _contact.text,
         'facebook': _facebook.text,
         'image': imageUrl,
-        'chiefEngineer':_chief_enginear.text,
-        'director':_director.text,
-        'regionalStation':_regional_station.text,
-        'salesContact':_sales_contact.text,
-        'whatsApp':_whats_app.text,
-        'hotlineNumber':_hotline_number.text,
+        'editor':_editor.text,
         'businessType': _business_type.text,
-        'channelName': _channelName.text,
+        'director':_director.text,
+        'position':_position.text,
         'id': widget.id,
         'status': statusValue.toLowerCase(),
         'date': dateData,
-        'ddgProgram': _ddgProgram.text,
-        'ddgNews': _ddgNews.text,
-
       };
       setState(()=>_isLoading=true);
-      await firebaseProvider.updateAudioMediaData(mapData, context).then((value){
+      await firebaseProvider.updatePrintMediaData(mapData, context).then((value){
         if(value){
           setState(()=>_isLoading=false);
           Navigator.pop(context,true);
@@ -308,125 +367,6 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         }
       });
     }else showToast("Select Status");
-  }
-
-  Widget AudioMediaFild(Size size) {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width:  size.width*.5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      _textFormBuilderForAudio('Name'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Address'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('PABX'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('E-mail'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Web'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('FAX'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Phone(T&T)'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Mobile'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Contact'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('FaceBook'),
-
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width:  size.width*.5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      _textFormBuilderForAudio('Chief Enginear'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Director'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Regional Station'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Sales Contact'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Whats App'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Hotline Number'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Business Type'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Channel Name'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('DDG (Program)'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('DDG (News)'),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-
-  }
-  Widget _textFormBuilderForAudio(String hint) {
-    return TextFormField(
-      controller: hint == 'Name'
-          ? _name
-          : hint == 'Address'
-          ? _address
-          : hint == 'PABX'
-          ? _PABX
-          : hint == 'E-mail'
-          ? _email
-          : hint == 'Web'
-          ? _web
-          : hint == 'FAX'
-          ? _fax
-          : hint == 'Phone(T&T)'
-          ? _phonet_t
-          : hint == 'Mobile'
-          ? _mobile
-          : hint == 'Contact'
-          ? _contact
-          : hint == 'FaceBook'
-          ? _facebook
-          : hint == 'Chief Enginear'
-          ? _chief_enginear
-          : hint == 'Director'
-          ? _director
-          : hint == 'Regional Station'
-          ? _regional_station
-          : hint == 'Sales Contact'
-          ? _sales_contact
-          : hint == 'Whats App'
-          ? _whats_app
-          : hint == 'Hotline Number'
-          ? _hotline_number
-          : hint == 'Business Type'
-          ? _business_type
-          : hint == 'Channel Name'
-          ? _channelName
-          : hint == 'DDG (Program)'
-          ? _ddgProgram
-          : _ddgNews,
-
-      decoration: InputDecoration(hintText: hint),
-    );
   }
   Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
     if(data==null){

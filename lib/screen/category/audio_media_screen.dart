@@ -8,6 +8,7 @@ import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/radio_widget.dart';
+import 'package:media_directory_admin/screen/category/update_audio_media_data.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +23,8 @@ class AudioMediaScreen extends StatefulWidget {
 }
 
 class _AudioMediaScreenState extends State<AudioMediaScreen> {
-  bool _isLoading=false;
 
+  bool _isLoading=false;
   TextEditingController _name = TextEditingController(text:'');
   TextEditingController _address = TextEditingController(text:'');
   TextEditingController _PABX = TextEditingController(text:'');
@@ -57,7 +58,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
     'Private'
   ];
   String statusValue = "Public";
-  final String uuid = Uuid().v1();
+   String? uuid ;
   String name='';
   String? error;
   Uint8List? data;
@@ -77,6 +78,10 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   List audios = Variables().getAudioMediaList();
   FatchDataHelper _databaseHelper = FatchDataHelper();
   List<AudioMediaModel> _dataList  = [];
+  void initState() {
+    super.initState();
+    _getDataFromDatabase();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -275,25 +280,33 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                                     ElevatedButton(
                                       child: Text('Update'),
                                       onPressed: () {
-                                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                        //     UpdateDataPage(
-                                        //       name: _dataList[index].name,
-                                        //       address: _dataList[index].address,
-                                        //       pabx: _dataList[index].pabx,
-                                        //       email: _dataList[index].email,
-                                        //       web: _dataList[index].web,
-                                        //       fax: _dataList[index].fax,
-                                        //       phone: _dataList[index].phone,
-                                        //       mobile: _dataList[index].mobile,
-                                        //       contact: _dataList[index].contact,
-                                        //       facebook: _dataList[index].facebook,
-                                        //       designation: _dataList[index].designation,
-                                        //       hallname: _dataList[index].hallname,
-                                        //       image: _dataList[index].image,
-                                        //       id: _dataList[index].id,
-                                        //       status: _dataList[index].status,
-                                        //
-                                        //     )));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                            UpdateAdioData(
+                                              name: _dataList[index].name,
+                                              address: _dataList[index].address,
+                                              pabx: _dataList[index].pabx,
+                                              email: _dataList[index].email,
+                                              web: _dataList[index].web,
+                                              fax: _dataList[index].fax,
+                                              phone: _dataList[index].phone,
+                                              mobile: _dataList[index].mobile,
+                                              contact: _dataList[index].contact,
+                                              facebook: _dataList[index].facebook,
+                                              image: _dataList[index].image,
+                                              chiefEngineer: _dataList[index].chiefEngineer,
+                                              director: _dataList[index].director,
+                                              regionalStation: _dataList[index].regionalStation,
+                                              salesContact: _dataList[index].salesContact,
+                                              whatApp: _dataList[index].whatApp,
+                                              hotlineNumber: _dataList[index].hotlineNumber,
+                                              businessType: _dataList[index].businessType,
+                                              channelName: _dataList[index].channelName,
+                                              id: _dataList[index].id,
+                                              status: _dataList[index].status,
+                                              date: _dataList[index].date,
+                                              ddgNews: _dataList[index].ddgNews,
+                                              ddgprogram: _dataList[index].ddgprogram,
+                                            )));
 
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -565,7 +578,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                     child: fadingCircle)
                : ElevatedButton(
                     onPressed: ()  {
-
+                      uuid = Uuid().v1();
                       uploadPhoto(dataProvider,firebaseProvider);
 
                       setState(() {
@@ -608,7 +621,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         'hotlineNumber':_hotline_number.text,
         'businessType': _business_type.text,
         'channelName': _channelName.text,
-        'id': uuid,
+        'id': uuid!,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'status': statusValue.toLowerCase(),
@@ -727,7 +740,6 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
     );
 
   }
-
   Widget _textFormBuilderForAudio(String hint) {
     return TextFormField(
       controller: hint == 'Name'
@@ -802,7 +814,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
       _submitData(dataProvider,firebaseProvider,);
     }else {
       firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
@@ -819,7 +831,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
 
   }
 
-Future<void> _getDataFromDatabase()async{
+  Future<void> _getDataFromDatabase()async{
     await _databaseHelper.fetchAudioData().then((result){
       if(result.isNotEmpty){
         setState(() {
