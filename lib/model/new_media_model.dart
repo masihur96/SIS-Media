@@ -20,6 +20,8 @@ class NewMediaModel{
   String id;
   String status;
   String date;
+  String subCategory;
+
 
   NewMediaModel(
   {
@@ -42,7 +44,8 @@ class NewMediaModel{
     required this.youtubeChannel,
     required this.id,
     required this.status,
-    required this.date
+    required this.date,
+    required this.subCategory,
 }
     );
 }

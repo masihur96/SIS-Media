@@ -25,6 +25,8 @@ class AudioMediaModel{
   String date;
   String ddgNews;
   String ddgprogram;
+  String subCategory;
+
 AudioMediaModel(
       {
        required this.id,
@@ -50,7 +52,9 @@ AudioMediaModel(
         required this.status,
         required this.date,
         required this.ddgNews,
-        required this.ddgprogram
+        required this.ddgprogram,
+        required this.subCategory,
+
       }
       );
 }

@@ -47,7 +47,7 @@ class _MainPageState extends State<MainPage> {
             ),
             Align(
                 alignment: Alignment.center,
-                child: Text(dataProvider.pageHeader(),style: TextStyle(fontSize: size.height*.025,fontWeight: FontWeight.w700,color: Colors.grey),)),
+                child: Text(dataProvider.pageHeader(),style: TextStyle(fontSize: size.height*.030,fontWeight: FontWeight.w700,color: Colors.blueGrey),)),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 0),
               decoration: BoxDecoration(

@@ -7,7 +7,9 @@ import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/screen/category/update_importent_emergency.dart';
+import 'package:media_directory_admin/widgets/film_media_tile.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'update_screen/update_importent_emergency.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +25,7 @@ class ImportentEmergency extends StatefulWidget {
 class _ImportentEmergencyState extends State<ImportentEmergency> {
   bool _isLoading=false;
 
-  TextEditingController _name = TextEditingController(text:'');
+  TextEditingController _name = TextEditingController(text:'',);
   TextEditingController _address = TextEditingController(text:'');
   TextEditingController _PABX = TextEditingController(text:'');
   TextEditingController _email = TextEditingController(text:'');
@@ -61,16 +63,46 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   List importentEmergency = Variables().getImportentEmergencyList();
 
   FatchDataHelper _databaseHelper = FatchDataHelper();
+
   List<ImportentEmergencyModel> _dataList  = [];
+  List<ImportentEmergencyModel> _dataListForDisplay = [];
+
+  // List<ImportentEmergencyModel> _subList = [];
+  // List<ImportentEmergencyModel> _filteredSubList = [];
+  // int _counter=0;
+
+  // void _initializeData() {
+  //   setState((){
+  //     _subList = _dataList;
+  //     _filteredSubList = _subList;
+  //     _counter++;
+  //   });
+  // }
+  // ///SearchList builder
+  // _filterList(String searchItem) {
+  //   setState(() {
+  //     _filteredSubList = _subList.where((element) =>
+  //     (element.name.toLowerCase().contains(searchItem.toLowerCase()))).toList();
+  //   });
+  // }
+
+
+  @override
   void initState() {
     super.initState();
     _getDataFromDatabase();
+    setState(() {
+      _dataListForDisplay = _dataList;
+    });
   }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+
+ //   if(_counter==0) _initializeData();
+
     return Container(
         color: Color(0xffedf7fd),
         width:dataProvider.pageWidth(size),
@@ -98,7 +130,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       ),
                     ),
                     body: TabBarView(children: [
-                      _allDataUI(size, dataProvider, context,),
+                      _allDataUI(size, dataProvider, context,firebaseProvider),
                       _insetDataUI(size, context,dataProvider,firebaseProvider),
                     ]),
                   ),
@@ -113,6 +145,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
       Size size,
       DataProvider dataProvider,
       BuildContext context,
+      FirebaseProvider firebaseProvider,
       ) =>
       Container(
         child: Column(
@@ -138,6 +171,11 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                               dropdownColor: Colors.white,
                               style: TextStyle(color: Colors.black),
                               items: importentEmergency.map((itemValue) {
+                                _dataListForDisplay = _dataList.where((element) {
+                                  var noteTitle = element.subCategory;
+                                  return noteTitle.contains(dropdownValue);
+                                }).toList();
+
                                 return DropdownMenuItem<String>(
                                   value: itemValue,
                                   child: Text(itemValue),
@@ -149,6 +187,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                                 });
                               },
                             ),
+
                           ],
                         ),
                       ),
@@ -158,14 +197,26 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       child: TextField(
                         decoration: InputDecoration(
                             hintText: "Please Search your Query",
+                            labelText: 'Search',
                             prefixIcon: Icon(Icons.search_outlined),
                             enabledBorder: InputBorder.none),
+                        onChanged:(text){
+                          text = text.toLowerCase();
+                          setState(() {
+                            _dataListForDisplay = _dataList.where((element) {
+                              var noteTitle = element.name.toLowerCase();
+                              return noteTitle.contains(text);
+                            }).toList();
+
+                          });
+                        },
                       ),
                     )
                   ],
                 ),
               ),
             ),
+
             Expanded(
               child: SizedBox(
                 height: 500.0,
@@ -173,176 +224,14 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                   backgroundColor: Colors.white,
                   onRefresh: ()async{
                     await _getDataFromDatabase();
+                  //  _isLoading = false;
                   },
-                  child: new ListView.builder(
+                  child:  new ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: _dataList.length,
                     itemBuilder: (context, index){
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1,color: Colors.grey),
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-
-                              Container(
-                                  width: size.height*.15,
-                                  height: size.height*.16,
-                                  child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
-                              ),
-                              Container(
-                                width: size.width*.5,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _dataList[index].name.isEmpty?Container():
-                                    Text(_dataList[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                                    _dataList[index].address.isEmpty?Container():
-                                    Text('Address: ${_dataList[index].address}',style: TextStyle(fontSize: 12,)),
-                                    _dataList[index].pabx.isEmpty?Container():
-                                    Text('PABX: ${_dataList[index].pabx}',style: TextStyle(fontSize: 12),),
-                                    _dataList[index].email.isEmpty?Container():
-                                    Text('E-mail: ${_dataList[index].email}',style: TextStyle(fontSize: 12,)),
-                                    _dataList[index].web.isEmpty?Container():
-                                    Text('Web: ${_dataList[index].web}',style: TextStyle(fontSize: 12,)),
-                                    _dataList[index].fax.isEmpty?Container():
-                                    Text('Fax: ${_dataList[index].fax}',style: TextStyle(fontSize: 12)),
-                                    _dataList[index].phone.isEmpty?Container():
-                                    Text('Phone: ${_dataList[index].phone}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].mobile.isEmpty?Container():
-                                    Text('Mobile: ${_dataList[index].mobile}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].contact.isEmpty?Container():
-                                    Text('Contact: ${_dataList[index].contact}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].facebook.isEmpty?Container():
-                                    Text('Facebook: ${_dataList[index].facebook}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].corporateOffice.isEmpty?Container():
-                                    Text('Corporate Office: ${_dataList[index].corporateOffice}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].headOffice.isEmpty?Container():
-                                    Text('Head Office: ${_dataList[index].headOffice}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].position.isEmpty?Container():
-                                    Text('Position: ${_dataList[index].position}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].businessType.isEmpty?Container():
-                                    Text('Business Type: ${_dataList[index].businessType}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].status.isEmpty?Container():
-                                    Text('Status: ${_dataList[index].status}',style: TextStyle(fontSize: 12,),),
-                                    // _dataList[index].id.isEmpty?Container():
-                                    // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].date.isEmpty?Container():
-                                    Text('Date: ${_dataList[index].date}',style: TextStyle(fontSize: 12,),),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: size.width*.1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(
-                                      child: Text('Update'),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                            UpdateImportentEmergencyData(
-                                              name: _dataList[index].name,
-                                              address: _dataList[index].address,
-                                              pabx: _dataList[index].pabx,
-                                              email: _dataList[index].email,
-                                              web: _dataList[index].web,
-                                              fax: _dataList[index].fax,
-                                              phone: _dataList[index].phone,
-                                              mobile: _dataList[index].mobile,
-                                              contact: _dataList[index].contact,
-                                              facebook: _dataList[index].facebook,
-                                              image: _dataList[index].image,
-                                              corporateOffice: _dataList[index].corporateOffice,
-                                              headOffice: _dataList[index].headOffice,
-                                              position: _dataList[index].position,
-                                              businessType: _dataList[index].businessType,
-                                              id: _dataList[index].id,
-                                              status: _dataList[index].status,
-                                              date: _dataList[index].date,
-                                            )));
-
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                                          textStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-
-
-                                    SizedBox(height: 5,),
-
-                                    ElevatedButton(
-                                      child: Text('Delete'),
-                                      onPressed: () {
-                                        Alert(
-                                          context: context,
-                                          type: AlertType.warning,
-                                          title: "Confirmation Alert",
-                                          desc: "Are you confirm to delete this item ?",
-                                          buttons: [
-                                            DialogButton(
-                                              child: Text(
-                                                "Cancel",
-                                                style: TextStyle(color: Colors.white, fontSize: 20),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              color: Color.fromRGBO(0, 179, 134, 1.0),
-                                            ),
-                                            DialogButton(
-                                              child: Text(
-                                                "OK",
-                                                style: TextStyle(color: Colors.white, fontSize: 20),
-                                              ),
-                                              onPressed: () {
-                                                setState(()=> _isLoading=true);
-                                                _databaseHelper.deleteImportentEmergencyData(_dataList[index].id, context).then((value){
-                                                  if(value==true){
-                                                    _getDataFromDatabase();
-                                                    setState(()=> _isLoading=false);
-                                                    Navigator.pop(context);
-                                                    showToast('Data deleted successful');
-                                                  }else{
-                                                    setState(()=> _isLoading=false);
-                                                    showToast('Data delete unsuccessful');
-                                                  }
-                                                });
-                                              },
-                                              gradient: LinearGradient(colors: [
-                                                Color.fromRGBO(116, 116, 191, 1.0),
-                                                Color.fromRGBO(52, 138, 199, 1.0)
-                                              ]),
-                                            )
-                                          ],
-                                        ).show();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.redAccent,
-                                          padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
-                                          textStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
+                      return _listItem(index,size,firebaseProvider,);
                     },
-
+                    itemCount: _dataListForDisplay.length,
                   ),
                 ),
               ),
@@ -350,6 +239,177 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
           ],
         ),
       );
+  _listItem(index,Size size,FirebaseProvider firebaseProvider){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            border: Border.all(width: 1,color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+
+            Container(
+                width: size.height*.15,
+                height: size.height*.16,
+
+            child: _dataListForDisplay[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataListForDisplay[index].image,fit: BoxFit.cover)
+
+            ),
+            Container(
+              width: size.width*.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _dataListForDisplay[index].name.isEmpty?Container():
+                  Text(_dataListForDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                  _dataListForDisplay[index].address.isEmpty?Container():
+                  Text('Address: ${_dataListForDisplay[index].address}',style: TextStyle(fontSize: 12,)),
+                  _dataListForDisplay[index].pabx.isEmpty?Container():
+                  Text('PABX: ${_dataListForDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
+                  _dataListForDisplay[index].email.isEmpty?Container():
+                  Text('E-mail: ${_dataListForDisplay[index].email}',style: TextStyle(fontSize: 12,)),
+                  _dataListForDisplay[index].web.isEmpty?Container():
+                  Text('Web: ${_dataListForDisplay[index].web}',style: TextStyle(fontSize: 12,)),
+                  _dataListForDisplay[index].fax.isEmpty?Container():
+                  Text('Fax: ${_dataListForDisplay[index].fax}',style: TextStyle(fontSize: 12)),
+                  _dataListForDisplay[index].phone.isEmpty?Container():
+                  Text('Phone: ${_dataListForDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].mobile.isEmpty?Container():
+                  Text('Mobile: ${_dataListForDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].contact.isEmpty?Container():
+                  Text('Contact: ${_dataListForDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].facebook.isEmpty?Container():
+                  Text('Facebook: ${_dataListForDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].corporateOffice.isEmpty?Container():
+                  Text('Corporate Office: ${_dataListForDisplay[index].corporateOffice}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].headOffice.isEmpty?Container():
+                  Text('Head Office: ${_dataListForDisplay[index].headOffice}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].position.isEmpty?Container():
+                  Text('Position: ${_dataListForDisplay[index].position}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].businessType.isEmpty?Container():
+                  Text('Business Type: ${_dataListForDisplay[index].businessType}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].status.isEmpty?Container():
+                  Text('Status: ${_dataListForDisplay[index].status}',style: TextStyle(fontSize: 12,),),
+                  // _dataList[index].id.isEmpty?Container():
+                  // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].date.isEmpty?Container():
+                  Text('Date: ${_dataListForDisplay[index].date}',style: TextStyle(fontSize: 12,),),
+                ],
+              ),
+            ),
+            Container(
+              width: size.width*.1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    child: Text('Update'),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          UpdateImportentEmergencyData(
+                            name: _dataList[index].name,
+                            address: _dataList[index].address,
+                            pabx: _dataList[index].pabx,
+                            email: _dataList[index].email,
+                            web: _dataList[index].web,
+                            fax: _dataList[index].fax,
+                            phone: _dataList[index].phone,
+                            mobile: _dataList[index].mobile,
+                            contact: _dataList[index].contact,
+                            facebook: _dataList[index].facebook,
+                            image: _dataList[index].image,
+                            corporateOffice: _dataList[index].corporateOffice,
+                            headOffice: _dataList[index].headOffice,
+                            position: _dataList[index].position,
+                            businessType: _dataList[index].businessType,
+                            id: _dataList[index].id,
+                            status: _dataList[index].status,
+                            date: _dataList[index].date,
+                          )));
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        textStyle: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold)),
+                  ),
+
+
+                  SizedBox(height: 5,),
+
+                  ElevatedButton(
+                    child: Text('Delete'),
+                    onPressed: () {
+                      Alert(
+                        context: context,
+                        type: AlertType.warning,
+                        title: "Confirmation Alert",
+                        desc: "Are you confirm to delete this item ?",
+                        buttons: [
+                          DialogButton(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            color: Color.fromRGBO(0, 179, 134, 1.0),
+                          ),
+                          DialogButton(
+                            child: Text(
+                              "OK",
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () {
+                              setState(()=> _isLoading=true);
+                              firebaseProvider.deleteImportentEmergencyData(_dataList[index].id, context).then((value){
+                                if(value==true){
+                                  _getDataFromDatabase();
+                                  setState(()=> _isLoading=false);
+                                  Navigator.pop(context);
+                                  showToast('Data deleted successful');
+                                }else{
+                                  setState(()=> _isLoading=false);
+                                  showToast('Data delete unsuccessful');
+                                }
+                              });
+                            },
+                            gradient: LinearGradient(colors: [
+                              Color.fromRGBO(116, 116, 191, 1.0),
+                              Color.fromRGBO(52, 138, 199, 1.0)
+                            ]),
+                          )
+                        ],
+                      ).show();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.redAccent,
+                        padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                        textStyle: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+
+  }
+
   Widget _insetDataUI(
       Size size,
       BuildContext context,
@@ -424,10 +484,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                                   dropdownValue = newValue!;
                                 });
                               },
-                            ),
-
-
-
+                            )
                           ],
                         ),
                       ),

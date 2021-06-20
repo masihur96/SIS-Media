@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:media_directory_admin/model/audio_media_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
+import 'package:media_directory_admin/model/importent_emergency_model.dart';
+import 'package:media_directory_admin/model/new_media_model.dart';
+import 'package:media_directory_admin/model/print_media_model.dart';
+import 'package:media_directory_admin/model/television_media_model.dart';
 import '../widgets/notificastion.dart';
 import 'package:uuid/uuid.dart';
 
@@ -90,6 +95,8 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
+
+
   Future<bool> updateData(Map<String, String> map, BuildContext context)async{
     try{
       await FirebaseFirestore.instance.
@@ -121,16 +128,17 @@ class FirebaseProvider extends ChangeNotifier {
       return false;
     }
   }
-  Future<bool> updateImportentEmergencyData(Map<String, String> map, BuildContext context)async{
+  Future<bool> updatePrintMediaData(Map<String, String> map, BuildContext context)async{
     try{
       await FirebaseFirestore.instance.
-      collection('ImportentEmergency').doc(map['id']).update(map);
+      collection('PrintMediaData').doc(map['id']).update(map);
       return true;
     }catch(error){
       showToast(error.toString());
       return false;
     }
   }
+
   Future<bool> updateNewMediaData(Map<String, String> map, BuildContext context)async{
     try{
       await FirebaseFirestore.instance.
@@ -141,10 +149,67 @@ class FirebaseProvider extends ChangeNotifier {
       return false;
     }
   }
-  Future<bool> updatePrintMediaData(Map<String, String> map, BuildContext context)async{
+
+  Future<bool> updateImportentEmergencyData(Map<String, String> map, BuildContext context)async{
     try{
       await FirebaseFirestore.instance.
-      collection('PrintMediaData').doc(map['id']).update(map);
+      collection('ImportentEmergency').doc(map['id']).update(map);
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('FilmMediaData').doc(id).delete();
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> deleteTelevisionData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('TelevisionMediaData').doc(id).delete();
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> deleteAudioData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('AudioMediaData').doc(id).delete();
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> deletePrintData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('PrintMediaData').doc(id).delete();
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+  Future<bool> deleteNewData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('NewMediaData').doc(id).delete();
+      return true;
+    }catch(error){
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteImportentEmergencyData(String id, BuildContext context)async{
+    try{
+      await FirebaseFirestore.instance.collection('ImportentEmergency').doc(id).delete();
       return true;
     }catch(error){
       showToast(error.toString());

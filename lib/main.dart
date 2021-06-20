@@ -1,6 +1,8 @@
 
-
+import 'dart:html';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/main_page.dart';
@@ -8,6 +10,16 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
 void main() async{
+  // ui.platformViewsRegistry(
+  //
+  // );
+  // ui.platformViewRegistry.registerViewFactory(
+  //     'hello-html',
+  //         (int viewId) => IFrameElement()
+  //       ..width = '640'
+  //       ..height = '360'
+  //       ..src = 'https://www.youtube.com/embed/xg4S67ZvsRs'
+  //       ..style.border = 'none');
   WidgetsFlutterBinding.ensureInitialized();
   await firebase_core.Firebase.initializeApp();
   runApp(MyApp());

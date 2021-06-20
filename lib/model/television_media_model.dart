@@ -34,6 +34,7 @@ class TelevisionMediaModel{
   String id;
   String status;
   String date;
+  String subCategory;
 
   TelevisionMediaModel(
   {
@@ -69,7 +70,8 @@ class TelevisionMediaModel{
   required this.houseName,
   required this.id,
   required this.status,
-  required this.date
+  required this.date,
+  required this.subCategory,
 
    }
    );

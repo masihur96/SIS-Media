@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:media_directory_admin/model/all_category_model.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 
 
 class FatchDataHelper{
-
   Future<List<FilmMediaModel>> fetchData()async{
     List<FilmMediaModel> dataList = [];
     try{
@@ -33,6 +33,7 @@ class FatchDataHelper{
             status: element.doc['status'],
             id: element.doc['id'],
             date: element.doc['date'],
+            subCategory: element.doc['sub-category']
           );
           dataList.add(filmMediaModel);
         });
@@ -42,7 +43,6 @@ class FatchDataHelper{
       return [];
     }
   }
-
   Future<List<TelevisionMediaModel>> fetchTelevisionData()async{
     List<TelevisionMediaModel> dataList = [];
     try{
@@ -82,6 +82,7 @@ class FatchDataHelper{
             id: element.doc['id'],
             status: element.doc['status'],
             date: element.doc['date'],
+            subCategory: element.doc['sub-category']
           );
           dataList.add(televisionMediaModel);
         });
@@ -91,7 +92,6 @@ class FatchDataHelper{
       return [];
     }
   }
-
   Future<List<AudioMediaModel>> fetchAudioData()async{
     List<AudioMediaModel> dataList = [];
     try{
@@ -122,6 +122,7 @@ class FatchDataHelper{
             date: element.doc['date'],
             ddgNews: element.doc['ddgNews'],
             ddgprogram: element.doc['ddgProgram'],
+            subCategory: element.doc['sub-category']
           );
           dataList.add(audioMediaModel);
         });
@@ -131,7 +132,40 @@ class FatchDataHelper{
       return [];
     }
   }
-
+  Future<List<PrintMediaModel>> fetchPrintData()async{
+    List<PrintMediaModel> dataList = [];
+    try{
+      await FirebaseFirestore.instance.collection('PrintMediaData').get().then((snapshot){
+        snapshot.docChanges.forEach((element) {
+          PrintMediaModel printMediaModel = PrintMediaModel(
+            name: element.doc['name'],
+            address: element.doc['address'],
+            pabx: element.doc['pabx'],
+            email: element.doc['email'],
+            web: element.doc['web'],
+            fax: element.doc['fax'],
+            phone: element.doc['phone'],
+            mobile: element.doc['mobile'],
+            contact: element.doc['contact'],
+            facebook: element.doc['facebook'],
+            image: element.doc['image'],
+            editor: element.doc['editor'],
+            businessType: element.doc['businessType'],
+            director: element.doc['director'],
+            position: element.doc['position'],
+            id: element.doc['id'],
+            status: element.doc['status'],
+            date: element.doc['date'],
+            subCategory: element.doc['sub-category']
+          );
+          dataList.add(printMediaModel);
+        });
+      });
+      return dataList;
+    }catch(error){
+      return [];
+    }
+  }
   Future<List<NewMediaModel>> fetchNewData()async{
     List<NewMediaModel> dataList = [];
     try{
@@ -158,6 +192,7 @@ class FatchDataHelper{
             id: element.doc['id'],
             status: element.doc['status'],
             date: element.doc['date'],
+            subCategory: element.doc['sub-category']
           );
           dataList.add(newMediaModel);
         });
@@ -167,7 +202,6 @@ class FatchDataHelper{
       return [];
     }
   }
-
   Future<List<ImportentEmergencyModel>> fetchImportentEmergencyData()async{
     List<ImportentEmergencyModel> dataList = [];
     try{
@@ -192,6 +226,7 @@ class FatchDataHelper{
             id: element.doc['id'],
             status: element.doc['status'],
             date: element.doc['date'],
+            subCategory: element.doc['sub-category']
           );
           dataList.add(importentEmergencyModel);
         });
@@ -199,107 +234,6 @@ class FatchDataHelper{
       return dataList;
     }catch(error){
       return [];
-    }
-  }
-
-  Future<List<PrintMediaModel>> fetchPrintData()async{
-    List<PrintMediaModel> dataList = [];
-    try{
-      await FirebaseFirestore.instance.collection('PrintMediaData').get().then((snapshot){
-        snapshot.docChanges.forEach((element) {
-          PrintMediaModel printMediaModel = PrintMediaModel(
-            name: element.doc['name'],
-            address: element.doc['address'],
-            pabx: element.doc['pabx'],
-            email: element.doc['email'],
-            web: element.doc['web'],
-            fax: element.doc['fax'],
-            phone: element.doc['phone'],
-            mobile: element.doc['mobile'],
-            contact: element.doc['contact'],
-            facebook: element.doc['facebook'],
-            image: element.doc['image'],
-            editor: element.doc['editor'],
-            businessType: element.doc['businessType'],
-            director: element.doc['director'],
-            position: element.doc['position'],
-            id: element.doc['id'],
-            status: element.doc['status'],
-            date: element.doc['date'],
-          );
-          dataList.add(printMediaModel);
-        });
-      });
-      return dataList;
-    }catch(error){
-      return [];
-    }
-  }
-
-  Future<bool> deleteData(String id, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.collection('FilmMediaData').doc(id).delete();
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
-    }
-  }
-  Future<bool> deleteTelevisionData(String id, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.collection('TelevisionMediaData').doc(id).delete();
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
-    }
-  }
-  Future<bool> deleteAudioData(String id, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.collection('AudioMediaData').doc(id).delete();
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
-    }
-  }
-  Future<bool> deleteImportentEmergencyData(String id, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.collection('ImportentEmergency').doc(id).delete();
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
-    }
-  }
-  Future<bool> deleteNewData(String id, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.collection('NewMediaData').doc(id).delete();
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
-    }
-  }
-
-  Future<bool> deletePrintData(String id, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.collection('PrintMediaData').doc(id).delete();
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
-    }
-  }
-
-  Future<bool> updateData(Map<String, String> map, BuildContext context)async{
-    try{
-      await FirebaseFirestore.instance.
-      collection('FilmMediaData').doc(map['id']).update(map);
-      return true;
-    }catch(error){
-      showToast(error.toString());
-      return false;
     }
   }
 }

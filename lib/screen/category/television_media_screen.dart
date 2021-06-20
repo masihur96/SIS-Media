@@ -9,7 +9,7 @@ import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_widget.dart';
-import 'package:media_directory_admin/screen/category/update_television_media_data.dart';
+import 'package:media_directory_admin/screen/category/update_screen/update_television_media_data.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -78,12 +78,17 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   String imageUrl = '';
   var file;
 
+
+  FatchDataHelper _databaseHelper = FatchDataHelper();
+  List<TelevisionMediaModel> _dataList  = [];
+  List<TelevisionMediaModel> _dataListForDisplay = [];
   void initState() {
     super.initState();
     _getDataFromDatabase();
+    setState(() {
+      _dataListForDisplay = _dataList;
+    });
   }
-  FatchDataHelper _databaseHelper = FatchDataHelper();
-  List<TelevisionMediaModel> _dataList  = [];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -121,6 +126,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                         size,
                         dataProvider,
                         context,
+                          firebaseProvider,
                       ),
                       _insetDataUI(size, context, dataProvider, firebaseProvider),
                     ]),
@@ -136,6 +142,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     Size size,
     DataProvider dataProvider,
     BuildContext context,
+    FirebaseProvider firebaseProvider
   ) =>
       Container(
         child: Column(
@@ -171,6 +178,11 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                               setState(() {
                                 dropdownValue = newValue!;
                               });
+                              _dataListForDisplay = _dataList.where((element) {
+                                var noteTitle = element.subCategory;
+                                return noteTitle.contains(dropdownValue);
+                              }).toList();
+
                             },
                           ),
                         ],
@@ -184,6 +196,16 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                           hintText: "Please Search your Query",
                           prefixIcon: Icon(Icons.search_outlined),
                           enabledBorder: InputBorder.none),
+                      onChanged: (text){
+                        text = text.toLowerCase();
+                        setState(() {
+                          _dataListForDisplay = _dataList.where((element) {
+                            var noteTitle = element.name.toLowerCase();
+                            return noteTitle.contains(text);
+                          }).toList();
+                        });
+                      },
+
                     ),
                   )
                 ],
@@ -200,220 +222,9 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                   },
                   child: new ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: _dataList.length,
+                    itemCount: _dataListForDisplay.length,
                     itemBuilder: (context, index){
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 1,color: Colors.grey),
-                              borderRadius: BorderRadius.all(Radius.circular(5))
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-
-                              Container(
-                                  width: size.height*.15,
-                                  height: size.height*.16,
-                                  child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
-                              ),
-                              Container(
-                                width: size.width*.5,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _dataList[index].name.isEmpty?Container():
-                                    Text(_dataList[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                                    _dataList[index].address.isEmpty?Container():
-                                    Text('Address: ${_dataList[index].address}',style: TextStyle(fontSize: 12,)),
-                                    _dataList[index].pabx.isEmpty?Container():
-                                    Text('PABX: ${_dataList[index].pabx}',style: TextStyle(fontSize: 12),),
-                                    _dataList[index].email.isEmpty?Container():
-                                    Text('E-mail: ${_dataList[index].email}',style: TextStyle(fontSize: 12,)),
-                                    _dataList[index].web.isEmpty?Container():
-                                    Text('Web: ${_dataList[index].web}',style: TextStyle(fontSize: 12,)),
-                                    _dataList[index].fax.isEmpty?Container():
-                                    Text('Fax: ${_dataList[index].fax}',style: TextStyle(fontSize: 12)),
-                                    _dataList[index].phone.isEmpty?Container():
-                                    Text('Phone: ${_dataList[index].phone}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].mobile.isEmpty?Container():
-                                    Text('Mobile: ${_dataList[index].mobile}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].contact.isEmpty?Container():
-                                    Text('Contact: ${_dataList[index].contact}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].facebook.isEmpty?Container():
-                                    Text('Facebook: ${_dataList[index].facebook}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].businessType.isEmpty?Container():
-                                    Text('Business Type: ${_dataList[index].businessType}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].camera.isEmpty?Container():
-                                    Text('Camera: ${_dataList[index].camera}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].unit1.isEmpty?Container():
-                                    Text('Unit 1: ${_dataList[index].unit1}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].unit2.isEmpty?Container():
-                                    Text('unit 2: ${_dataList[index].unit2}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].unit3.isEmpty?Container():
-                                    Text('Unit 3: ${_dataList[index].unit3}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].unit4.isEmpty?Container():
-                                    Text('Unit 4: ${_dataList[index].unit4}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].macPro.isEmpty?Container():
-                                    Text('Mac Pro: ${_dataList[index].macPro}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].brunchOffice.isEmpty?Container():
-                                    Text('Brunch Office: ${_dataList[index].brunchOffice}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].programs.isEmpty?Container():
-                                    Text('Programs: ${_dataList[index].programs}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].training.isEmpty?Container():
-                                    Text('Training Course : ${_dataList[index].training}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].shooting.isEmpty?Container():
-                                    Text('Shooting Facilities: ${_dataList[index].shooting}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].location.isEmpty?Container():
-                                    Text('location: ${_dataList[index].location}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].artist.isEmpty?Container():
-                                    Text('Artist Type: ${_dataList[index].artist}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].representative.isEmpty?Container():
-                                    Text('Representative: ${_dataList[index].representative}',style: TextStyle(fontSize: 12),),
-                                    _dataList[index].designation.isEmpty?Container():
-                                    Text('Designation: ${_dataList[index].designation}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].companyName.isEmpty?Container():
-                                    Text('Company Name: ${_dataList[index].companyName}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].regionalOffice.isEmpty?Container():
-                                    Text('Regional Sales Ofice: ${_dataList[index].regionalOffice}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].channelName.isEmpty?Container():
-                                    Text('Channel Name: ${_dataList[index].channelName}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].houseName.isEmpty?Container():
-                                    Text('House Name: ${_dataList[index].houseName}',style: TextStyle(fontSize: 12,),),
-                                    // _dataList[index].id.isEmpty?Container():
-                                    // Text('id: ${_dataList[index].id}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].status.isEmpty?Container():
-                                    Text('Status: ${_dataList[index].status}',style: TextStyle(fontSize: 12,),),
-                                    _dataList[index].date.isEmpty?Container():
-                                    Text('Date: ${_dataList[index].date}',style: TextStyle(fontSize: 12,),),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: size.width*.1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(
-                                      child: Text('Update'),
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                            UpdateTelevisionData(
-                                              name: _dataList[index].name,
-                                              address: _dataList[index].address,
-                                              pabx: _dataList[index].pabx,
-                                              email: _dataList[index].email,
-                                              web: _dataList[index].web,
-                                              fax: _dataList[index].fax,
-                                              phone: _dataList[index].phone,
-                                              mobile: _dataList[index].mobile,
-                                              contact: _dataList[index].contact,
-                                              facebook: _dataList[index].facebook,
-                                              image: _dataList[index].image,
-                                              businessType: _dataList[index].businessType,
-                                              camera: _dataList[index].camera,
-                                              unit1: _dataList[index].unit1,
-                                              unit2: _dataList[index].unit2,
-                                              unit3: _dataList[index].unit3,
-                                              unit4: _dataList[index].unit4,
-                                              macPro: _dataList[index].macPro,
-                                              brunchOffice: _dataList[index].brunchOffice,
-                                              programs: _dataList[index].programs,
-                                              training: _dataList[index].training,
-                                              shooting: _dataList[index].shooting,
-                                              location: _dataList[index].location,
-                                              artist: _dataList[index].artist,
-                                              representative: _dataList[index].representative,
-                                              designation: _dataList[index].designation,
-                                              companyName: _dataList[index].companyName,
-                                              regionalOffice: _dataList[index].regionalOffice,
-                                              channelName: _dataList[index].channelName,
-                                              houseName: _dataList[index].houseName,
-                                              id: _dataList[index].id,
-                                              status: _dataList[index].status,
-                                              date: _dataList[index].date,
-
-                                            )
-
-                                        ));
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                                          textStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-
-
-                                    SizedBox(height: 5,),
-
-                                    ElevatedButton(
-                                      child: Text('Delete'),
-                                      onPressed: () {
-                                        Alert(
-                                          context: context,
-                                          type: AlertType.warning,
-                                          title: "Confirmation Alert",
-                                          desc: "Are you confirm to delete this item ?",
-                                          buttons: [
-                                            DialogButton(
-                                              child: Text(
-                                                "Cancel",
-                                                style: TextStyle(color: Colors.white, fontSize: 20),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              color: Color.fromRGBO(0, 179, 134, 1.0),
-                                            ),
-                                            DialogButton(
-                                              child: Text(
-                                                "OK",
-                                                style: TextStyle(color: Colors.white, fontSize: 20),
-                                              ),
-                                              onPressed: () {
-                                                setState(()=> _isLoading=true);
-                                                _databaseHelper.deleteTelevisionData(_dataList[index].id, context).then((value){
-                                                  if(value==true){
-                                                    _getDataFromDatabase();
-                                                    setState(()=> _isLoading=false);
-                                                    Navigator.pop(context);
-                                                    showToast('Data deleted successful');
-                                                  }else{
-                                                    setState(()=> _isLoading=false);
-                                                    showToast('Data delete unsuccessful');
-                                                  }
-                                                });
-                                              },
-                                              gradient: LinearGradient(colors: [
-                                                Color.fromRGBO(116, 116, 191, 1.0),
-                                                Color.fromRGBO(52, 138, 199, 1.0)
-                                              ]),
-                                            )
-                                          ],
-                                        ).show();
-
-
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.redAccent,
-                                          padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
-                                          textStyle: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
+                      return _listItem(index,size,firebaseProvider);
                     },
 
                   ),
@@ -423,7 +234,222 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
              ],
         ),
       );
+  _listItem(index,Size size,FirebaseProvider firebaseProvider){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            border: Border.all(width: 1,color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
 
+            Container(
+                width: size.height*.15,
+                height: size.height*.16,
+                child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
+            ),
+            Container(
+              width: size.width*.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _dataListForDisplay[index].name.isEmpty?Container():
+                  Text(_dataListForDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                  _dataListForDisplay[index].address.isEmpty?Container():
+                  Text('Address: ${_dataListForDisplay[index].address}',style: TextStyle(fontSize: 12,)),
+                  _dataListForDisplay[index].pabx.isEmpty?Container():
+                  Text('PABX: ${_dataListForDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
+                  _dataListForDisplay[index].email.isEmpty?Container():
+                  Text('E-mail: ${_dataListForDisplay[index].email}',style: TextStyle(fontSize: 12,)),
+                  _dataListForDisplay[index].web.isEmpty?Container():
+                  Text('Web: ${_dataListForDisplay[index].web}',style: TextStyle(fontSize: 12,)),
+                  _dataListForDisplay[index].fax.isEmpty?Container():
+                  Text('Fax: ${_dataListForDisplay[index].fax}',style: TextStyle(fontSize: 12)),
+                  _dataListForDisplay[index].phone.isEmpty?Container():
+                  Text('Phone: ${_dataListForDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].mobile.isEmpty?Container():
+                  Text('Mobile: ${_dataListForDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].contact.isEmpty?Container():
+                  Text('Contact: ${_dataListForDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].facebook.isEmpty?Container():
+                  Text('Facebook: ${_dataListForDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].businessType.isEmpty?Container():
+                  Text('Business Type: ${_dataListForDisplay[index].businessType}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].camera.isEmpty?Container():
+                  Text('Camera: ${_dataListForDisplay[index].camera}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].unit1.isEmpty?Container():
+                  Text('Unit 1: ${_dataListForDisplay[index].unit1}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].unit2.isEmpty?Container():
+                  Text('unit 2: ${_dataListForDisplay[index].unit2}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].unit3.isEmpty?Container():
+                  Text('Unit 3: ${_dataListForDisplay[index].unit3}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].unit4.isEmpty?Container():
+                  Text('Unit 4: ${_dataListForDisplay[index].unit4}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].macPro.isEmpty?Container():
+                  Text('Mac Pro: ${_dataListForDisplay[index].macPro}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].brunchOffice.isEmpty?Container():
+                  Text('Brunch Office: ${_dataListForDisplay[index].brunchOffice}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].programs.isEmpty?Container():
+                  Text('Programs: ${_dataListForDisplay[index].programs}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].training.isEmpty?Container():
+                  Text('Training Course : ${_dataListForDisplay[index].training}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].shooting.isEmpty?Container():
+                  Text('Shooting Facilities: ${_dataListForDisplay[index].shooting}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].location.isEmpty?Container():
+                  Text('location: ${_dataListForDisplay[index].location}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].artist.isEmpty?Container():
+                  Text('Artist Type: ${_dataListForDisplay[index].artist}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].representative.isEmpty?Container():
+                  Text('Representative: ${_dataListForDisplay[index].representative}',style: TextStyle(fontSize: 12),),
+                  _dataListForDisplay[index].designation.isEmpty?Container():
+                  Text('Designation: ${_dataListForDisplay[index].designation}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].companyName.isEmpty?Container():
+                  Text('Company Name: ${_dataListForDisplay[index].companyName}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].regionalOffice.isEmpty?Container():
+                  Text('Regional Sales Ofice: ${_dataListForDisplay[index].regionalOffice}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].channelName.isEmpty?Container():
+                  Text('Channel Name: ${_dataListForDisplay[index].channelName}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].houseName.isEmpty?Container():
+                  Text('House Name: ${_dataListForDisplay[index].houseName}',style: TextStyle(fontSize: 12,),),
+                  // _dataList[index].id.isEmpty?Container():
+                  // Text('id: ${_dataList[index].id}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].status.isEmpty?Container():
+                  Text('Status: ${_dataListForDisplay[index].status}',style: TextStyle(fontSize: 12,),),
+                  _dataListForDisplay[index].date.isEmpty?Container():
+                  Text('Date: ${_dataListForDisplay[index].date}',style: TextStyle(fontSize: 12,),),
+                ],
+              ),
+            ),
+            Container(
+              width: size.width*.1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    child: Text('Update'),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                          UpdateTelevisionData(
+                            name: _dataList[index].name,
+                            address: _dataList[index].address,
+                            pabx: _dataList[index].pabx,
+                            email: _dataList[index].email,
+                            web: _dataList[index].web,
+                            fax: _dataList[index].fax,
+                            phone: _dataList[index].phone,
+                            mobile: _dataList[index].mobile,
+                            contact: _dataList[index].contact,
+                            facebook: _dataList[index].facebook,
+                            image: _dataList[index].image,
+                            businessType: _dataList[index].businessType,
+                            camera: _dataList[index].camera,
+                            unit1: _dataList[index].unit1,
+                            unit2: _dataList[index].unit2,
+                            unit3: _dataList[index].unit3,
+                            unit4: _dataList[index].unit4,
+                            macPro: _dataList[index].macPro,
+                            brunchOffice: _dataList[index].brunchOffice,
+                            programs: _dataList[index].programs,
+                            training: _dataList[index].training,
+                            shooting: _dataList[index].shooting,
+                            location: _dataList[index].location,
+                            artist: _dataList[index].artist,
+                            representative: _dataList[index].representative,
+                            designation: _dataList[index].designation,
+                            companyName: _dataList[index].companyName,
+                            regionalOffice: _dataList[index].regionalOffice,
+                            channelName: _dataList[index].channelName,
+                            houseName: _dataList[index].houseName,
+                            id: _dataList[index].id,
+                            status: _dataList[index].status,
+                            date: _dataList[index].date,
+
+                          )
+
+                      ));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        textStyle: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold)),
+                  ),
+
+
+                  SizedBox(height: 5,),
+
+                  ElevatedButton(
+                    child: Text('Delete'),
+                    onPressed: () {
+                      Alert(
+                        context: context,
+                        type: AlertType.warning,
+                        title: "Confirmation Alert",
+                        desc: "Are you confirm to delete this item ?",
+                        buttons: [
+                          DialogButton(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            color: Color.fromRGBO(0, 179, 134, 1.0),
+                          ),
+                          DialogButton(
+                            child: Text(
+                              "OK",
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () {
+                              setState(()=> _isLoading=true);
+                              firebaseProvider.deleteTelevisionData(_dataList[index].id, context).then((value){
+                                if(value==true){
+                                  _getDataFromDatabase();
+                                  setState(()=> _isLoading=false);
+                                  Navigator.pop(context);
+                                  showToast('Data deleted successful');
+                                }else{
+                                  setState(()=> _isLoading=false);
+                                  showToast('Data delete unsuccessful');
+                                }
+                              });
+                            },
+                            gradient: LinearGradient(colors: [
+                              Color.fromRGBO(116, 116, 191, 1.0),
+                              Color.fromRGBO(52, 138, 199, 1.0)
+                            ]),
+                          )
+                        ],
+                      ).show();
+
+
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.redAccent,
+                        padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                        textStyle: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+
+  }
   Widget _insetDataUI(
     Size size,
     BuildContext context,

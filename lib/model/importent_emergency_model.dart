@@ -18,6 +18,9 @@ class ImportentEmergencyModel{
   String id;
   String status;
   String date;
+  String subCategory;
+
+
 
   ImportentEmergencyModel(
   {
@@ -38,6 +41,7 @@ class ImportentEmergencyModel{
     required this.businessType,
     required this.id,
     required this.status,
-    required this.date
+    required this.date,
+    required this.subCategory,
 });
 }

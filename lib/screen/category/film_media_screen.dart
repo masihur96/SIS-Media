@@ -8,8 +8,7 @@ import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/screen/category/update_data_page.dart';
-import 'package:media_directory_admin/screen/category/update_data_page.dart';
+import 'update_screen/update_data_page.dart';
 import '../../widgets/notificastion.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +35,9 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   TextEditingController _designation = TextEditingController(text:'');
   TextEditingController _hallname = TextEditingController(text:'');
 
+
   final _ktabs = <Tab>[
-    const Tab(text: 'All Data',),
+    const Tab(text: 'All Data'),
     const Tab(text: 'Insert Data',),
   ];
   final _formKey = GlobalKey<FormState>();
@@ -54,21 +54,45 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   String imageUrl = '';
    var file;
   String? error;
-  List films = Variables().getFilmMediaList();
+
   FatchDataHelper _databaseHelper = FatchDataHelper();
+
    List<FilmMediaModel> _dataList  = [];
+   List<FilmMediaModel> _dataListForDisplay = [];
+   List<FilmMediaModel> _dataListForDropDisplay = [];
+
    @override
   void initState() {
     super.initState();
+
+    setState(() {
+      _dataListForDisplay = _dataList;
+      _dataListForDropDisplay = _dataList;
+      _isLoading=true;
+
+      if(_isLoading=true){
+        Center(
+          child: Container(
+              child: fadingCircle),
+        );
+      }
+    });
     _getDataFromDatabase();
+
   }
+
+  List films = Variables().getFilmMediaList();
+
   String? uuid ;
-  // String? currentName;
+
+  final myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+
     return Container(
         color: Color(0xffedf7fd),
         width:dataProvider.pageWidth(size),
@@ -88,7 +112,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                         elevation: 0.0,
                         backgroundColor: Color.fromRGBO(216, 211, 216, 1),
                         bottom: TabBar(
-                          labelStyle:TextStyle(fontSize: size.height*.04,),
+                          labelStyle:TextStyle(fontSize: size.height*.03,),
                           tabs: _ktabs,
                           indicatorColor: Colors.white,
                           unselectedLabelColor: Colors.black54,
@@ -97,7 +121,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       ),
                     ),
                     body: TabBarView(children: [
-                      _allFilmUI(size, dataProvider,context),
+                      _allFilmUI(size, dataProvider,context,firebaseProvider),
                       _insetFilmUI(size, context, dataProvider,firebaseProvider),
                     ]),
                   ),
@@ -111,6 +135,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     Size size,
     DataProvider dataProvider,
     BuildContext context,
+      FirebaseProvider firebaseProvider
   ) =>
       Container(
         padding: const EdgeInsets.all(10.0),
@@ -137,6 +162,12 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                             dropdownColor: Colors.white,
                             style: TextStyle(color: Colors.black),
                             items: films.map((itemValue) {
+
+                                _dataListForDisplay = _dataList.where((element) {
+                                  var noteTitle = element.subCategory;
+                                  return noteTitle.contains(dropdownValue);
+                                }).toList();
+
                               return DropdownMenuItem<String>(
                                 value: itemValue,
                                 child: Text(itemValue),
@@ -155,10 +186,22 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                   Container(
                     width: size.width * .3,
                     child: TextField(
+                      controller: myController,
                       decoration: InputDecoration(
                           hintText: "Please Search your Query",
                           prefixIcon: Icon(Icons.search_outlined),
-                          enabledBorder: InputBorder.none),
+                          enabledBorder: InputBorder.none
+                      ),
+                   onChanged: (text){
+                        text = text.toLowerCase();
+                       setState((){
+
+                         _dataListForDropDisplay = _dataList.where((element) {
+                             var noteTitle = element.name.toLowerCase();
+                               return noteTitle.contains(text)?noteTitle.contains(text):noteTitle.contains("noteTitle");
+                           }).toList();
+                       });
+                       },
                     ),
                   )
                 ],
@@ -174,176 +217,327 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
               },
               child: new ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: _dataList.length,
+                itemCount: _dataListForDisplay.length,
                 itemBuilder: (context, index){
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1,color: Colors.grey),
-                          borderRadius: BorderRadius.all(Radius.circular(5))
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-
-                          Container(
-                              width: size.height*.15,
-                              height: size.height*.16,
-                              child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
-                          ),
-                          Container(
-                            width: size.width*.5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _dataList[index].name.isEmpty?Container():
-                                Text(_dataList[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                                _dataList[index].address.isEmpty?Container():
-                                Text('Address: ${_dataList[index].address}',style: TextStyle(fontSize: 12,)),
-                                _dataList[index].pabx.isEmpty?Container():
-                                Text('PABX: ${_dataList[index].pabx}',style: TextStyle(fontSize: 12),),
-                                _dataList[index].email.isEmpty?Container():
-                                Text('E-mail: ${_dataList[index].email}',style: TextStyle(fontSize: 12,)),
-                                _dataList[index].web.isEmpty?Container():
-                                Text('Web: ${_dataList[index].web}',style: TextStyle(fontSize: 12,)),
-                                _dataList[index].fax.isEmpty?Container():
-                                Text('Fax: ${_dataList[index].fax}',style: TextStyle(fontSize: 12)),
-                                _dataList[index].phone.isEmpty?Container():
-                                Text('Phone: ${_dataList[index].phone}',style: TextStyle(fontSize: 12,),),
-                                _dataList[index].mobile.isEmpty?Container():
-                                Text('Mobile: ${_dataList[index].mobile}',style: TextStyle(fontSize: 12,),),
-                                _dataList[index].contact.isEmpty?Container():
-                                Text('Contact: ${_dataList[index].contact}',style: TextStyle(fontSize: 12,),),
-                                _dataList[index].facebook.isEmpty?Container():
-                                Text('Facebook: ${_dataList[index].facebook}',style: TextStyle(fontSize: 12,),),
-                                _dataList[index].designation.isEmpty?Container():
-                                Text('Designation: ${_dataList[index].designation}',style: TextStyle(fontSize: 12),),
-                                _dataList[index].hallname.isEmpty?Container():
-                                Text('Hall Name: ${_dataList[index].hallname}',style: TextStyle(fontSize: 12,),),
-                                // _dataList[index].id.isEmpty?Container():
-                                // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
-                                _dataList[index].status.isEmpty?Container():
-                                Text('Status: ${_dataList[index].status}',style: TextStyle(fontSize: 12,),),
-                                _dataList[index].date.isEmpty?Container():
-                                Text('Date: ${_dataList[index].date}',style: TextStyle(fontSize: 12,),),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: size.width*.1,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  child: Text('Update'),
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                        UpdateDataPage(
-                                          name: _dataList[index].name,
-                                          address: _dataList[index].address,
-                                          pabx: _dataList[index].pabx,
-                                          email: _dataList[index].email,
-                                          web: _dataList[index].web,
-                                          fax: _dataList[index].fax,
-                                          phone: _dataList[index].phone,
-                                          mobile: _dataList[index].mobile,
-                                          contact: _dataList[index].contact,
-                                          facebook: _dataList[index].facebook,
-                                          designation: _dataList[index].designation,
-                                          hallname: _dataList[index].hallname,
-                                          image: _dataList[index].image,
-                                          id: _dataList[index].id,
-                                          status: _dataList[index].status,
-
-                                        )));
-
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.green,
-                                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                                      textStyle: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-
-
-                                SizedBox(height: 5,),
-
-                                ElevatedButton(
-                                  child: Text('Delete'),
-                                  onPressed: () {
-                                    Alert(
-                                      context: context,
-                                      type: AlertType.warning,
-                                      title: "Confirmation Alert",
-                                      desc: "Are you confirm to delete this item ?",
-                                      buttons: [
-                                        DialogButton(
-                                          child: Text(
-                                            "Cancel",
-                                            style: TextStyle(color: Colors.white, fontSize: 20),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                            },
-                                          color: Color.fromRGBO(0, 179, 134, 1.0),
-                                        ),
-                                        DialogButton(
-                                          child: Text(
-                                            "OK",
-                                            style: TextStyle(color: Colors.white, fontSize: 20),
-                                          ),
-                                          onPressed: () {
-                                            setState(()=> _isLoading=true);
-                                            _databaseHelper.deleteData(_dataList[index].id, context).then((value){
-                                              if(value==true){
-                                                _getDataFromDatabase();
-                                                setState(()=> _isLoading=false);
-                                                Navigator.pop(context);
-                                                showToast('Data deleted successful');
-                                              }else{
-                                                setState(()=> _isLoading=false);
-                                                showToast('Data delete unsuccessful');
-                                              }
-                                            });
-                                          },
-                                          gradient: LinearGradient(colors: [
-                                            Color.fromRGBO(116, 116, 191, 1.0),
-                                            Color.fromRGBO(52, 138, 199, 1.0)
-                                          ]),
-                                        )
-                                      ],
-                                    ).show();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.redAccent,
-                                      padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
-                                      textStyle: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
+                  return _listItem(index,size,firebaseProvider);
                 },
-
               ),
             ),
           ),
         ),
-
           ],
         ),
       );
 
+  _listItem(index,Size size,FirebaseProvider firebaseProvider){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            border: Border.all(width: 1,color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+        child: myController.text.isEmpty? Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                  width: size.height*.15,
+                  height: size.height*.16,
+                  child: _dataListForDisplay[index].image.isEmpty? Icon(Icons.photo,size: size.height*.16,color: Colors.grey,):Image.network(_dataListForDisplay[index].image,fit: BoxFit.fill)
+              ),
+               Container(
+                width: size.width*.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _dataListForDisplay[index].name.isEmpty?Container():
+                    Text(_dataListForDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                    _dataListForDisplay[index].address.isEmpty?Container():
+                    Text('Address: ${_dataListForDisplay[index].address}',style: TextStyle(fontSize: 12,)),
+                    _dataListForDisplay[index].pabx.isEmpty?Container():
+                    Text('PABX: ${_dataListForDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
+                    _dataListForDisplay[index].email.isEmpty?Container():
+                    Text('E-mail: ${_dataListForDisplay[index].email}',style: TextStyle(fontSize: 12,)),
+                    _dataListForDisplay[index].web.isEmpty?Container():
+                    Text('Web: ${_dataListForDisplay[index].web}',style: TextStyle(fontSize: 12,)),
+                    _dataListForDisplay[index].fax.isEmpty?Container():
+                    Text('Fax: ${_dataListForDisplay[index].fax}',style: TextStyle(fontSize: 12)),
+                    _dataListForDisplay[index].phone.isEmpty?Container():
+                    Text('Phone: ${_dataListForDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDisplay[index].mobile.isEmpty?Container():
+                    Text('Mobile: ${_dataListForDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDisplay[index].contact.isEmpty?Container():
+                    Text('Contact: ${_dataListForDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDisplay[index].facebook.isEmpty?Container():
+                    Text('Facebook: ${_dataListForDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDisplay[index].designation.isEmpty?Container():
+                    Text('Designation: ${_dataListForDisplay[index].designation}',style: TextStyle(fontSize: 12),),
+                    _dataListForDisplay[index].hallname.isEmpty?Container():
+                    Text('Hall Name: ${_dataListForDisplay[index].hallname}',style: TextStyle(fontSize: 12,),),
+                    // _dataList[index].id.isEmpty?Container():
+                    // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
+                    _dataListForDisplay[index].status.isEmpty?Container():
+                    Text('Status: ${_dataListForDisplay[index].status}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDisplay[index].date.isEmpty?Container():
+                    Text('Date: ${_dataListForDisplay[index].date}',style: TextStyle(fontSize: 12,),),
+                  ],
+                ),
+              ),
+              Container(
+                width: size.width*.1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      child: Text('Update'),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            UpdateDataPage(
+                              name: _dataList[index].name,
+                              address: _dataList[index].address,
+                              pabx: _dataList[index].pabx,
+                              email: _dataList[index].email,
+                              web: _dataList[index].web,
+                              fax: _dataList[index].fax,
+                              phone: _dataList[index].phone,
+                              mobile: _dataList[index].mobile,
+                              contact: _dataList[index].contact,
+                              facebook: _dataList[index].facebook,
+                              designation: _dataList[index].designation,
+                              hallname: _dataList[index].hallname,
+                              image: _dataList[index].image,
+                              id: _dataList[index].id,
+                              status: _dataList[index].status,
+
+                            )));
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                    ),
+
+
+                    SizedBox(height: 5,),
+
+                    ElevatedButton(
+                      child: Text('Delete'),
+                      onPressed: () {
+                        Alert(
+                          context: context,
+                          type: AlertType.warning,
+                          title: "Confirmation Alert",
+                          desc: "Are you confirm to delete this item ?",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              color: Color.fromRGBO(0, 179, 134, 1.0),
+                            ),
+                            DialogButton(
+                              child: Text(
+                                "OK",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () {
+                                setState(()=> _isLoading=true);
+                                firebaseProvider.deleteData(_dataListForDisplay[index].id, context).then((value){
+                                  if(value==true){
+                                    _getDataFromDatabase();
+                                    setState(()=> _isLoading=false);
+                                    Navigator.pop(context);
+                                    showToast('Data deleted successful');
+                                  }else{
+                                    setState(()=> _isLoading=false);
+                                    showToast('Data delete unsuccessful');
+                                  }
+                                });
+                              },
+                              gradient: LinearGradient(colors: [
+                                Color.fromRGBO(116, 116, 191, 1.0),
+                                Color.fromRGBO(52, 138, 199, 1.0)
+                              ]),
+                            )
+                          ],
+                        ).show();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ):Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                  width: size.height*.15,
+                  height: size.height*.16,
+                  child: _dataListForDropDisplay[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
+              ),
+              Container(
+                width: size.width*.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _dataListForDropDisplay[index].name.isEmpty?Container():
+                    Text(_dataListForDropDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                    _dataListForDropDisplay[index].address.isEmpty?Container():
+                    Text('Address: ${_dataListForDropDisplay[index].address}',style: TextStyle(fontSize: 12,)),
+                    _dataListForDropDisplay[index].pabx.isEmpty?Container():
+                    Text('PABX: ${_dataListForDropDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
+                    _dataListForDropDisplay[index].email.isEmpty?Container():
+                    Text('E-mail: ${_dataListForDropDisplay[index].email}',style: TextStyle(fontSize: 12,)),
+                    _dataListForDropDisplay[index].web.isEmpty?Container():
+                    Text('Web: ${_dataListForDropDisplay[index].web}',style: TextStyle(fontSize: 12,)),
+                    _dataListForDropDisplay[index].fax.isEmpty?Container():
+                    Text('Fax: ${_dataListForDropDisplay[index].fax}',style: TextStyle(fontSize: 12)),
+                    _dataListForDropDisplay[index].phone.isEmpty?Container():
+                    Text('Phone: ${_dataListForDropDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDropDisplay[index].mobile.isEmpty?Container():
+                    Text('Mobile: ${_dataListForDropDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDropDisplay[index].contact.isEmpty?Container():
+                    Text('Contact: ${_dataListForDropDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDropDisplay[index].facebook.isEmpty?Container():
+                    Text('Facebook: ${_dataListForDropDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDropDisplay[index].designation.isEmpty?Container():
+                    Text('Designation: ${_dataListForDropDisplay[index].designation}',style: TextStyle(fontSize: 12),),
+                    _dataListForDropDisplay[index].hallname.isEmpty?Container():
+                    Text('Hall Name: ${_dataListForDropDisplay[index].hallname}',style: TextStyle(fontSize: 12,),),
+                    // _dataList[index].id.isEmpty?Container():
+                    // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
+                    _dataListForDropDisplay[index].status.isEmpty?Container():
+                    Text('Status: ${_dataListForDropDisplay[index].status}',style: TextStyle(fontSize: 12,),),
+                    _dataListForDropDisplay[index].date.isEmpty?Container():
+                    Text('Date: ${_dataListForDropDisplay[index].date}',style: TextStyle(fontSize: 12,),),
+                  ],
+                ),
+              ),
+              Container(
+                width: size.width*.1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      child: Text('Update'),
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            UpdateDataPage(
+                              name: _dataList[index].name,
+                              address: _dataList[index].address,
+                              pabx: _dataList[index].pabx,
+                              email: _dataList[index].email,
+                              web: _dataList[index].web,
+                              fax: _dataList[index].fax,
+                              phone: _dataList[index].phone,
+                              mobile: _dataList[index].mobile,
+                              contact: _dataList[index].contact,
+                              facebook: _dataList[index].facebook,
+                              designation: _dataList[index].designation,
+                              hallname: _dataList[index].hallname,
+                              image: _dataList[index].image,
+                              id: _dataList[index].id,
+                              status: _dataList[index].status,
+
+                            )));
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                    ),
+
+
+                    SizedBox(height: 5,),
+
+                    ElevatedButton(
+                      child: Text('Delete'),
+                      onPressed: () {
+                        Alert(
+                          context: context,
+                          type: AlertType.warning,
+                          title: "Confirmation Alert",
+                          desc: "Are you confirm to delete this item ?",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              color: Color.fromRGBO(0, 179, 134, 1.0),
+                            ),
+                            DialogButton(
+                              child: Text(
+                                "OK",
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () {
+                                setState(()=> _isLoading=true);
+                                firebaseProvider.deleteData(_dataList[index].id, context).then((value){
+                                  if(value==true){
+                                    _getDataFromDatabase();
+                                    setState(()=> _isLoading=false);
+                                    Navigator.pop(context);
+                                    showToast('Data deleted successful');
+                                  }else{
+                                    setState(()=> _isLoading=false);
+                                    showToast('Data delete unsuccessful');
+                                  }
+                                });
+                              },
+                              gradient: LinearGradient(colors: [
+                                Color.fromRGBO(116, 116, 191, 1.0),
+                                Color.fromRGBO(52, 138, 199, 1.0)
+                              ]),
+                            )
+                          ],
+                        ).show();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                          textStyle: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+
+  }
 
   Widget _insetFilmUI(
     Size size,
@@ -363,18 +557,19 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    "Film Media",
+                    "FILM MEDIA",
                     style: TextStyle(
                         fontSize: size.height*.04,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey
+                        color: Colors.blueGrey,
+                        letterSpacing: 2.0
                     ),
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Stack(
                         alignment: Alignment.bottomRight,
@@ -382,53 +577,48 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                           data==null ? CircleAvatar(
                             radius: size.height*.09,
                             backgroundColor: Colors.white,
-                            child: Icon(Icons.account_box),
-                          ): Container(
-                            height: size.height*.1,
-                            width: size.height*.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
-                          ),
+                            child: Icon(Icons.account_box,size: size.height*.08,),
+                          ): CircleAvatar(
+                            radius: size.height*.09,
+                            backgroundColor: Colors.white,
+                             child: Image.memory(data!,fit: BoxFit.fill,),
+                          ),                   
                           IconButton(
                               onPressed: () {
-                               uploadToStorage(dataProvider);
+                                pickedImage(dataProvider);
                               },
                               icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
+                              Icon(Icons.photo_library_outlined,
+                               color: Colors.grey))
                         ],
                       ),
                       Container(
-                        width: size.width * .4,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
-                              SizedBox(
-                                width: size.height*.04,
-                              ),
-                              DropdownButton<String>(
-                                value: dropdownValue,
-                                elevation: 0,
-                                dropdownColor: Colors.white,
-                                style: TextStyle(color: Colors.black),
-                                items: films.map((itemValue) {
-                                  return DropdownMenuItem<String>(
-                                    value: itemValue,
-                                    child: Text(itemValue),
-                                  );
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    dropdownValue = newValue!;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
+                        // width: size.width * .4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
+                            SizedBox(
+                              width: size.height*.04,
+                            ),
+                            DropdownButton<String>(
+                              value: dropdownValue,
+                              elevation: 0,
+                              dropdownColor: Colors.white,
+                              style: TextStyle(color: Colors.black),
+                              items: films.map((itemValue) {
+                                return DropdownMenuItem<String>(
+                                  value: itemValue,
+                                  child: Text(itemValue),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ),
                       Container(
@@ -465,19 +655,26 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
 
                 SizedBox(height: size.height*.04,),
 
-                if (_isLoading) Container(
-                    height: size.height*.06,
-                    child: fadingCircle) else ElevatedButton( onPressed: () {
+               ElevatedButton( onPressed: () {
+                      
                        uuid = Uuid().v1();
-                       uploadPhoto(dataProvider, firebaseProvider);
                         setState(() {
                           data=null;
-                        });
+                        });           
+                           showLoaderDialog(context);
+                          uploadData(dataProvider, firebaseProvider);
                         },
-                      child: Text(
-                                'Submit Data',
-                                style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                              )
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                        child: Text(
+                                  'SUBMIT',
+                                  style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
+                                ),
+                      ),
+                              style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+                              
+                      ),
                 ),
                 SizedBox(height: size.height*.04,),
               ],
@@ -486,7 +683,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
         ),
       );
 
-  uploadToStorage(DataProvider dataProvider) async {
+  pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
@@ -508,11 +705,11 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       });
     });
   }
-
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-
+  Future<void> uploadData(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+ 
     if(data==null){
       _submitData(dataProvider,firebaseProvider,);
+     
     }else {
       firebase_storage.Reference storageReference =
       firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
@@ -526,13 +723,12 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
             imageUrl = downloadUrl;
           });
           _submitData(dataProvider,firebaseProvider,);
+          
         });
       });
     }
 
   }
-
-
   Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
@@ -560,7 +756,10 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       };
       await firebaseProvider.addFilmMediaData(map).then((value){
         if(value){
-          setState(()=> _isLoading=false);
+
+          setState((){
+            return Navigator.pop(context);
+          });
           showToast('Success');
           _emptyFildCreator();
         } else {
@@ -644,6 +843,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   }
   Widget _textFormBuilder(String hint) {
     return TextFormField(
+
       controller: hint == 'Name'
           ? _name
           : hint == 'Address'
@@ -668,7 +868,11 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
           ? _designation
           : _hallname,
 
-      decoration: InputDecoration(hintText: hint),
+      decoration: InputDecoration(hintText: hint,  border: new OutlineInputBorder(
+        borderRadius: new BorderRadius.circular(5.0),
+        borderSide: new BorderSide(width: 1),
+      ),),
+      maxLines: 2,
     );
   }
   Future<void> _getDataFromDatabase()async{
@@ -689,6 +893,24 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       }
     });
   }
+
+
+showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
 
 }
 

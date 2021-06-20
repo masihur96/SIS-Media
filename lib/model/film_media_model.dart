@@ -18,7 +18,7 @@ class FilmMediaModel{
   String image;
   String status;
   String date;
-
+  String subCategory;
   FilmMediaModel(
   {
     required this.id,
@@ -36,7 +36,8 @@ class FilmMediaModel{
     required this.hallname,
     required this.image,
     required this.status,
-    required this.date
+    required this.date,
+    required this.subCategory,
 }
 );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_widget.dart';
 import '../screen/category/audio_media_screen.dart';
 import 'package:media_directory_admin/screen/dash_board.dart';
@@ -58,7 +59,42 @@ class DataProvider extends ChangeNotifier {
   }
 
 
-  // Widget sidebarControl(){
+  // List<FilmMediaModel> _filmMediaList=[];
+  // List<FilmMediaModel> _tvMediaList=[];
+  // List<FilmMediaModel> _audioMediaList=[];
+  // List<FilmMediaModel> _printMediaList=[];
+  // List<FilmMediaModel> _newMediaList=[];
+  // List<FilmMediaModel> _importantMediaList=[];
+  //
+  // List<FilmMediaModel> _subCategoryList=[];
+  //
+  // get filmMediaList => _filmMediaList;
+  // get tvMediaList => _tvMediaList;
+  // get audioMediaList => _audioMediaList;
+  // get printMediaList => _printMediaList;
+  // get newMediaList => _newMediaList;
+  // get importantMediaList => _importantMediaList;
+  //
+  // get subCategoryList => _subCategoryList;
+  //
+  //
+  //
+  // void getSubFilmMediaList(String category,String subCategory){
+  //   _subCategoryList.clear();
+  //   int i=0;
+  //   if(category.toLowerCase()=='Film Media'.toLowerCase()){
+  //     while(i<_filmMediaList.length){
+  //       if(_filmMediaList[i].subCatagory.toLowerCase()==subCategory.toLowerCase()){
+  //         _subCategoryList.add(_filmMediaList[i]);
+  //       }
+  //       i++;
+  //     }
+  //     notifyListeners();
+  //     print(_subCategoryList.length);
+  //   }
+  // }
+
+// Widget sidebarControl(){
   //   if(sideBarValue == 1 ) return HomePage();
   //   else return DashBoard();
   // }

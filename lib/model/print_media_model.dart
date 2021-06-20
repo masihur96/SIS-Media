@@ -17,6 +17,7 @@ class PrintMediaModel{
   String id;
   String status;
   String date;
+  String subCategory;
 
   PrintMediaModel(
   {
@@ -37,7 +38,8 @@ class PrintMediaModel{
     required this.position,
     required this.id,
     required this.status,
-    required this.date
+    required this.date,
+    required this.subCategory,
 }
 
       );
