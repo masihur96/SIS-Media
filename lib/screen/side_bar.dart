@@ -13,7 +13,7 @@ class SideBar extends StatelessWidget {
     return Container(
       width: size.width<1200? 0.0: size.width*.2,
       height: size.height,
-      color: Color.fromRGBO(216,211,216,1),
+      color: Colors.blueGrey,
       //color: Colors.white,
       child:  ListView.builder(
         itemCount: Variables.sideBarMenuList().length,
@@ -44,7 +44,7 @@ class EntryItemTile extends StatelessWidget {
         },
         contentPadding: EdgeInsets.only(left: 40),
         dense: true,
-        title: Text(root.title,style: TextStyle(color: Colors.black,fontSize: size.height*.02)),
+        title: Text(root.title,style: TextStyle(color: Colors.white,fontSize: size.height*.02)),
       );
     }
     return ExpansionTile(
@@ -52,12 +52,12 @@ class EntryItemTile extends StatelessWidget {
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Icon(root.iconData,size: size.height*.03,color: Colors.black),
+          Icon(root.iconData,size: size.height*.03,color: Colors.white),
           SizedBox(width: size.height*.02),
-          Text(root.title,style: TextStyle(fontWeight: FontWeight.w500,fontSize: size.height*.022,color: Colors.black)),
+          Text(root.title,style: TextStyle(fontWeight: FontWeight.w500,fontSize: size.height*.022,color: Colors.white)),
         ],
       ),
-      trailing: Icon(Icons.keyboard_arrow_down, color: Colors.black,),
+      trailing: Icon(Icons.keyboard_arrow_down, color: Colors.white,),
       onExpansionChanged: (val){
         _category= root.title;
       },

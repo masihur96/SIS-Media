@@ -8,14 +8,15 @@ import 'package:media_directory_admin/model/television_media_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/screen/category/rate_chart/television_widget.dart';
-import 'package:media_directory_admin/screen/category/update_screen/update_television_media_data.dart';
+import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_insert.dart';
+import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_alldata.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/painting.dart';
+
 class TelevisionMediaScreen extends StatefulWidget {
   @override
   _TelevisionMediaScreenState createState() => _TelevisionMediaScreenState();
@@ -54,56 +55,113 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   TextEditingController _houseName = TextEditingController(text: '');
 
   final _ktabs = <Tab>[
-    const Tab(text: 'All Data',),
-    const Tab(text: 'Insert Data',),
+    const Tab(
+      text: 'All Data',
+    ),
+    const Tab(
+      text: 'Insert Data',
+    ),
   ];
   List staatus = ['Public', 'Private'];
+  String statusValue = "Public";
+
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'Television Channel';
-  String channelValue = 'Bangladesh Television';
-  bool _checkboSponsorship = false;
-  Widget rateChartWidget = TelevisionRateChartWidget().TelevisionRateChart();
-  Widget rateChartWidgetsponsorship =
-      TelevisionRateChartWidget().TelevisionRateChartforSponsorship();
-  Widget rateChartWidgetchannelI =
-      TelevisionRateChartWidget().TelevisionRateChartforchannelI();
-  List Televisions = Variables().getTelevisionList();
-  List Channels = Variables().getTVChannelList();
 
-  String statusValue = "Public";
-  final String uuid = Uuid().v1();
-  String name='';
+  List channels = Variables().getTVChannelList();
+  String channelValue = 'Bangladesh Television';
+
+  bool _checkboSponsorship = false;
+  List televisions = Variables().getTelevisionList();
+
+  String? uuid;
+  String name = '';
   String? error;
   Uint8List? data;
   String imageUrl = '';
   var file;
 
+  List<TelevisionMediaModel> _subList = [];
+  List<TelevisionMediaModel> _filteredList = [];
 
-  FatchDataHelper _databaseHelper = FatchDataHelper();
-  List<TelevisionMediaModel> _dataList  = [];
-  List<TelevisionMediaModel> _dataListForDisplay = [];
-  void initState() {
-    super.initState();
-    _getDataFromDatabase();
+  _filterList(String searchItem) {
     setState(() {
-      _dataListForDisplay = _dataList;
+      _filteredList = _subList
+          .where((element) =>
+              (element.name!.toLowerCase().contains(searchItem.toLowerCase())))
+          .toList();
     });
   }
+
+  _filterSubCategoryList(String searchItem) {
+    setState(() {
+      _filteredList = _subList
+          .where((element) => (element.subCategory!
+              .toLowerCase()
+              .contains(searchItem.toLowerCase())))
+          .toList();
+    });
+  }
+
+  int counter = 0;
+  customInit(FatchDataHelper fatchDataHelper) async {
+    setState(() {
+      counter++;
+    });
+    if (fatchDataHelper.televisionMediadataList.isEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
+      await fatchDataHelper.fetchTelevisionData().then((value) {
+        setState(() {
+          _subList = fatchDataHelper.televisionMediadataList;
+          _filteredList = _subList;
+          _isLoading = false;
+        });
+      });
+    } else {
+      setState(() {
+        _subList = fatchDataHelper.televisionMediadataList;
+        _filteredList = _subList;
+      });
+    }
+  }
+
+  getData(FatchDataHelper fatchDataHelper) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await fatchDataHelper.fetchTelevisionData().then((value) {
+      setState(() {
+        _subList = fatchDataHelper.televisionMediadataList;
+        _filteredList = _subList;
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
-    final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+    final FirebaseProvider firebaseProvider =
+        Provider.of<FirebaseProvider>(context);
+    final FatchDataHelper fatchDataHelper =
+        Provider.of<FatchDataHelper>(context);
+
+    if (counter == 0) {
+      customInit(fatchDataHelper);
+    }
     return Container(
         color: Color(0xffedf7fd),
-        width:dataProvider.pageWidth(size),
+        width: dataProvider.pageWidth(size),
         height: size.height,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             children: <Widget>[
               Container(
-                height: size.height*.913,
+                height: size.height * .913,
                 child: DefaultTabController(
                   length: _ktabs.length,
                   child: Scaffold(
@@ -111,13 +169,15 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Color.fromRGBO(216, 211, 216, 1),
+                        backgroundColor: Colors.blueGrey,
                         bottom: TabBar(
-                          labelStyle:TextStyle(fontSize: size.height*.04,),
+                          labelStyle: TextStyle(
+                            fontSize: size.height * .03,
+                          ),
                           tabs: _ktabs,
                           indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.black54,
-                          labelColor: Colors.black,
+                          unselectedLabelColor: Colors.white60,
+                          labelColor: Colors.white,
                         ),
                       ),
                     ),
@@ -126,9 +186,11 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                         size,
                         dataProvider,
                         context,
-                          firebaseProvider,
+                        firebaseProvider,
+                        fatchDataHelper,
                       ),
-                      _insetDataUI(size, context, dataProvider, firebaseProvider),
+                      _insetDataUI(
+                          size, context, dataProvider, firebaseProvider),
                     ]),
                   ),
                 ),
@@ -138,195 +200,394 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         ));
   }
 
-  Widget _allDataUI(
-    Size size,
-    DataProvider dataProvider,
-    BuildContext context,
-    FirebaseProvider firebaseProvider
-  ) =>
+  Widget _allDataUI(Size size, DataProvider dataProvider, BuildContext context,
+          FirebaseProvider firebaseProvider, FatchDataHelper fatchDataHelper) =>
       Container(
+        padding: const EdgeInsets.all(10.0),
+        height: size.height,
+        width: size.width,
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                    width: size.width * .4,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.blueGrey),
+                    ),
+                    // width: size.width * .5,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.04),),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          DropdownButton<String>(
-                            value: dropdownValue,
-                            elevation: 0,
-                            dropdownColor: Colors.white,
-                            style: TextStyle(color: Colors.black),
-                            items: Televisions.map((itemValue) {
-                              return DropdownMenuItem<String>(
-                                value: itemValue,
-                                child: Text(itemValue),
-                              );
-                            }).toList(),
-                            onChanged: (newValue) {
-                              setState(() {
-                                dropdownValue = newValue!;
-                              });
-                              _dataListForDisplay = _dataList.where((element) {
-                                var noteTitle = element.subCategory;
-                                return noteTitle.contains(dropdownValue);
-                              }).toList();
-
-                            },
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Please Select Your Sub-Category : ",
+                              style: TextStyle(fontSize: size.height * .025),
+                            ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                elevation: 0,
+                                dropdownColor: Colors.white,
+                                style: TextStyle(color: Colors.black),
+                                items: televisions.map((itemValue) {
+                                  return DropdownMenuItem<String>(
+                                    value: itemValue,
+                                    child: Text(itemValue),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                  _filterSubCategoryList(dropdownValue);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    width: size.width * .3,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "Please Search your Query",
-                          prefixIcon: Icon(Icons.search_outlined),
-                          enabledBorder: InputBorder.none),
-                      onChanged: (text){
-                        text = text.toLowerCase();
-                        setState(() {
-                          _dataListForDisplay = _dataList.where((element) {
-                            var noteTitle = element.name.toLowerCase();
-                            return noteTitle.contains(text);
-                          }).toList();
-                        });
-                      },
-
-                    ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Visibility(
+                      visible: dropdownValue != 'Rate Chart',
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 1, color: Colors.blueGrey),
+                          ),
+                          width: size.width * .3,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Please Search your Query",
+                                prefixIcon: Icon(Icons.search_outlined),
+                                enabledBorder: InputBorder.none),
+                            onChanged: _filterList,
+                          ),
+                        ),
+                      )),
+                  SizedBox(
+                    width: size.width * .02,
+                  ),
+                  Visibility(
+                    visible: dropdownValue != 'Rate Chart',
+                    child: GestureDetector(
+                        onTap: () {
+                          getData(fatchDataHelper);
+                        },
+                        child: Icon(Icons.refresh_outlined)),
                   )
                 ],
               ),
             ),
-
-            Expanded(
-              child: SizedBox(
-                height: 500.0,
-                child: RefreshIndicator(
-                  backgroundColor: Colors.white,
-                  onRefresh: ()async{
-                    await _getDataFromDatabase();
-                  },
-                  child: new ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: _dataListForDisplay.length,
-                    itemBuilder: (context, index){
-                      return _listItem(index,size,firebaseProvider);
-                    },
-
-                  ),
-                ),
-              ),
-            ),
-             ],
+            dropdownValue == 'Rate Chart'
+                ? AllDataTelevisionRate()
+                : _isLoading
+                    ? Container(
+                        child: Column(
+                        children: [
+                          SizedBox(
+                            height: size.height * .4,
+                          ),
+                          fadingCircle,
+                        ],
+                      ))
+                    : Expanded(
+                        child: SizedBox(
+                          height: 500.0,
+                          child: new ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: _filteredList.length,
+                            itemBuilder: (context, index) {
+                              return _listItem(index, size, firebaseProvider,
+                                  fatchDataHelper, dataProvider);
+                            },
+                          ),
+                        ),
+                      ),
+          ],
         ),
       );
-  _listItem(index,Size size,FirebaseProvider firebaseProvider){
+  _listItem(index, Size size, FirebaseProvider firebaseProvider,
+      FatchDataHelper fatchDataHelper, DataProvider dataProvider) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-            border: Border.all(width: 1,color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
+            border: Border.all(width: 1, color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             Container(
-                width: size.height*.15,
-                height: size.height*.16,
-                child: _dataList[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
-            ),
+                width: size.height * .13,
+                height: size.height * .16,
+                child: _filteredList[index].image!.isEmpty
+                    ? Icon(
+                        Icons.photo,
+                        size: size.height * .16,
+                        color: Colors.grey,
+                      )
+                    : Image.network(_filteredList[index].image!,
+                        fit: BoxFit.fill)),
             Container(
-              width: size.width*.5,
+              width: size.width * .5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _dataListForDisplay[index].name.isEmpty?Container():
-                  Text(_dataListForDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                  _dataListForDisplay[index].address.isEmpty?Container():
-                  Text('Address: ${_dataListForDisplay[index].address}',style: TextStyle(fontSize: 12,)),
-                  _dataListForDisplay[index].pabx.isEmpty?Container():
-                  Text('PABX: ${_dataListForDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
-                  _dataListForDisplay[index].email.isEmpty?Container():
-                  Text('E-mail: ${_dataListForDisplay[index].email}',style: TextStyle(fontSize: 12,)),
-                  _dataListForDisplay[index].web.isEmpty?Container():
-                  Text('Web: ${_dataListForDisplay[index].web}',style: TextStyle(fontSize: 12,)),
-                  _dataListForDisplay[index].fax.isEmpty?Container():
-                  Text('Fax: ${_dataListForDisplay[index].fax}',style: TextStyle(fontSize: 12)),
-                  _dataListForDisplay[index].phone.isEmpty?Container():
-                  Text('Phone: ${_dataListForDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].mobile.isEmpty?Container():
-                  Text('Mobile: ${_dataListForDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].contact.isEmpty?Container():
-                  Text('Contact: ${_dataListForDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].facebook.isEmpty?Container():
-                  Text('Facebook: ${_dataListForDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].businessType.isEmpty?Container():
-                  Text('Business Type: ${_dataListForDisplay[index].businessType}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].camera.isEmpty?Container():
-                  Text('Camera: ${_dataListForDisplay[index].camera}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].unit1.isEmpty?Container():
-                  Text('Unit 1: ${_dataListForDisplay[index].unit1}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].unit2.isEmpty?Container():
-                  Text('unit 2: ${_dataListForDisplay[index].unit2}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].unit3.isEmpty?Container():
-                  Text('Unit 3: ${_dataListForDisplay[index].unit3}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].unit4.isEmpty?Container():
-                  Text('Unit 4: ${_dataListForDisplay[index].unit4}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].macPro.isEmpty?Container():
-                  Text('Mac Pro: ${_dataListForDisplay[index].macPro}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].brunchOffice.isEmpty?Container():
-                  Text('Brunch Office: ${_dataListForDisplay[index].brunchOffice}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].programs.isEmpty?Container():
-                  Text('Programs: ${_dataListForDisplay[index].programs}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].training.isEmpty?Container():
-                  Text('Training Course : ${_dataListForDisplay[index].training}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].shooting.isEmpty?Container():
-                  Text('Shooting Facilities: ${_dataListForDisplay[index].shooting}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].location.isEmpty?Container():
-                  Text('location: ${_dataListForDisplay[index].location}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].artist.isEmpty?Container():
-                  Text('Artist Type: ${_dataListForDisplay[index].artist}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].representative.isEmpty?Container():
-                  Text('Representative: ${_dataListForDisplay[index].representative}',style: TextStyle(fontSize: 12),),
-                  _dataListForDisplay[index].designation.isEmpty?Container():
-                  Text('Designation: ${_dataListForDisplay[index].designation}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].companyName.isEmpty?Container():
-                  Text('Company Name: ${_dataListForDisplay[index].companyName}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].regionalOffice.isEmpty?Container():
-                  Text('Regional Sales Ofice: ${_dataListForDisplay[index].regionalOffice}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].channelName.isEmpty?Container():
-                  Text('Channel Name: ${_dataListForDisplay[index].channelName}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].houseName.isEmpty?Container():
-                  Text('House Name: ${_dataListForDisplay[index].houseName}',style: TextStyle(fontSize: 12,),),
+                  _filteredList[index].name!.isEmpty
+                      ? Container()
+                      : Text(
+                          _filteredList[index].name!,
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w700),
+                        ),
+                  _filteredList[index].address!.isEmpty
+                      ? Container()
+                      : Text('Address: ${_filteredList[index].address}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+                  _filteredList[index].pabx!.isEmpty
+                      ? Container()
+                      : Text(
+                          'PABX: ${_filteredList[index].pabx}',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                  _filteredList[index].email!.isEmpty
+                      ? Container()
+                      : Text('E-mail: ${_filteredList[index].email}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+                  _filteredList[index].web!.isEmpty
+                      ? Container()
+                      : Text('Web: ${_filteredList[index].web}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+                  _filteredList[index].fax!.isEmpty
+                      ? Container()
+                      : Text('Fax: ${_filteredList[index].fax}',
+                          style: TextStyle(fontSize: 12)),
+                  _filteredList[index].phone!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Phone: ${_filteredList[index].phone}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].mobile!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Mobile: ${_filteredList[index].mobile}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].contact!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Contact: ${_filteredList[index].contact}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].facebook!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Facebook: ${_filteredList[index].facebook}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].businessType!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Business Type: ${_filteredList[index].businessType}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].camera!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Camera: ${_filteredList[index].camera}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].unit1!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Unit 1: ${_filteredList[index].unit1}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].unit2!.isEmpty
+                      ? Container()
+                      : Text(
+                          'unit 2: ${_filteredList[index].unit2}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].unit3!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Unit 3: ${_filteredList[index].unit3}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].unit4!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Unit 4: ${_filteredList[index].unit4}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].macPro!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Mac Pro: ${_filteredList[index].macPro}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].brunchOffice!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Brunch Office: ${_filteredList[index].brunchOffice}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].programs!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Programs: ${_filteredList[index].programs}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].training!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Training Course : ${_filteredList[index].training}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].shooting!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Shooting Facilities: ${_filteredList[index].shooting}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].location!.isEmpty
+                      ? Container()
+                      : Text(
+                          'location: ${_filteredList[index].location}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].artist!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Artist Type: ${_filteredList[index].artist}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].representative!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Representative: ${_filteredList[index].representative}',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                  _filteredList[index].designation!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Designation: ${_filteredList[index].designation}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].companyName!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Company Name: ${_filteredList[index].companyName}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].regionalOffice!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Regional Sales Ofice: ${_filteredList[index].regionalOffice}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].channelName!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Channel Name: ${_filteredList[index].channelName}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].houseName!.isEmpty
+                      ? Container()
+                      : Text(
+                          'House Name: ${_filteredList[index].houseName}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                   // _dataList[index].id.isEmpty?Container():
                   // Text('id: ${_dataList[index].id}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].status.isEmpty?Container():
-                  Text('Status: ${_dataListForDisplay[index].status}',style: TextStyle(fontSize: 12,),),
-                  _dataListForDisplay[index].date.isEmpty?Container():
-                  Text('Date: ${_dataListForDisplay[index].date}',style: TextStyle(fontSize: 12,),),
+                  _filteredList[index].status!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Status: ${_filteredList[index].status}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].date!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Date: ${_filteredList[index].date}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                 ],
               ),
             ),
             Container(
-              width: size.width*.1,
+              width: size.width * .1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -334,57 +595,88 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                   ElevatedButton(
                     child: Text('Update'),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                          UpdateTelevisionData(
-                            name: _dataList[index].name,
-                            address: _dataList[index].address,
-                            pabx: _dataList[index].pabx,
-                            email: _dataList[index].email,
-                            web: _dataList[index].web,
-                            fax: _dataList[index].fax,
-                            phone: _dataList[index].phone,
-                            mobile: _dataList[index].mobile,
-                            contact: _dataList[index].contact,
-                            facebook: _dataList[index].facebook,
-                            image: _dataList[index].image,
-                            businessType: _dataList[index].businessType,
-                            camera: _dataList[index].camera,
-                            unit1: _dataList[index].unit1,
-                            unit2: _dataList[index].unit2,
-                            unit3: _dataList[index].unit3,
-                            unit4: _dataList[index].unit4,
-                            macPro: _dataList[index].macPro,
-                            brunchOffice: _dataList[index].brunchOffice,
-                            programs: _dataList[index].programs,
-                            training: _dataList[index].training,
-                            shooting: _dataList[index].shooting,
-                            location: _dataList[index].location,
-                            artist: _dataList[index].artist,
-                            representative: _dataList[index].representative,
-                            designation: _dataList[index].designation,
-                            companyName: _dataList[index].companyName,
-                            regionalOffice: _dataList[index].regionalOffice,
-                            channelName: _dataList[index].channelName,
-                            houseName: _dataList[index].houseName,
-                            id: _dataList[index].id,
-                            status: _dataList[index].status,
-                            date: _dataList[index].date,
+                      dataProvider.category = dataProvider.subCategory;
+                      dataProvider.subCategory = "Update Television Media";
 
-                          )
-
-                      ));
+                      dataProvider.televisionMediaModel.id =
+                          _filteredList[index].id;
+                      dataProvider.televisionMediaModel.name =
+                          _filteredList[index].name;
+                      dataProvider.televisionMediaModel.address =
+                          _filteredList[index].address;
+                      dataProvider.televisionMediaModel.pabx =
+                          _filteredList[index].pabx;
+                      dataProvider.televisionMediaModel.email =
+                          _filteredList[index].email;
+                      dataProvider.televisionMediaModel.web =
+                          _filteredList[index].web;
+                      dataProvider.televisionMediaModel.fax =
+                          _filteredList[index].fax;
+                      dataProvider.televisionMediaModel.phone =
+                          _filteredList[index].phone;
+                      dataProvider.televisionMediaModel.mobile =
+                          _filteredList[index].mobile;
+                      dataProvider.televisionMediaModel.contact =
+                          _filteredList[index].contact;
+                      dataProvider.televisionMediaModel.facebook =
+                          _filteredList[index].facebook;
+                      dataProvider.televisionMediaModel.designation =
+                          _filteredList[index].designation;
+                      dataProvider.televisionMediaModel.image =
+                          _filteredList[index].image;
+                      dataProvider.televisionMediaModel.businessType =
+                          _filteredList[index].businessType;
+                      dataProvider.televisionMediaModel.camera =
+                          _filteredList[index].camera;
+                      dataProvider.televisionMediaModel.unit1 =
+                          _filteredList[index].unit1;
+                      dataProvider.televisionMediaModel.unit2 =
+                          _filteredList[index].unit2;
+                      dataProvider.televisionMediaModel.unit3 =
+                          _filteredList[index].unit3;
+                      dataProvider.televisionMediaModel.unit4 =
+                          _filteredList[index].unit4;
+                      dataProvider.televisionMediaModel.macPro =
+                          _filteredList[index].macPro;
+                      dataProvider.televisionMediaModel.brunchOffice =
+                          _filteredList[index].brunchOffice;
+                      dataProvider.televisionMediaModel.programs =
+                          _filteredList[index].programs;
+                      dataProvider.televisionMediaModel.training =
+                          _filteredList[index].training;
+                      dataProvider.televisionMediaModel.shooting =
+                          _filteredList[index].shooting;
+                      dataProvider.televisionMediaModel.location =
+                          _filteredList[index].location;
+                      dataProvider.televisionMediaModel.artist =
+                          _filteredList[index].artist;
+                      dataProvider.televisionMediaModel.representative =
+                          _filteredList[index].representative;
+                      dataProvider.televisionMediaModel.designation =
+                          _filteredList[index].designation;
+                      dataProvider.televisionMediaModel.companyName =
+                          _filteredList[index].companyName;
+                      dataProvider.televisionMediaModel.regionalOffice =
+                          _filteredList[index].regionalOffice;
+                      dataProvider.televisionMediaModel.channelName =
+                          _filteredList[index].channelName;
+                      dataProvider.televisionMediaModel.houseName =
+                          _filteredList[index].houseName;
+                      dataProvider.televisionMediaModel.status =
+                          _filteredList[index].status;
+                      dataProvider.televisionMediaModel.date =
+                          _filteredList[index].date;
                     },
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        primary: Colors.grey,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         textStyle: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold)),
+                            fontSize: 15, fontWeight: FontWeight.bold)),
                   ),
-
-
-                  SizedBox(height: 5,),
-
+                  SizedBox(
+                    height: 5,
+                  ),
                   ElevatedButton(
                     child: Text('Delete'),
                     onPressed: () {
@@ -397,7 +689,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                           DialogButton(
                             child: Text(
                               "Cancel",
-                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
                               Navigator.pop(context);
@@ -407,18 +700,28 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                           DialogButton(
                             child: Text(
                               "OK",
-                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
-                              setState(()=> _isLoading=true);
-                              firebaseProvider.deleteTelevisionData(_dataList[index].id, context).then((value){
-                                if(value==true){
-                                  _getDataFromDatabase();
-                                  setState(()=> _isLoading=false);
+                              setState(() => _isLoading = true);
+                              firebaseProvider
+                                  .deleteTelevisionData(
+                                      _filteredList[index].id!, context)
+                                  .then((value) async {
+                                if (value == true) {
+                                  firebase_storage.FirebaseStorage.instance
+                                      .ref()
+                                      .child(dataProvider.subCategory)
+                                      .child(_filteredList[index].id!)
+                                      .delete();
+                                  setState(() => _isLoading = false);
+                                  getData(fatchDataHelper);
                                   Navigator.pop(context);
                                   showToast('Data deleted successful');
-                                }else{
-                                  setState(()=> _isLoading=false);
+                                } else {
+                                  setState(() => _isLoading = false);
+                                  Navigator.pop(context);
                                   showToast('Data delete unsuccessful');
                                 }
                               });
@@ -430,15 +733,13 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                           )
                         ],
                       ).show();
-
-
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.redAccent,
-                        padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 23, vertical: 15),
                         textStyle: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold)),
+                            fontSize: 15, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
@@ -447,9 +748,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         ),
       ),
     );
-
-
   }
+
   Widget _insetDataUI(
     Size size,
     BuildContext context,
@@ -457,7 +757,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     FirebaseProvider firebaseProvider,
   ) =>
       Container(
-       height: size.height,
+        height: size.height,
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -466,56 +766,82 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    "Television Media",
+                    "TELEVISION MEDIA",
                     style: TextStyle(
-                        fontSize: size.height*.04,
+                        fontSize: size.height * .04,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey),
+                        color: Colors.blueGrey,
+                        letterSpacing: 2.0),
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data==null ? CircleAvatar(
-                            radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.account_box),
-                          ): Container(
-                            height: size.height*.05,
-                            width: size.height*.05,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                uploadToStorage(dataProvider);
-                              },
-                              icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
-                        ],
+                      Visibility(
+                        visible: dropdownValue != 'Rate Chart',
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            data == null
+                                ? CircleAvatar(
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.blueGrey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .087,
+                                      backgroundColor: Colors.white,
+                                      child: Icon(
+                                        Icons.account_box,
+                                        size: size.height * .08,
+                                      ),
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.blueGrey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .087,
+                                      backgroundColor: Colors.white,
+                                      backgroundImage: MemoryImage(
+                                        data!,
+                                      ),
+                                    ),
+                                  ),
+                            IconButton(
+                                onPressed: () {
+                                  pickedImage(dataProvider);
+                                },
+                                icon: Icon(Icons.photo_library_outlined,
+                                    color: Colors.grey))
+                          ],
+                        ),
                       ),
                       Container(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          width: size.width * .5,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025),),
-                                DropdownButton<String>(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.blueGrey),
+                        ),
+                        // width: size.width * .4,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Please Select Your Sub-Category :",
+                                style: TextStyle(fontSize: size.height * .025),
+                              ),
+                              SizedBox(
+                                width: size.height * .04,
+                              ),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
                                   value: dropdownValue,
                                   elevation: 0,
                                   dropdownColor: Colors.white,
                                   style: TextStyle(color: Colors.black),
-                                  items: Televisions.map((itemValue) {
+                                  items: televisions.map((itemValue) {
                                     return DropdownMenuItem<String>(
                                       value: itemValue,
                                       child: Text(itemValue),
@@ -527,110 +853,60 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                                     });
                                   },
                                 ),
-                              ],
-                            ),
-                          )),
-                      Container(
-                          width: size.width * .2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                              Expanded(
-                                child: DropdownButton<String>(
-                                  value: statusValue,
-                                  elevation: 0,
-                                  dropdownColor: Colors.white,
-                                  style: TextStyle(color: Colors.black),
-                                  items: staatus.map((itemValue) {
-                                    return DropdownMenuItem<String>(
-                                      value: itemValue,
-                                      child: Text(itemValue),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      statusValue = newValue!;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          )),
-
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Visibility(
-                        visible: dropdownValue == "Rate Chart",
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Text("Please Select Channel Name :"),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DropdownButton<String>(
-                                value: channelValue,
-                                elevation: 0,
-                                dropdownColor: Colors.white,
-                                style: TextStyle(color: Colors.black),
-                                items: Channels.map((itemValue) {
-                                  return DropdownMenuItem<String>(
-                                    value: itemValue,
-                                    child: Text(itemValue),
-                                  );
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    channelValue = newValue!;
-                                  });
-                                },
                               ),
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      Visibility(
+                          visible: dropdownValue != 'Rate Chart',
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1, color: Colors.blueGrey),
+                            ),
+                            // width: size.width * .2,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Status : ",
+                                    style:
+                                        TextStyle(fontSize: size.height * .025),
+                                  ),
+                                  DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: statusValue,
+                                      elevation: 0,
+                                      dropdownColor: Colors.white,
+                                      style: TextStyle(color: Colors.black),
+                                      items: staatus.map((itemValue) {
+                                        return DropdownMenuItem<String>(
+                                          value: itemValue,
+                                          child: Text(itemValue),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          statusValue = newValue!;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
                     ],
                   ),
                 ),
                 Visibility(
-                    visible: dropdownValue == "Rate Chart",
-                    child: Column(
-                      children: <Widget>[
-                        Visibility(
-                            visible: channelValue == 'Bangladesh Television',
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("To Rate For Sponsorship : "),
-                                    Checkbox(
-                                      value: _checkboSponsorship,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _checkboSponsorship =
-                                              !_checkboSponsorship;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                _checkboSponsorship
-                                    ? rateChartWidgetsponsorship
-                                    : rateChartWidget,
-                              ],
-                            )),
-                        Visibility(
-                          visible: channelValue == 'Channel I' ||
-                              channelValue == 'MAASRANGA' ||
-                              channelValue == 'CHANNEL 9' ||
-                              channelValue == 'ASIAN TV',
-                          child: rateChartWidgetchannelI,
-                        ),
-                      ],
-                    )),
+                  visible: dropdownValue == "Rate Chart",
+                  child: TelevisionRateChart(),
+                ),
                 Visibility(
                   visible: dropdownValue != "Rate Chart",
                   child: Container(
@@ -639,22 +915,42 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                     ),
                   ),
                 ),
-
-                SizedBox(height: size.height*.04,),
-                _isLoading
-                    ? Container(height: size.height*.06, child: fadingCircle)
-                    : ElevatedButton(
-                        onPressed: () async {
-                          uploadPhoto(dataProvider, firebaseProvider);
-                          setState(() {
-                            data=null;
-                          });
-                        },
-                        child: Text(
-                          'Submit Data Data',
-                            style: TextStyle(color: Colors.white, fontSize: size.height*.04,
-                        )),
-                )
+                SizedBox(
+                  height: size.height * .04,
+                ),
+                Visibility(
+                  visible: dropdownValue != 'Rate Chart',
+                  child: _isLoading
+                      ? Container(
+                          child: Column(
+                          children: [
+                            fadingCircle,
+                          ],
+                        ))
+                      : ElevatedButton(
+                          onPressed: () {
+                            uuid = Uuid().v1();
+                            uploadData(dataProvider, firebaseProvider);
+                            setState(() {
+                              data = null;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 10),
+                            child: Text(
+                              'SUBMIT',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: size.height * .04,
+                              ),
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey,
+                          ),
+                        ),
+                ),
               ],
             ),
           ),
@@ -665,7 +961,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
-
     if (statusValue.isNotEmpty) {
       setState(() => _isLoading = true);
       Map<String, String> map = {
@@ -699,7 +994,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         'regionalOffice': _regionalSalesOffice.text,
         'channelName': _channelName.text,
         'houseName': _houseName.text,
-        'id': uuid,
+        'id': uuid!,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'status': statusValue.toLowerCase(),
@@ -751,46 +1046,62 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     _houseName.clear();
   }
 
-  uploadToStorage(DataProvider dataProvider) async {
+  pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
     input.onChange.listen((event) {
       file = input.files!.first;
-      final reader1 =   html.FileReader();
+      final reader1 = html.FileReader();
       reader1.readAsDataUrl(input.files![0]);
-      reader1.onError.listen((err) => setState((){
-        error = err.toString();
-      }) );
-      reader1.onLoad.first.then((res){
+      reader1.onError.listen((err) => setState(() {
+            error = err.toString();
+          }));
+      reader1.onLoad.first.then((res) {
         final encoded = reader1.result as String;
-        final stripped = encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+        final stripped =
+            encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
         setState(() {
           name = input.files![0].name;
-          data  =base64.decode(stripped);
+          data = base64.decode(stripped);
           error = null;
         });
       });
     });
   }
 
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    firebase_storage.Reference storageReference =
-    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid);
-    firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
-    firebase_storage.TaskSnapshot taskSnapshot;
-    storageUploadTask.then((value) {
-      taskSnapshot = value;
-      taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
-        final downloadUrl = newImageDownloadUrl;
-        _submitData(dataProvider,firebaseProvider);
-        setState((){
-          imageUrl = downloadUrl;
+  Future<void> uploadData(
+      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+    if (data == null) {
+      _submitData(
+        dataProvider,
+        firebaseProvider,
+      );
+    } else {
+      setState(() => _isLoading = true);
+      firebase_storage.Reference storageReference = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child(dataProvider.subCategory)
+          .child(uuid!);
+      firebase_storage.UploadTask storageUploadTask =
+          storageReference.putBlob(file);
+      firebase_storage.TaskSnapshot taskSnapshot;
+      storageUploadTask.then((value) {
+        taskSnapshot = value;
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
+          final downloadUrl = newImageDownloadUrl;
+          setState(() {
+            imageUrl = downloadUrl;
+          });
+          _submitData(
+            dataProvider,
+            firebaseProvider,
+          );
         });
       });
-    });
+    }
   }
-
 
   Widget TelevisionMediaFild(Size size) {
     return Container(
@@ -800,7 +1111,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width>1200? size.width*.4: size.width *.5,
+                width: size.width > 1200 ? size.width * .4 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -832,13 +1143,12 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                       _textFormBuilderForTelevision('Unit 3'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Unit 4'),
-
                     ],
                   ),
                 ),
               ),
               Container(
-                width:  size.width>1200? size.width*.4: size.width *.5,
+                width: size.width > 1200 ? size.width * .4 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -870,7 +1180,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                       _textFormBuilderForTelevision('Regional Sales Office'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Channel Name'),
-
                     ],
                   ),
                 ),
@@ -878,7 +1187,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             ],
           ),
           Container(
-            width: size.width*.4,
+            width: size.width * .4,
             child: Column(
               children: [
                 SizedBox(height: 20),
@@ -896,79 +1205,70 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       controller: hint == 'Name'
           ? _name
           : hint == 'Address'
-          ? _address
-          : hint == 'PABX'
-          ? _PABX
-          : hint == 'email'
-          ? _email
-          : hint == 'Web'
-          ? _web
-          : hint == 'Fax'
-          ? _fax
-          : hint == 'Phone(T&T)'
-          ? _phonet_t
-          : hint == 'Mobile'
-          ? _mobile
-          : hint == 'Contact'
-          ? _caontact
-          : hint == 'Facebook'
-          ? _facebook
-          : hint == 'Business Type'
-          ? _business_type
-          : hint == 'Camera'
-          ? _camera
-          : hint == 'Unit 1'
-          ? _unit1
-          : hint == 'Unit 2'
-          ? _unit2
-          : hint == 'Unit 3'
-          ? _unit3
-          : hint == 'Unit 4'
-          ? _unit4
-          : hint == 'Mac Pro'
-          ? _mac_pro
-          : hint == 'Branch Office'
-          ? _branch_office
-          : hint == 'Programs'
-          ? _programs
-          : hint == 'Training Course'
-          ? _training
-          : hint == 'Shooting Facilities'
-          ? _shooting
-          : hint == 'Location'
-          ? _location
-          : hint == 'Artist Type'
-          ? _artist_type
-          : hint == 'Representative'
-          ? _representative
-          : hint == 'Designation / Position'
-          ? _designation
-          : hint == 'Company Name'
-          ? _company_name
-          : hint == 'Regional Sales Office'
-          ? _regionalSalesOffice
-          : hint == 'Channel Name'
-          ? _channelName
-          : _houseName,
-      decoration: InputDecoration(hintText: hint),
+              ? _address
+              : hint == 'PABX'
+                  ? _PABX
+                  : hint == 'email'
+                      ? _email
+                      : hint == 'Web'
+                          ? _web
+                          : hint == 'Fax'
+                              ? _fax
+                              : hint == 'Phone(T&T)'
+                                  ? _phonet_t
+                                  : hint == 'Mobile'
+                                      ? _mobile
+                                      : hint == 'Contact'
+                                          ? _caontact
+                                          : hint == 'Facebook'
+                                              ? _facebook
+                                              : hint == 'Business Type'
+                                                  ? _business_type
+                                                  : hint == 'Camera'
+                                                      ? _camera
+                                                      : hint == 'Unit 1'
+                                                          ? _unit1
+                                                          : hint == 'Unit 2'
+                                                              ? _unit2
+                                                              : hint == 'Unit 3'
+                                                                  ? _unit3
+                                                                  : hint ==
+                                                                          'Unit 4'
+                                                                      ? _unit4
+                                                                      : hint ==
+                                                                              'Mac Pro'
+                                                                          ? _mac_pro
+                                                                          : hint == 'Branch Office'
+                                                                              ? _branch_office
+                                                                              : hint == 'Programs'
+                                                                                  ? _programs
+                                                                                  : hint == 'Training Course'
+                                                                                      ? _training
+                                                                                      : hint == 'Shooting Facilities'
+                                                                                          ? _shooting
+                                                                                          : hint == 'Location'
+                                                                                              ? _location
+                                                                                              : hint == 'Artist Type'
+                                                                                                  ? _artist_type
+                                                                                                  : hint == 'Representative'
+                                                                                                      ? _representative
+                                                                                                      : hint == 'Designation / Position'
+                                                                                                          ? _designation
+                                                                                                          : hint == 'Company Name'
+                                                                                                              ? _company_name
+                                                                                                              : hint == 'Regional Sales Office'
+                                                                                                                  ? _regionalSalesOffice
+                                                                                                                  : hint == 'Channel Name'
+                                                                                                                      ? _channelName
+                                                                                                                      : _houseName,
+      decoration: InputDecoration(
+        hintText: hint,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(5.0),
+          borderSide: new BorderSide(width: 1),
+        ),
+      ),
+      maxLines: 2,
     );
-  }
-  Future<void> _getDataFromDatabase()async{
-    await _databaseHelper.fetchTelevisionData().then((result){
-      if(result.isNotEmpty){
-        setState(() {
-          _dataList.clear();
-          _dataList=result;
-          _isLoading=false;
-          showToast("Data  Get Successful");
-        });
-      }else{
-        setState(() {
-          _dataList.clear();
-          _isLoading=false;
-          showToast('Failed to fetch data');
-        });
-      }
-    });
   }
 }

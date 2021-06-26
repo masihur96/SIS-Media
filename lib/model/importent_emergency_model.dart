@@ -1,47 +1,47 @@
 class ImportentEmergencyModel{
 
-  String name;
-  String address;
-  String pabx;
-  String email;
-  String web;
-  String fax;
-  String phone;
-  String mobile;
-  String contact;
-  String facebook;
-  String image;
-  String corporateOffice;
-  String headOffice;
-  String position;
-  String businessType;
-  String id;
-  String status;
-  String date;
-  String subCategory;
+  String? name;
+  String? address;
+  String? pabx;
+  String? email;
+  String? web;
+  String? fax;
+  String? phone;
+  String? mobile;
+  String? contact;
+  String? facebook;
+  String? image;
+  String? corporateOffice;
+  String? headOffice;
+  String? position;
+  String? businessType;
+  String? id;
+  String? status;
+  String? date;
+  String? subCategory;
 
 
 
   ImportentEmergencyModel(
   {
-   required this.name,
-    required this.address,
-    required this.pabx,
-    required this.email,
-    required this.web,
-    required this.fax,
-    required this.phone,
-    required this.mobile,
-    required this.contact,
-    required this.facebook,
-    required this.image,
-    required this.corporateOffice,
-    required this.headOffice,
-    required this.position,
-    required this.businessType,
-    required this.id,
-    required this.status,
-    required this.date,
-    required this.subCategory,
+     this.name,
+     this.address,
+     this.pabx,
+     this.email,
+     this.web,
+     this.fax,
+     this.phone,
+     this.mobile,
+     this.contact,
+     this.facebook,
+     this.image,
+     this.corporateOffice,
+     this.headOffice,
+     this.position,
+     this.businessType,
+     this.id,
+     this.status,
+     this.date,
+     this.subCategory,
 });
 }

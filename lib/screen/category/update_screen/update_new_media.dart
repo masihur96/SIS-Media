@@ -5,53 +5,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class UpdateNewMedia extends StatefulWidget {
-  String name;
-  String address;
-  String pabx;
-  String email;
-  String web;
-  String fax;
-  String phone;
-  String mobile;
-  String contact;
-  String facebook;
-  String image;
-  String editor;
-  String birthDate;
-  String deathDate;
-  String designation;
-  String deathList;
-  String youtubeChannel;
-  String id;
-  String status;
-  String date;
+  String? name;
+  String? address;
+  String? pabx;
+  String? email;
+  String? web;
+  String? fax;
+  String? phone;
+  String? mobile;
+  String? contact;
+  String? facebook;
+  String? image;
+  String? editor;
+  String? birthDate;
+  String? deathDate;
+  String? designation;
+  String? deathList;
+  String? youtubeChannel;
+  String? id;
+  String? status;
+  String? date;
 
   UpdateNewMedia(
       {
-        required this.name,
-        required this.address,
-        required this.pabx,
-        required this.email,
-        required this.web,
-        required this.fax,
-        required this.phone,
-        required this.mobile,
-        required this.contact,
-        required this.facebook,
-        required this.image,
-        required this.editor,
-        required this.birthDate,
-        required this.deathDate,
-        required this.designation,
-        required this.deathList,
-        required this.youtubeChannel,
-        required this.id,
-        required this.status,
-        required this.date
+         this.name,
+         this.address,
+         this.pabx,
+         this.email,
+         this.web,
+         this.fax,
+         this.phone,
+         this.mobile,
+         this.contact,
+         this.facebook,
+         this.image,
+         this.editor,
+         this.birthDate,
+         this.deathDate,
+         this.designation,
+         this.deathList,
+         this.youtubeChannel,
+         this.id,
+         this.status,
+         this.date
       }
       );
   @override
@@ -77,25 +78,34 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
   TextEditingController _designation = TextEditingController();
   TextEditingController _deathList = TextEditingController();
   TextEditingController _youtubeChannel = TextEditingController();
-  void initState() {
-    super.initState();
-    _name.text = widget.name;
-    _address.text = widget.address;
-    _PABX.text = widget.pabx;
-    _email.text = widget.email;
-    _web.text = widget.web;
-    _fax.text = widget.fax;
-    _phonet_t.text = widget.phone;
-    _mobile.text = widget.mobile;
-    _contact.text = widget.contact;
-    _facebook.text = widget.facebook;
-    _editor.text = widget.editor;
-    _birthDate.text = widget.birthDate;
-    _deathDate.text = widget.deathDate;
-    _designation.text = widget.designation;
-    _deathList.text = widget.deathList;
-    _youtubeChannel.text = widget.youtubeChannel;
+
+
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+
+    _name.text = dataProvider.newMediaModel.name!;
+    _address.text = dataProvider.newMediaModel.address!;
+    _PABX.text = dataProvider.newMediaModel.pabx!;
+    _email.text = dataProvider.newMediaModel.email!;
+    _web.text = dataProvider.newMediaModel.web!;
+    _fax.text = dataProvider.newMediaModel.fax!;
+    _phonet_t.text = dataProvider.newMediaModel.phone!;
+    _mobile.text = dataProvider.newMediaModel.mobile!;
+    _contact.text = dataProvider.newMediaModel.contact!;
+    _facebook.text = dataProvider.newMediaModel.facebook!;
+    _editor.text = dataProvider.newMediaModel.editor!;
+    _birthDate.text = dataProvider.newMediaModel.birthDate!;
+    _deathDate.text = dataProvider.newMediaModel.deathDate!;
+    _designation.text = dataProvider.newMediaModel.designation!;
+    _deathList.text = dataProvider.newMediaModel.deathList!;
+    _youtubeChannel.text = dataProvider.newMediaModel.youtubeChannel!;
+    _designation.text = dataProvider.filmMediaModel.designation!;
+
   }
+
 
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
@@ -108,125 +118,199 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
     'Private'
   ];
   String statusValue='Public';
+  List newMedia = Variables().getNewMediaList();
+  String dropdownValue = "Digital Audio - Video Content Provider";
 
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          height: size.height,
-          width: size.width,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Film Media",
-                      style: TextStyle(
-                          fontSize: size.height*.04,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data==null ? CircleAvatar(
-                            radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
-                          ): Container(
-                            height: size.height*.1,
-                            width: size.height*.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
+    return Container(
+      height: size.height,
+      width: size.width * .8,
+      color: Colors.blueGrey,
+          child: Column(
+            children: [
+              SizedBox(height: 3,),
+              Expanded(
+                child: Container(
+                  color: Color(0xffedf7fd),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                data == null
+                                    ? CircleAvatar(
+                                  radius: size.height * .09,
+                                  backgroundColor: Colors.grey,
+                                  child: CircleAvatar(
+                                    radius: size.height * .085,
+                                    backgroundColor: Colors.white,
+                                    child: dataProvider.newMediaModel.image!.isEmpty
+                                        ? Icon(Icons.photo)
+                                        : Image.network(
+                                        dataProvider.newMediaModel.image!),
+                                  ),
+                                )
+                                    : CircleAvatar(
+                                  radius: size.height * .09,
+                                  child: Image.memory(
+                                    data!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      pickedImage(dataProvider);
+                                    },
+                                    icon: Icon(Icons.add_photo_alternate_rounded, color: Colors.black54))
+                              ],
                             ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                uploadToStorage(dataProvider);
-                              },
-                              icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .4,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
+                                      SizedBox(
+                                        width: size.height*.04,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: dropdownValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: newMedia.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              dropdownValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: statusValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: staatus.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              statusValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          NewMediaWidget(size),
+
+                          SizedBox(height: size.height*.04,),
+
+                          _isLoading?
+                          Container(height: size.height * .06, child: fadingCircle):
+                          ElevatedButton(
+                            onPressed: () {
+
+
+                              updateData(dataProvider, firebaseProvider);
+
+
+                              //  Navigator.pop(context,true);
+
+                              // showToast(imageUrl);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                              child: Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .04,
+                                ),
+
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+
+                            ),
+
+                          ),
+
+                          SizedBox(height: size.height*.04,),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                            DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                  NewMediaWidget(size),
-
-                  SizedBox(height: size.height*.04,),
-
-                  if (_isLoading) Container(
-                      height: size.height*.06,
-                      child: fadingCircle) else ElevatedButton( onPressed: () {
-
-                    uploadPhoto(dataProvider, firebaseProvider);
-                    //  Navigator.pop(context,true);
-
-
-                    // showToast(imageUrl);
-                  },
-                      child: Text(
-                        'Update Data',
-                        style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                      )
-                  ),
-                  SizedBox(height: size.height*.04,),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
   }
   Widget NewMediaWidget(Size size) {
     return Container(
+
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width *.5,
+                width:  size.width *.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -252,7 +336,7 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                 ),
               ),
               Container(
-                width: size.width *.5,
+                width: size.width *.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -315,10 +399,17 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
           : hint == 'Death List'
           ? _deathList
           : _youtubeChannel,
-      decoration: InputDecoration(hintText: hint),
+      decoration: InputDecoration(
+        hintText: hint,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(5.0),
+          borderSide: new BorderSide(width: 1),
+        ),
+      ),
+      maxLines: 2,
     );
   }
-  uploadToStorage(DataProvider dataProvider) async {
+  pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
@@ -363,21 +454,22 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
         'designation':_designation.text,
         'deathList':_deathList.text,
         'youtuveChannel':_youtubeChannel.text,
-        'id': widget.id,
+        'id': dataProvider.newMediaModel.id!,
         'date': dateData,
         'status': statusValue.toLowerCase(),
       };
       setState(()=>_isLoading=true);
       await firebaseProvider.updateNewMediaData(mapData, context).then((value){
-        if(value){
-          setState(()=>_isLoading=false);
-          Navigator.pop(context,true);
+        if (value) {
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "New Media Screen";
           showToast('Data updated successful');
-        }
-        else{
-          setState(()=>_isLoading=false);
+        } else {
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "New Media Screen";
           showToast('Data update failed!');
-
         }
       }
       );
@@ -385,15 +477,15 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
 
 
   }
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+  Future<void> updateData(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
     if(data==null){
       setState(() {
-        imageUrl = widget.image;
+        imageUrl = dataProvider.newMediaModel.image!;
       });
       _submitData(dataProvider,firebaseProvider,);
     }else{
       firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(widget.id);
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(dataProvider.newMediaModel.id!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {

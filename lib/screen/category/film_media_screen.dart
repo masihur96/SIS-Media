@@ -8,7 +8,7 @@ import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'update_screen/update_data_page.dart';
+import 'update_screen/update_film_media_page.dart';
 import '../../widgets/notificastion.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +36,8 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   TextEditingController _hallname = TextEditingController(text:'');
 
 
+
+
   final _ktabs = <Tab>[
     const Tab(text: 'All Data'),
     const Tab(text: 'Insert Data',),
@@ -55,43 +57,84 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
    var file;
   String? error;
 
-  FatchDataHelper _databaseHelper = FatchDataHelper();
+  // FatchDataHelper _databaseHelper = FatchDataHelper();
 
-   List<FilmMediaModel> _dataList  = [];
-   List<FilmMediaModel> _dataListForDisplay = [];
-   List<FilmMediaModel> _dataListForDropDisplay = [];
+   List<FilmMediaModel> _subList  = [];
+   List<FilmMediaModel> _filteredList = [];
 
-   @override
-  void initState() {
-    super.initState();
 
+  ///SearchList builder
+  _filterList(String searchItem) {
     setState(() {
-      _dataListForDisplay = _dataList;
-      _dataListForDropDisplay = _dataList;
-      _isLoading=true;
-
-      if(_isLoading=true){
-        Center(
-          child: Container(
-              child: fadingCircle),
-        );
-      }
+      _filteredList = _subList.where((element) =>
+      (element.name!.toLowerCase().contains(searchItem.toLowerCase()))).toList();
     });
-    _getDataFromDatabase();
-
   }
 
+    _filterSubCategoryList(String searchItem) {
+    setState(() {
+      _filteredList = _subList.where((element) =>
+      (element.subCategory!.toLowerCase().contains(searchItem.toLowerCase()))).toList();
+    });
+  }
+
+   int counter = 0;
+   customInit(FatchDataHelper fatchDataHelper)async{
+     setState(() {
+       counter++;
+     });
+     if(fatchDataHelper.filmMediadataList.isEmpty){
+       setState(() {
+         _isLoading=true;
+       });
+       await fatchDataHelper.fetchFilmMediaData().then((value) {
+         setState(() {
+           _subList  = fatchDataHelper.filmMediadataList;
+           _filteredList = _subList;
+           _isLoading=false;
+         });
+
+       });
+     }else{
+       setState(() {
+         _subList  = fatchDataHelper.filmMediadataList;
+         _filteredList = _subList;
+       });
+     }
+   }
+
+   getData(FatchDataHelper fatchDataHelper) async{
+
+       setState(() {
+         _isLoading=true;
+       });
+       await fatchDataHelper.fetchFilmMediaData().then((value) {
+         setState(() {
+           _subList  = fatchDataHelper.filmMediadataList;
+           _filteredList = _subList;
+           _isLoading=false;
+         });
+
+       });
+
+   }
+
+
   List films = Variables().getFilmMediaList();
-
   String? uuid ;
-
   final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
     final Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+    final FatchDataHelper fatchDataHelper = Provider.of<FatchDataHelper>(context);
+
+    if(counter==0){
+      customInit(fatchDataHelper);
+    }
 
     return Container(
         color: Color(0xffedf7fd),
@@ -110,19 +153,19 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Color.fromRGBO(216, 211, 216, 1),
+                        backgroundColor: Colors.blueGrey,
                         bottom: TabBar(
                           labelStyle:TextStyle(fontSize: size.height*.03,),
                           tabs: _ktabs,
                           indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.black54,
-                          labelColor: Colors.black,
+                          unselectedLabelColor: Colors.white60,
+                          labelColor: Colors.white,
                         ),
                       ),
                     ),
                     body: TabBarView(children: [
-                      _allFilmUI(size, dataProvider,context,firebaseProvider),
-                      _insetFilmUI(size, context, dataProvider,firebaseProvider),
+                      _allFilmUI(size, dataProvider,context,firebaseProvider,fatchDataHelper),
+                      _insetFilmUI(size, context, dataProvider,firebaseProvider,fatchDataHelper),
                     ]),
                   ),
                 ),
@@ -134,8 +177,9 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   Widget _allFilmUI(
     Size size,
     DataProvider dataProvider,
-    BuildContext context,
-      FirebaseProvider firebaseProvider
+    BuildContext context, FirebaseProvider firebaseProvider,
+      FatchDataHelper fatchDataHelper,
+
   ) =>
       Container(
         padding: const EdgeInsets.all(10.0),
@@ -149,79 +193,89 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    width: size.width * .5,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1,color: Colors.blueGrey),
+                    ),
+                   // width: size.width * .5,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025),),
-                          DropdownButton<String>(
-                            value: dropdownValue,
-                            elevation: 0,
-                            dropdownColor: Colors.white,
-                            style: TextStyle(color: Colors.black),
-                            items: films.map((itemValue) {
-
-                                _dataListForDisplay = _dataList.where((element) {
-                                  var noteTitle = element.subCategory;
-                                  return noteTitle.contains(dropdownValue);
-                                }).toList();
-
-                              return DropdownMenuItem<String>(
-                                value: itemValue,
-                                child: Text(itemValue),
-                              );
-                            }).toList(),
-                            onChanged: (newValue) {
-                              setState(() {
-                                dropdownValue = newValue!;
-                              });
-                            },
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
+                        child: Row(
+                         // mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025),),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                elevation: 0,
+                                dropdownColor: Colors.white,
+                                style: TextStyle(color: Colors.black),
+                                items: films.map((itemValue) {
+                                  return DropdownMenuItem<String>(
+                                    value: itemValue,
+                                    child: Text(itemValue),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                    _filterSubCategoryList(dropdownValue);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    width: size.width * .3,
-                    child: TextField(
-                      controller: myController,
-                      decoration: InputDecoration(
-                          hintText: "Please Search your Query",
-                          prefixIcon: Icon(Icons.search_outlined),
-                          enabledBorder: InputBorder.none
-                      ),
-                   onChanged: (text){
-                        text = text.toLowerCase();
-                       setState((){
 
-                         _dataListForDropDisplay = _dataList.where((element) {
-                             var noteTitle = element.name.toLowerCase();
-                               return noteTitle.contains(text)?noteTitle.contains(text):noteTitle.contains("noteTitle");
-                           }).toList();
-                       });
-                       },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal:10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1,color: Colors.blueGrey),
+                      ),
+                      width: size.width * .3,
+                      child: TextField(
+                        controller: myController,
+                        decoration: InputDecoration(
+                            hintText: "Please Search your Query",
+                            prefixIcon: Icon(Icons.search_outlined),
+                            enabledBorder: InputBorder.none
+                        ),
+                     onChanged: _filterList,
+                      ),
                     ),
-                  )
+                  ),
+                  SizedBox(width: size.width*.02,),
+                  GestureDetector(
+                      onTap: (){
+                        getData(fatchDataHelper);
+                      },
+                      child: Icon(Icons.refresh_outlined)),
                 ],
               ),
             ),
+            _isLoading?
+            Container(
+                child: Column(
+                  children: [
+                    SizedBox(height: size.height*.4,),
+                    fadingCircle,
+                  ],
+                )
+            ):
         Expanded(
           child: SizedBox(
             height: 500.0,
-            child: RefreshIndicator(
-              backgroundColor: Colors.white,
-              onRefresh: ()async{
-                await _getDataFromDatabase();
+            child: new  ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: _filteredList.length,
+              itemBuilder: (context, index){
+                return _listItem(index,size,firebaseProvider,dataProvider,fatchDataHelper);
               },
-              child: new ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: _dataListForDisplay.length,
-                itemBuilder: (context, index){
-                  return _listItem(index,size,firebaseProvider);
-                },
-              ),
             ),
           ),
         ),
@@ -229,7 +283,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
         ),
       );
 
-  _listItem(index,Size size,FirebaseProvider firebaseProvider){
+  _listItem(index,Size size,FirebaseProvider firebaseProvider, DataProvider dataProvider, FatchDataHelper fatchDataHelper ){
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -238,51 +292,49 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
             border: Border.all(width: 1,color: Colors.grey),
             borderRadius: BorderRadius.all(Radius.circular(5))
         ),
-        child: myController.text.isEmpty? Container(
+        child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                  width: size.height*.15,
+                  width: size.height*.13,
                   height: size.height*.16,
-                  child: _dataListForDisplay[index].image.isEmpty? Icon(Icons.photo,size: size.height*.16,color: Colors.grey,):Image.network(_dataListForDisplay[index].image,fit: BoxFit.fill)
+                  child: _filteredList[index].image!.isEmpty? Icon(Icons.photo,size: size.height*.16,color: Colors.grey,):Image.network(_filteredList[index].image!,fit: BoxFit.fill)
               ),
-               Container(
+              Container(
                 width: size.width*.5,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _dataListForDisplay[index].name.isEmpty?Container():
-                    Text(_dataListForDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                    _dataListForDisplay[index].address.isEmpty?Container():
-                    Text('Address: ${_dataListForDisplay[index].address}',style: TextStyle(fontSize: 12,)),
-                    _dataListForDisplay[index].pabx.isEmpty?Container():
-                    Text('PABX: ${_dataListForDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
-                    _dataListForDisplay[index].email.isEmpty?Container():
-                    Text('E-mail: ${_dataListForDisplay[index].email}',style: TextStyle(fontSize: 12,)),
-                    _dataListForDisplay[index].web.isEmpty?Container():
-                    Text('Web: ${_dataListForDisplay[index].web}',style: TextStyle(fontSize: 12,)),
-                    _dataListForDisplay[index].fax.isEmpty?Container():
-                    Text('Fax: ${_dataListForDisplay[index].fax}',style: TextStyle(fontSize: 12)),
-                    _dataListForDisplay[index].phone.isEmpty?Container():
-                    Text('Phone: ${_dataListForDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDisplay[index].mobile.isEmpty?Container():
-                    Text('Mobile: ${_dataListForDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDisplay[index].contact.isEmpty?Container():
-                    Text('Contact: ${_dataListForDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDisplay[index].facebook.isEmpty?Container():
-                    Text('Facebook: ${_dataListForDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDisplay[index].designation.isEmpty?Container():
-                    Text('Designation: ${_dataListForDisplay[index].designation}',style: TextStyle(fontSize: 12),),
-                    _dataListForDisplay[index].hallname.isEmpty?Container():
-                    Text('Hall Name: ${_dataListForDisplay[index].hallname}',style: TextStyle(fontSize: 12,),),
-                    // _dataList[index].id.isEmpty?Container():
-                    // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
-                    _dataListForDisplay[index].status.isEmpty?Container():
-                    Text('Status: ${_dataListForDisplay[index].status}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDisplay[index].date.isEmpty?Container():
-                    Text('Date: ${_dataListForDisplay[index].date}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].name!.isEmpty?Container():
+                    Text(_filteredList[index].name!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
+                    _filteredList[index].address!.isEmpty?Container():
+                    Text('Address: ${_filteredList[index].address}',style: TextStyle(fontSize: 12,)),
+                    _filteredList[index].pabx!.isEmpty?Container():
+                    Text('PABX: ${_filteredList[index].pabx}',style: TextStyle(fontSize: 12),),
+                    _filteredList[index].email!.isEmpty?Container():
+                    Text('E-mail: ${_filteredList[index].email}',style: TextStyle(fontSize: 12,)),
+                    _filteredList[index].web!.isEmpty?Container():
+                    Text('Web: ${_filteredList[index].web}',style: TextStyle(fontSize: 12,)),
+                    _filteredList[index].fax!.isEmpty?Container():
+                    Text('Fax: ${_filteredList[index].fax}',style: TextStyle(fontSize: 12)),
+                    _filteredList[index].phone!.isEmpty?Container():
+                    Text('Phone: ${_filteredList[index].phone}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].mobile!.isEmpty?Container():
+                    Text('Mobile: ${_filteredList[index].mobile}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].contact!.isEmpty?Container():
+                    Text('Contact: ${_filteredList[index].contact}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].facebook!.isEmpty?Container():
+                    Text('Facebook: ${_filteredList[index].facebook}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].designation!.isEmpty?Container():
+                    Text('Designation: ${_filteredList[index].designation}',style: TextStyle(fontSize: 12),),
+                    _filteredList[index].hallname!.isEmpty?Container():
+                    Text('Hall Name: ${_filteredList[index].hallname}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].status!.isEmpty?Container():
+                    Text('Status: ${_filteredList[index].status}',style: TextStyle(fontSize: 12,),),
+                    _filteredList[index].date!.isEmpty?Container():
+                    Text('Date: ${_filteredList[index].date}',style: TextStyle(fontSize: 12,),),
                   ],
                 ),
               ),
@@ -295,29 +347,31 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                     ElevatedButton(
                       child: Text('Update'),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                            UpdateDataPage(
-                              name: _dataList[index].name,
-                              address: _dataList[index].address,
-                              pabx: _dataList[index].pabx,
-                              email: _dataList[index].email,
-                              web: _dataList[index].web,
-                              fax: _dataList[index].fax,
-                              phone: _dataList[index].phone,
-                              mobile: _dataList[index].mobile,
-                              contact: _dataList[index].contact,
-                              facebook: _dataList[index].facebook,
-                              designation: _dataList[index].designation,
-                              hallname: _dataList[index].hallname,
-                              image: _dataList[index].image,
-                              id: _dataList[index].id,
-                              status: _dataList[index].status,
+              
+                        dataProvider.category=dataProvider.subCategory;
+                        dataProvider.subCategory = "Update Film Media";
 
-                            )));
+                        dataProvider.filmMediaModel.id = _filteredList[index].id;
+                        dataProvider.filmMediaModel.name = _filteredList[index].name;
+                        dataProvider.filmMediaModel.address = _filteredList[index].address;
+                        dataProvider.filmMediaModel.pabx = _filteredList[index].pabx;
+                        dataProvider.filmMediaModel.email = _filteredList[index].email;
+                        dataProvider.filmMediaModel.web = _filteredList[index].web;
+                        dataProvider.filmMediaModel.fax = _filteredList[index].fax;
+                        dataProvider.filmMediaModel.phone = _filteredList[index].phone;
+                        dataProvider.filmMediaModel.mobile = _filteredList[index].mobile;
+                        dataProvider.filmMediaModel.contact = _filteredList[index].contact;
+                        dataProvider.filmMediaModel.facebook = _filteredList[index].facebook;
+                        dataProvider.filmMediaModel.designation = _filteredList[index].designation;
+                        dataProvider.filmMediaModel.hallname = _filteredList[index].hallname;
+                        dataProvider.filmMediaModel.image = _filteredList[index].image;
+
+                     
+
 
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          primary: Colors.grey,
                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                           textStyle: TextStyle(
                               fontSize: 15,
@@ -344,7 +398,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              color: Color.fromRGBO(0, 179, 134, 1.0),
                             ),
                             DialogButton(
                               child: Text(
@@ -353,169 +406,22 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                               ),
                               onPressed: () {
                                 setState(()=> _isLoading=true);
-                                firebaseProvider.deleteData(_dataListForDisplay[index].id, context).then((value){
+                                firebaseProvider.deleteFilmMediaData(_filteredList[index].id!, context).then((value) async{
                                   if(value==true){
-                                    _getDataFromDatabase();
+                                    firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(_filteredList[index].id!).delete();
                                     setState(()=> _isLoading=false);
+                                    getData(fatchDataHelper);
                                     Navigator.pop(context);
                                     showToast('Data deleted successful');
+
                                   }else{
                                     setState(()=> _isLoading=false);
+                                    Navigator.pop(context);
                                     showToast('Data delete unsuccessful');
+
                                   }
                                 });
                               },
-                              gradient: LinearGradient(colors: [
-                                Color.fromRGBO(116, 116, 191, 1.0),
-                                Color.fromRGBO(52, 138, 199, 1.0)
-                              ]),
-                            )
-                          ],
-                        ).show();
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 23, vertical: 15),
-                          textStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ):Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                  width: size.height*.15,
-                  height: size.height*.16,
-                  child: _dataListForDropDisplay[index].image.isEmpty? Image.asset('images/atnbanglalogo.jpg',fit: BoxFit.cover):Image.network(_dataList[index].image,fit: BoxFit.cover)
-              ),
-              Container(
-                width: size.width*.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _dataListForDropDisplay[index].name.isEmpty?Container():
-                    Text(_dataListForDropDisplay[index].name,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w700),),
-                    _dataListForDropDisplay[index].address.isEmpty?Container():
-                    Text('Address: ${_dataListForDropDisplay[index].address}',style: TextStyle(fontSize: 12,)),
-                    _dataListForDropDisplay[index].pabx.isEmpty?Container():
-                    Text('PABX: ${_dataListForDropDisplay[index].pabx}',style: TextStyle(fontSize: 12),),
-                    _dataListForDropDisplay[index].email.isEmpty?Container():
-                    Text('E-mail: ${_dataListForDropDisplay[index].email}',style: TextStyle(fontSize: 12,)),
-                    _dataListForDropDisplay[index].web.isEmpty?Container():
-                    Text('Web: ${_dataListForDropDisplay[index].web}',style: TextStyle(fontSize: 12,)),
-                    _dataListForDropDisplay[index].fax.isEmpty?Container():
-                    Text('Fax: ${_dataListForDropDisplay[index].fax}',style: TextStyle(fontSize: 12)),
-                    _dataListForDropDisplay[index].phone.isEmpty?Container():
-                    Text('Phone: ${_dataListForDropDisplay[index].phone}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDropDisplay[index].mobile.isEmpty?Container():
-                    Text('Mobile: ${_dataListForDropDisplay[index].mobile}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDropDisplay[index].contact.isEmpty?Container():
-                    Text('Contact: ${_dataListForDropDisplay[index].contact}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDropDisplay[index].facebook.isEmpty?Container():
-                    Text('Facebook: ${_dataListForDropDisplay[index].facebook}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDropDisplay[index].designation.isEmpty?Container():
-                    Text('Designation: ${_dataListForDropDisplay[index].designation}',style: TextStyle(fontSize: 12),),
-                    _dataListForDropDisplay[index].hallname.isEmpty?Container():
-                    Text('Hall Name: ${_dataListForDropDisplay[index].hallname}',style: TextStyle(fontSize: 12,),),
-                    // _dataList[index].id.isEmpty?Container():
-                    // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
-                    _dataListForDropDisplay[index].status.isEmpty?Container():
-                    Text('Status: ${_dataListForDropDisplay[index].status}',style: TextStyle(fontSize: 12,),),
-                    _dataListForDropDisplay[index].date.isEmpty?Container():
-                    Text('Date: ${_dataListForDropDisplay[index].date}',style: TextStyle(fontSize: 12,),),
-                  ],
-                ),
-              ),
-              Container(
-                width: size.width*.1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      child: Text('Update'),
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                            UpdateDataPage(
-                              name: _dataList[index].name,
-                              address: _dataList[index].address,
-                              pabx: _dataList[index].pabx,
-                              email: _dataList[index].email,
-                              web: _dataList[index].web,
-                              fax: _dataList[index].fax,
-                              phone: _dataList[index].phone,
-                              mobile: _dataList[index].mobile,
-                              contact: _dataList[index].contact,
-                              facebook: _dataList[index].facebook,
-                              designation: _dataList[index].designation,
-                              hallname: _dataList[index].hallname,
-                              image: _dataList[index].image,
-                              id: _dataList[index].id,
-                              status: _dataList[index].status,
-
-                            )));
-
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                          textStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
-                    ),
-
-
-                    SizedBox(height: 5,),
-
-                    ElevatedButton(
-                      child: Text('Delete'),
-                      onPressed: () {
-                        Alert(
-                          context: context,
-                          type: AlertType.warning,
-                          title: "Confirmation Alert",
-                          desc: "Are you confirm to delete this item ?",
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              color: Color.fromRGBO(0, 179, 134, 1.0),
-                            ),
-                            DialogButton(
-                              child: Text(
-                                "OK",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                              onPressed: () {
-                                setState(()=> _isLoading=true);
-                                firebaseProvider.deleteData(_dataList[index].id, context).then((value){
-                                  if(value==true){
-                                    _getDataFromDatabase();
-                                    setState(()=> _isLoading=false);
-                                    Navigator.pop(context);
-                                    showToast('Data deleted successful');
-                                  }else{
-                                    setState(()=> _isLoading=false);
-                                    showToast('Data delete unsuccessful');
-                                  }
-                                });
-                              },
-                              gradient: LinearGradient(colors: [
-                                Color.fromRGBO(116, 116, 191, 1.0),
-                                Color.fromRGBO(52, 138, 199, 1.0)
-                              ]),
                             )
                           ],
                         ).show();
@@ -544,6 +450,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     BuildContext context,
       DataProvider dataProvider,
       FirebaseProvider firebaseProvider,
+      FatchDataHelper fatchDataHelper,
   ) =>
       Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -576,76 +483,101 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                         children: [
                           data==null ? CircleAvatar(
                             radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.account_box,size: size.height*.08,),
+                            backgroundColor:  Colors.blueGrey,
+                            child: CircleAvatar(
+                              radius: size.height*.087,
+                              backgroundColor:  Colors.white,
+                              child: Icon(Icons.account_box,size: size.height*.08,),
+                            ),
                           ): CircleAvatar(
                             radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                             child: Image.memory(data!,fit: BoxFit.fill,),
+                            backgroundColor: Colors.blueGrey,
+                            child: CircleAvatar(
+                              radius: size.height*.087,
+                              backgroundColor: Colors.white,
+                               backgroundImage: MemoryImage(data!,),
+
+
+                            ),
                           ),                   
                           IconButton(
                               onPressed: () {
                                 pickedImage(dataProvider);
                               },
                               icon:
-                              Icon(Icons.photo_library_outlined,
+                              Icon(Icons.add_photo_alternate_rounded,
                                color: Colors.grey))
                         ],
                       ),
                       Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1,color: Colors.blueGrey),
+                        ),
                         // width: size.width * .4,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
-                            SizedBox(
-                              width: size.height*.04,
-                            ),
-                            DropdownButton<String>(
-                              value: dropdownValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: films.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  dropdownValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
+                              SizedBox(
+                                width: size.height*.04,
+                              ),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: dropdownValue,
+                                  elevation: 0,
+                                  dropdownColor: Colors.white,
+                                  style: TextStyle(color: Colors.black),
+                                  items: films.map((itemValue) {
+                                    return DropdownMenuItem<String>(
+                                      value: itemValue,
+                                      child: Text(itemValue),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      dropdownValue = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
-                        width: size.width * .2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-
-                            DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1,color: Colors.blueGrey),
+                        ),
+                       // width: size.width * .2,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: statusValue,
+                                  elevation: 0,
+                                  dropdownColor: Colors.white,
+                                  style: TextStyle(color: Colors.black),
+                                  items: staatus.map((itemValue) {
+                                    return DropdownMenuItem<String>(
+                                      value: itemValue,
+                                      child: Text(itemValue),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      statusValue = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -654,18 +586,23 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                 commonCategoryFild(size),
 
                 SizedBox(height: size.height*.04,),
-
+                _isLoading?
+                Container(
+                    child: Column(
+                      children: [
+                        fadingCircle,
+                      ],
+                    )
+                ):
                ElevatedButton( onPressed: () {
-                      
                        uuid = Uuid().v1();
+                       uploadData(dataProvider, firebaseProvider);
                         setState(() {
                           data=null;
-                        });           
-                           showLoaderDialog(context);
-                          uploadData(dataProvider, firebaseProvider);
+                        });
                         },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
                         child: Text(
                                   'SUBMIT',
                                   style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
@@ -708,9 +645,11 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   Future<void> uploadData(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
  
     if(data==null){
+
       _submitData(dataProvider,firebaseProvider,);
      
     }else {
+      setState(()=> _isLoading=true);
       firebase_storage.Reference storageReference =
       firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(uuid!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
@@ -756,12 +695,9 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       };
       await firebaseProvider.addFilmMediaData(map).then((value){
         if(value){
-
-          setState((){
-            return Navigator.pop(context);
-          });
           showToast('Success');
           _emptyFildCreator();
+          setState(()=> _isLoading=false);
         } else {
           setState(()=> _isLoading=false);
           showToast('Failed');
@@ -867,7 +803,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
           : hint == 'Designation'
           ? _designation
           : _hallname,
-
       decoration: InputDecoration(hintText: hint,  border: new OutlineInputBorder(
         borderRadius: new BorderRadius.circular(5.0),
         borderSide: new BorderSide(width: 1),
@@ -875,42 +810,5 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       maxLines: 2,
     );
   }
-  Future<void> _getDataFromDatabase()async{
-    await _databaseHelper.fetchData().then((result){
-      if(result.isNotEmpty){
-        setState(() {
-          _dataList.clear();
-          _dataList=result;
-          _isLoading=false;
-          showToast("Data  Get Successful");
-        });
-      }else{
-        setState(() {
-          _dataList.clear();
-          _isLoading=false;
-          showToast('Failed to fetch data');
-        });
-      }
-    });
-  }
-
-
-showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
-        ],),
-    );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
-        return alert;
-      },
-    );
-  }
-
-
 }
 

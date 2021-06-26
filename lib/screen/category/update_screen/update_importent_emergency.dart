@@ -5,50 +5,51 @@ import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UpdateImportentEmergencyData extends StatefulWidget {
-  String name;
-  String address;
-  String pabx;
-  String email;
-  String web;
-  String fax;
-  String phone;
-  String mobile;
-  String contact;
-  String facebook;
-  String image;
-  String corporateOffice;
-  String headOffice;
-  String position;
-  String businessType;
-  String id;
-  String status;
-  String date;
+  String? name;
+  String? address;
+  String? pabx;
+  String? email;
+  String? web;
+  String? fax;
+  String? phone;
+  String? mobile;
+  String? contact;
+  String? facebook;
+  String? image;
+  String? corporateOffice;
+  String? headOffice;
+  String? position;
+  String? businessType;
+  String? id;
+  String? status;
+  String? date;
 
   UpdateImportentEmergencyData(
       {
-        required this.name,
-        required this.address,
-        required this.pabx,
-        required this.email,
-        required this.web,
-        required this.fax,
-        required this.phone,
-        required this.mobile,
-        required this.contact,
-        required this.facebook,
-        required this.image,
-        required this.corporateOffice,
-        required this.headOffice,
-        required this.position,
-        required this.businessType,
-        required this.id,
-        required this.status,
-        required this.date
+         this.name,
+         this.address,
+         this.pabx,
+         this.email,
+         this.web,
+         this.fax,
+         this.phone,
+         this.mobile,
+         this.contact,
+         this.facebook,
+         this.image,
+         this.corporateOffice,
+         this.headOffice,
+         this.position,
+         this.businessType,
+         this.id,
+         this.status,
+         this.date
       });
 
   @override
@@ -56,6 +57,7 @@ class UpdateImportentEmergencyData extends StatefulWidget {
 }
 
 class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyData> {
+  
   bool _isLoading=false;
   TextEditingController _name = TextEditingController(text:'');
   TextEditingController _address = TextEditingController(text:'');
@@ -72,6 +74,31 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
   TextEditingController _position = TextEditingController(text:'');
   TextEditingController _businessType = TextEditingController(text:'');
 
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+
+    _name.text = dataProvider.importentEmergencyModel.name!;
+    _address.text = dataProvider.importentEmergencyModel.address!;
+    _PABX.text = dataProvider.importentEmergencyModel.pabx!;
+    _email.text = dataProvider.importentEmergencyModel.email!;
+    _web.text = dataProvider.importentEmergencyModel.web!;
+    _fax.text = dataProvider.importentEmergencyModel.fax!;
+    _phonet_t.text = dataProvider.importentEmergencyModel.phone!;
+    _mobile.text = dataProvider.importentEmergencyModel.mobile!;
+    _contact.text = dataProvider.importentEmergencyModel.contact!;
+    _facebook.text = dataProvider.importentEmergencyModel.facebook!;
+    _corporateOffice.text = dataProvider.importentEmergencyModel.corporateOffice!;
+    _headOffice.text = dataProvider.importentEmergencyModel.headOffice!;
+    _position.text = dataProvider.importentEmergencyModel.position!;
+    _businessType.text = dataProvider.importentEmergencyModel.businessType!;
+
+  }
+
+
+
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
   var file;
@@ -84,117 +111,190 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
   ];
   String statusValue='Public';
   FatchDataHelper _fatchDataHelper = new FatchDataHelper();
+  String dropdownValue = "Bangladesh : At A Glance";
+  List importentEmergency = Variables().getImportentEmergencyList();
 
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          height: size.height,
-          width: size.width,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Film Media",
-                      style: TextStyle(
-                          fontSize: size.height*.04,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data==null ? CircleAvatar(
-                            radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
-                          ): Container(
-                            height: size.height*.1,
-                            width: size.height*.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
+
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
+    return Container(
+      height: size.height,
+      width: size.width * .8,
+      color: Colors.blueGrey,
+          child: Column(
+            children: [
+              SizedBox(height: 3,),
+              Expanded(
+                child: Container(
+                  color: Color(0xffedf7fd),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                data == null
+                                    ? CircleAvatar(
+                                  radius: size.height * .09,
+                                  backgroundColor: Colors.grey,
+                                  child: CircleAvatar(
+                                    radius: size.height * .085,
+                                    backgroundColor: Colors.white,
+                                    child: dataProvider.importentEmergencyModel.image!.isEmpty
+                                        ? Icon(Icons.photo)
+                                        : Image.network(
+                                        dataProvider.importentEmergencyModel.image!),
+                                  ),
+                                )
+                                    : CircleAvatar(
+                                  radius: size.height * .09,
+                                  child: Image.memory(
+                                    data!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      pickedImage(dataProvider);
+                                    },
+                                    icon: Icon(Icons.add_photo_alternate_outlined, color: Colors.black54))
+                              ],
                             ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                uploadToStorage(dataProvider);
-                              },
-                              icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .4,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
+                                      SizedBox(
+                                        width: size.height*.04,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: dropdownValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: importentEmergency.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              dropdownValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: statusValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: staatus.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              statusValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          ImportMediaWidget(size),
+
+                          SizedBox(height: size.height*.04,),
+
+                          _isLoading?
+                          Container(height: size.height * .06, child: fadingCircle):
+                          ElevatedButton(
+                            onPressed: () {
+
+
+                              updateData(dataProvider, firebaseProvider);
+
+
+                              //  Navigator.pop(context,true);
+
+                              // showToast(imageUrl);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                              child: Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .04,
+                                ),
+
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+
+                            ),
+
+                          ),
+
+                          SizedBox(height: size.height*.04,),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                            DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                  ImportMediaWidget(size),
-
-                  SizedBox(height: size.height*.04,),
-
-                  if (_isLoading) Container(
-                      height: size.height*.06,
-                      child: fadingCircle) else ElevatedButton( onPressed: () {
-
-                    uploadPhoto(dataProvider, firebaseProvider);
-                    //  Navigator.pop(context,true);
-
-
-                    // showToast(imageUrl);
-                  },
-                      child: Text(
-                        'Update Data',
-                        style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                      )
-                  ),
-                  SizedBox(height: size.height*.04,),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
   }
-  uploadToStorage(DataProvider dataProvider) async {
+  pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
@@ -237,21 +337,22 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
         'headOffice': _headOffice.text,
         'position': _position.text,
         'businessType': _businessType.text,
-        'id': widget.id,
+        'id': dataProvider.importentEmergencyModel.id!,
         'date': dateData,
         'status': statusValue.toLowerCase(),
       };
       setState(()=>_isLoading=true);
       await firebaseProvider.updateImportentEmergencyData(mapData, context).then((value){
-        if(value){
-          setState(()=>_isLoading=false);
-          Navigator.pop(context,true);
+        if (value) {
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Important Media Screen";
           showToast('Data updated successful');
-        }
-        else{
-          setState(()=>_isLoading=false);
+        } else {
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Important Media Screen";
           showToast('Data update failed!');
-
         }
       });
     }else showToast("Select Status");
@@ -265,7 +366,7 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width *.5,
+                width:  size.width *.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -288,7 +389,7 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
                 ),
               ),
               Container(
-                width: size.width *.5,
+                width: size.width *.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -345,35 +446,54 @@ class _UpdateImportentEmergencyDataState extends State<UpdateImportentEmergencyD
           : hint == 'Position'
           ? _position
           : _businessType,
-      decoration: InputDecoration(hintText: hint),
+      decoration: InputDecoration(
+        hintText: hint,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(5.0),
+          borderSide: new BorderSide(width: 1),
+        ),
+      ),
+      maxLines: 2,
     );
   }
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    if(data==null){
+  Future<void> updateData(
+      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+    if (data == null) {
       setState(() {
-        imageUrl = widget.image;
+        imageUrl = dataProvider.importentEmergencyModel.image!;
       });
-      _submitData(dataProvider,firebaseProvider,);
-    }else{
-      firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(widget.id);
-      firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+      _submitData(
+        dataProvider,
+        firebaseProvider,
+      );
+    } else {
+      firebase_storage.Reference storageReference = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child(dataProvider.subCategory)
+          .child(dataProvider.importentEmergencyModel.id!);
+      firebase_storage.UploadTask storageUploadTask =
+      storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
         taskSnapshot = value;
-        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
           showToast(downloadUrl);
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(dataProvider,firebaseProvider,);
+          _submitData(
+            dataProvider,
+            firebaseProvider,
+          );
         });
       });
 
-    }
 
+    }
   }
+
 
 }
 

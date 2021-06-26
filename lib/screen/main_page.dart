@@ -96,13 +96,14 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           child: Container(
             width: size.width<1200? 0.0: size.width*.2,
             height: size.height,
-            color: Color.fromRGBO(216,211,216,1),
+            color: Colors.blueGrey,
             //color: Colors.white,
             child:  ListView.builder(
               itemCount: Variables.sideBarMenuList().length,
               itemBuilder: (context, index)=>EntryItemTile(
                   Variables.sideBarMenuList()[index],
                   size,dataProvider),
+
             ),
           ),
         )

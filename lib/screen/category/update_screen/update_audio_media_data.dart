@@ -5,63 +5,64 @@ import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UpdateAdioData extends StatefulWidget {
 
-  String id;
-  String name;
-  String address;
-  String pabx;
-  String email;
-  String web;
-  String fax;
-  String phone;
-  String mobile;
-  String contact;
-  String facebook;
-  String image;
-  String chiefEngineer;
-  String director;
-  String regionalStation;
-  String salesContact;
-  String whatApp;
-  String hotlineNumber;
-  String businessType;
-  String channelName;
-  String status;
-  String date;
-  String ddgNews;
-  String ddgprogram;
+  String? id;
+  String? name;
+  String? address;
+  String? pabx;
+  String? email;
+  String? web;
+  String? fax;
+  String? phone;
+  String? mobile;
+  String?contact;
+  String? facebook;
+  String? image;
+  String? chiefEngineer;
+  String? director;
+  String? regionalStation;
+  String? salesContact;
+  String? whatApp;
+  String? hotlineNumber;
+  String? businessType;
+  String? channelName;
+  String? status;
+  String? date;
+  String? ddgNews;
+  String? ddgprogram;
 
   UpdateAdioData(
       {
-        required this.id,
-        required this.name,
-        required  this.address,
-        required this.pabx,
-        required this.email,
-        required this.web,
-        required this.fax,
-        required this.phone,
-        required this.mobile,
-        required this.contact,
-        required this.facebook,
-        required this.image,
-        required this.chiefEngineer,
-        required this.director,
-        required this.regionalStation,
-        required this.salesContact,
-        required this.whatApp,
-        required this.hotlineNumber,
-        required this.businessType,
-        required this.channelName,
-        required this.status,
-        required this.date,
-        required this.ddgNews,
-        required this.ddgprogram
+         this.id,
+         this.name,
+          this.address,
+         this.pabx,
+         this.email,
+         this.web,
+         this.fax,
+         this.phone,
+         this.mobile,
+         this.contact,
+         this.facebook,
+         this.image,
+         this.chiefEngineer,
+         this.director,
+         this.regionalStation,
+         this.salesContact,
+         this.whatApp,
+         this.hotlineNumber,
+         this.businessType,
+         this.channelName,
+         this.status,
+         this.date,
+         this.ddgNews,
+         this.ddgprogram
       }
       );
   @override
@@ -92,30 +93,35 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   TextEditingController _ddgProgram = TextEditingController();
   TextEditingController _ddgNews = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _name.text = widget.name;
-    _address.text = widget.address;
-    _PABX.text = widget.pabx;
-    _email.text = widget.email;
-    _web.text = widget.web;
-    _fax.text = widget.fax;
-    _phonet_t.text = widget.phone;
-    _mobile.text = widget.mobile;
-    _contact.text = widget.contact;
-    _facebook.text = widget.facebook;
-    _chief_enginear.text = widget.chiefEngineer;
-    _director.text = widget.director;
-    _regional_station.text = widget.regionalStation;
-    _sales_contact.text = widget.salesContact;
-    _whats_app.text = widget.whatApp;
-    _hotline_number.text = widget.hotlineNumber;
-    _business_type.text = widget.businessType;
-    _channelName.text = widget.channelName;
-    _ddgNews.text = widget.ddgNews;
-    _ddgProgram.text = widget.ddgprogram;
+
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+
+    _name.text = dataProvider.audioMediaModel.name!;
+    _address.text = dataProvider.audioMediaModel.address!;
+    _PABX.text =dataProvider.audioMediaModel.pabx!;
+    _email.text = dataProvider.audioMediaModel.email!;
+    _web.text = dataProvider.audioMediaModel.web!;
+    _fax.text = dataProvider.audioMediaModel.fax!;
+    _phonet_t.text = dataProvider.audioMediaModel.phone!;
+    _mobile.text = dataProvider.audioMediaModel.mobile!;
+    _contact.text = dataProvider.audioMediaModel.contact!;
+    _facebook.text = dataProvider.audioMediaModel.facebook!;;
+    _chief_enginear.text = dataProvider.audioMediaModel.chiefEngineer!;
+    _director.text = dataProvider.audioMediaModel.director!;
+    _regional_station.text = dataProvider.audioMediaModel.regionalStation!;
+    _sales_contact.text = dataProvider.audioMediaModel.salesContact!;
+    _whats_app.text = dataProvider.audioMediaModel.whatApp!;
+    _hotline_number.text = dataProvider.audioMediaModel.hotlineNumber!;
+    _business_type.text = dataProvider.audioMediaModel.businessType!;
+    _channelName.text = dataProvider.audioMediaModel.channelName!;
+    _ddgNews.text = dataProvider.audioMediaModel.ddgNews!;
+    _ddgProgram.text = dataProvider.audioMediaModel.ddgprogram!;
   }
+
 
 
   final _formKey = GlobalKey<FormState>();
@@ -129,115 +135,194 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     'Private'
   ];
   String statusValue='Public';
+  String dropdownValue = "FM Radio Channel";
+  List audios = Variables().getAudioMediaList();
   FatchDataHelper _fatchDataHelper = new FatchDataHelper();
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          height: size.height,
-          width: size.width,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Film Media",
-                      style: TextStyle(
-                          fontSize: size.height*.04,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data==null ? CircleAvatar(
-                            radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: Image.network(widget.image),
-                          ): Container(
-                            height: size.height*.1,
-                            width: size.height*.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
+
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
+    return Container(
+      height: size.height,
+      width: size.width * .8,
+      color: Colors.blueGrey,
+          child: Column(
+            children: [
+              SizedBox(height: 3,),
+              Expanded(
+                child: Container(
+                  color: Color(0xffedf7fd),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+
+                    child: Form(
+
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                data == null
+                                    ? CircleAvatar(
+                                  radius: size.height * .09,
+                                  backgroundColor: Colors.grey,
+                                  child: CircleAvatar(
+                                    radius: size.height * .085,
+                                    backgroundColor: Colors.white,
+                                    child: dataProvider.audioMediaModel.image!.isEmpty
+                                        ? Icon(Icons.photo)
+                                        : Image.network(
+                                        dataProvider.audioMediaModel.image!),
+                                  ),
+                                )
+                                    : CircleAvatar(
+                                  radius: size.height * .09,
+                                  child: Image.memory(
+                                    data!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      pickedImage(dataProvider);
+                                    },
+                                    icon: Icon(Icons.add_photo_alternate_rounded, color: Colors.black54))
+                              ],
                             ),
-                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                uploadToStorage(dataProvider);
-                              },
-                              icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .4,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
+                                      SizedBox(
+                                        width: size.height*.04,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: dropdownValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: audios.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              dropdownValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: statusValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: staatus.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              statusValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          AudioMediaFild(size),
+                          SizedBox(
+                            height: size.height * .04,
+                          ),
+
+                          _isLoading?
+                          Container(height: size.height * .06, child: fadingCircle):
+                          ElevatedButton(
+                            onPressed: () {
+
+
+                              updateData(dataProvider, firebaseProvider);
+
+
+                              //  Navigator.pop(context,true);
+
+                              // showToast(imageUrl);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                              child: Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .04,
+                                ),
+
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+
+                            ),
+
+                          ),
+
+
+                          SizedBox(
+                            height: size.height * .04,
+                          ),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                            DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                  AudioMediaFild(size),
-
-                  SizedBox(height: size.height*.04,),
-
-                  if (_isLoading) Container(
-                      height: size.height*.06,
-                      child: fadingCircle) else ElevatedButton( onPressed: () {
-
-                    uploadPhoto(dataProvider, firebaseProvider);
-                    //  Navigator.pop(context,true);
-
-
-                    // showToast(imageUrl);
-                  },
-                      child: Text(
-                        'Update Data',
-                        style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                      )
-                  ),
-                  SizedBox(height: size.height*.04,),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
   }
 
   uploadToStorage(DataProvider dataProvider) async {
@@ -287,7 +372,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         'hotlineNumber':_hotline_number.text,
         'businessType': _business_type.text,
         'channelName': _channelName.text,
-        'id': widget.id,
+        'id': dataProvider.audioMediaModel.id!,
         'status': statusValue.toLowerCase(),
         'date': dateData,
         'ddgProgram': _ddgProgram.text,
@@ -298,7 +383,8 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
       await firebaseProvider.updateAudioMediaData(mapData, context).then((value){
         if(value){
           setState(()=>_isLoading=false);
-          Navigator.pop(context,true);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Audio Media Screen";
           showToast('Data updated successful');
         }
         else{
@@ -318,7 +404,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width*.5,
+                width:  size.width*.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -348,7 +434,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                 ),
               ),
               Container(
-                width:  size.width*.5,
+                width:  size.width*.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -425,18 +511,25 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
           ? _ddgProgram
           : _ddgNews,
 
-      decoration: InputDecoration(hintText: hint),
+      decoration: InputDecoration(
+        hintText: hint,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(5.0),
+          borderSide: new BorderSide(width: 1),
+        ),
+      ),
+      maxLines: 2,
     );
   }
   Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
     if(data==null){
       setState(() {
-        imageUrl = widget.image;
+        imageUrl = dataProvider.audioMediaModel.image!;
       });
       _submitData(dataProvider,firebaseProvider,);
     }else{
       firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(widget.id);
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(dataProvider.audioMediaModel.id!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
@@ -454,4 +547,66 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     }
 
   }
+  pickedImage(DataProvider dataProvider) async {
+    html.FileUploadInputElement input = html.FileUploadInputElement()
+      ..accept = 'image/*';
+    input.click();
+    input.onChange.listen((event) {
+      file = input.files!.first;
+      final reader1 = html.FileReader();
+      reader1.readAsDataUrl(input.files![0]);
+      reader1.onError.listen((err) => setState(() {
+        error = err.toString();
+      }));
+      reader1.onLoad.first.then((res) {
+        final encoded = reader1.result as String;
+        final stripped =
+        encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+        setState(() {
+          name = input.files![0].name;
+          data = base64.decode(stripped);
+          error = null;
+        });
+      });
+    });
+  }
+  Future<void> updateData(
+      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+    if (data == null) {
+      setState(() {
+        imageUrl = dataProvider.audioMediaModel.image!;
+      });
+      _submitData(
+        dataProvider,
+        firebaseProvider,
+      );
+    } else {
+      firebase_storage.Reference storageReference = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child(dataProvider.subCategory)
+          .child(dataProvider.audioMediaModel.id!);
+      firebase_storage.UploadTask storageUploadTask =
+      storageReference.putBlob(file);
+      firebase_storage.TaskSnapshot taskSnapshot;
+      storageUploadTask.then((value) {
+        taskSnapshot = value;
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
+          final downloadUrl = newImageDownloadUrl;
+          showToast(downloadUrl);
+          setState(() {
+            imageUrl = downloadUrl;
+          });
+          _submitData(
+            dataProvider,
+            firebaseProvider,
+          );
+        });
+      });
+
+
+    }
+  }
+
+
 }

@@ -5,51 +5,52 @@ import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UpdatePrintMedia extends StatefulWidget {
 
-  String name;
-  String address;
-  String pabx;
-  String email;
-  String web;
-  String fax;
-  String phone;
-  String mobile;
-  String contact;
-  String facebook;
-  String image;
-  String editor;
-  String businessType;
-  String director;
-  String position;
-  String id;
-  String status;
-  String date;
+  String? name;
+  String? address;
+  String? pabx;
+  String? email;
+  String? web;
+  String? fax;
+  String? phone;
+  String? mobile;
+  String? contact;
+  String? facebook;
+  String? image;
+  String? editor;
+  String? businessType;
+  String? director;
+  String? position;
+  String? id;
+  String? status;
+  String? date;
 
   UpdatePrintMedia(
       {
-        required this.name,
-        required this.address,
-        required this.pabx,
-        required this.email,
-        required this.web,
-        required this.fax,
-        required this.phone,
-        required this.mobile,
-        required this.contact,
-        required this.facebook,
-        required this.image,
-        required this.editor,
-        required this.businessType,
-        required this.director,
-        required this.position,
-        required this.id,
-        required this.status,
-        required this.date
+         this.name,
+         this.address,
+         this.pabx,
+         this.email,
+         this.web,
+         this.fax,
+         this.phone,
+         this.mobile,
+         this.contact,
+         this.facebook,
+         this.image,
+         this.editor,
+         this.businessType,
+         this.director,
+         this.position,
+         this.id,
+         this.status,
+         this.date
       }
 
       );
@@ -75,24 +76,30 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   TextEditingController _director = TextEditingController();
   TextEditingController _position = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _name.text = widget.name;
-    _address.text = widget.address;
-    _PABX.text = widget.pabx;
-    _email.text = widget.email;
-    _web.text = widget.web;
-    _fax.text = widget.fax;
-    _phonet_t.text = widget.phone;
-    _mobile.text = widget.mobile;
-    _contact.text = widget.contact;
-    _facebook.text = widget.facebook;
-    _editor.text = widget.editor;
-    _business_type.text = widget.businessType;
-    _director.text = widget.director;
-    _position.text = widget.position;
+
+
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+    _name.text = dataProvider.printMediaModel.name!;
+    _address.text = dataProvider.printMediaModel.address!;
+    _PABX.text = dataProvider.printMediaModel.pabx!;
+    _email.text = dataProvider.printMediaModel.email!;
+    _web.text = dataProvider.printMediaModel.web!;
+    _fax.text = dataProvider.printMediaModel.fax!;
+    _phonet_t.text = dataProvider.printMediaModel.phone!;
+    _mobile.text = dataProvider.printMediaModel.mobile!;
+    _contact.text = dataProvider.printMediaModel.contact!;
+    _facebook.text = dataProvider.printMediaModel.facebook!;
+    _editor.text = dataProvider.printMediaModel.editor!;
+    _business_type.text = dataProvider.printMediaModel.businessType!;
+    _director.text = dataProvider.printMediaModel.director!;
+    _position.text = dataProvider.printMediaModel.position!;
+
   }
+
 
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
@@ -106,116 +113,195 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   ];
   String statusValue='Public';
   FatchDataHelper _fatchDataHelper = new FatchDataHelper();
+  List prints = Variables().getPrintingMediaList();
+  String dropdownValue = "Daily News Paper";
+
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          height: size.height,
-          width: size.width,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Print Media",
-                      style: TextStyle(
-                          fontSize: size.height*.04,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data==null ? CircleAvatar(
-                            radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
-                          ): Container(
-                            height: size.height*.1,
-                            width: size.height*.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
+    return Container(
+      height: size.height,
+      width: size.width * .8,
+      color: Colors.blueGrey,
+          child: Column(
+            children: [
+              SizedBox(height: 3,),
+              Expanded(
+                child: Container(
+                  color: Color(0xffedf7fd),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+
+                    child: Form(
+
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                data == null
+                                    ? CircleAvatar(
+                                  radius: size.height * .09,
+                                  backgroundColor: Colors.grey,
+                                  child: CircleAvatar(
+                                    radius: size.height * .085,
+                                    backgroundColor: Colors.white,
+                                    child: dataProvider.printMediaModel.image!.isEmpty
+                                        ? Icon(Icons.photo)
+                                        : Image.network(
+                                        dataProvider.printMediaModel.image!),
+                                  ),
+                                )
+                                    : CircleAvatar(
+                                  radius: size.height * .09,
+                                  child: Image.memory(
+                                    data!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      pickedImage(dataProvider);
+                                    },
+                                    icon: Icon(Icons.add_photo_alternate_rounded, color: Colors.black54))
+                              ],
                             ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                uploadToStorage(dataProvider);
-                              },
-                              icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .4,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
+                                      SizedBox(
+                                        width: size.height*.04,
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: dropdownValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: prints.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              dropdownValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1,color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: statusValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: staatus.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              statusValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          printMediaWidget(size),
+                          SizedBox(
+                            height: size.height * .04,
+                          ),
+
+                          _isLoading?
+                          Container(height: size.height * .06, child: fadingCircle):
+                          ElevatedButton(
+                            onPressed: () {
+
+
+                              updateData(dataProvider, firebaseProvider);
+
+
+                              //  Navigator.pop(context,true);
+
+                              // showToast(imageUrl);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                              child: Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .04,
+                                ),
+
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+
+                            ),
+
+                          ),
+
+
+                          SizedBox(
+                            height: size.height * .04,
+                          ),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                            DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                  PrintMediaWidget(size),
-
-                  SizedBox(height: size.height*.04,),
-
-                  if (_isLoading) Container(
-                      height: size.height*.06,
-                      child: fadingCircle) else ElevatedButton( onPressed: () {
-
-                    uploadPhoto(dataProvider, firebaseProvider);
-                    //  Navigator.pop(context,true);
-
-
-                    // showToast(imageUrl);
-                  },
-                      child: Text(
-                        'Update Data',
-                        style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                      )
-                  ),
-                  SizedBox(height: size.height*.04,),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
   }
-  Widget PrintMediaWidget(Size size) {
+  Widget printMediaWidget(Size size) {
     return Container(
       child: Column(
         children: [
@@ -223,7 +309,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width *.5,
+                width: size.width *.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -246,7 +332,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
                 ),
               ),
               Container(
-                width: size.width *.5,
+                width: size.width *.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -303,10 +389,17 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
           : hint == 'Director'
           ? _director
           : _position,
-      decoration: InputDecoration(hintText: hint),
+      decoration: InputDecoration(
+        hintText: hint,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(5.0),
+          borderSide: new BorderSide(width: 1),
+        ),
+      ),
+      maxLines: 2,
     );
   }
-  uploadToStorage(DataProvider dataProvider) async {
+  pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
@@ -349,34 +442,36 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
         'businessType': _business_type.text,
         'director':_director.text,
         'position':_position.text,
-        'id': widget.id,
+        'id': dataProvider.printMediaModel.id!,
         'status': statusValue.toLowerCase(),
         'date': dateData,
+        'sub-category':dropdownValue,
       };
       setState(()=>_isLoading=true);
       await firebaseProvider.updatePrintMediaData(mapData, context).then((value){
-        if(value){
-          setState(()=>_isLoading=false);
-          Navigator.pop(context,true);
+        if (value) {
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Print Media Screen";
           showToast('Data updated successful');
-        }
-        else{
-          setState(()=>_isLoading=false);
+        } else {
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Print Media Screen";
           showToast('Data update failed!');
-
         }
       });
     }else showToast("Select Status");
   }
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+  Future<void> updateData(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
     if(data==null){
       setState(() {
-        imageUrl = widget.image;
+        imageUrl = dataProvider.printMediaModel.image!;
       });
       _submitData(dataProvider,firebaseProvider,);
     }else{
       firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(widget.id);
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(dataProvider.printMediaModel.id!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {

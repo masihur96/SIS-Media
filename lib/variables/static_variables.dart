@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 
-
-class Variables{
-  static List<Entry> sideBarMenuList(){
+class Variables {
+  static List<Entry> sideBarMenuList() {
     final List<Entry> data = <Entry>[
-      Entry('Category', Icons.category_outlined, <Entry>[
-        Entry('Film Media'),
+      Entry('All Category', Icons.category_outlined, <Entry>[
+        Entry(
+          'Film Media',
+        ),
         Entry('Television Media'),
         Entry('Audio Media'),
         Entry('Print Media'),
         Entry('New Media'),
         Entry('Importent & Emergency'),
-      ]
-      ),
+      ]),
+      Entry('Banner', Icons.branding_watermark, <Entry>[
+        Entry('Index Banner'),
+        Entry('Content Banner'),
+        Entry('Top Banner'),
+        Entry('Bottom Banner'),
+        Entry('Pop Up Banner'),
+      ]),
     ];
+
     return data;
   }
-  List filmMediaList =[
+
+  List filmMediaList = [
     'Film Institution',
     'Film Producer & Distributor',
     'Film Director',
+    'Film Editor',
     'Film Artist',
     'Film Story Writer',
     'Cinematographer',
@@ -32,9 +42,10 @@ class Variables{
     'Important Telephone Number',
     'Cinema Hall',
   ];
-  List getFilmMediaList(){
+  List getFilmMediaList() {
     return filmMediaList;
   }
+
   List televisionList = [
     'Television Channel',
     'Audiovisual Technical Support',
@@ -64,11 +75,11 @@ class Variables{
     'Management Information',
     'Rate Chart'
   ];
-  List getTelevisionList(){
+  List getTelevisionList() {
     return televisionList;
   }
 
-  List televidionChennelList =[
+  List televidionChennelList = [
     'Bangladesh Television',
     'Channel I',
     'ATN Bangla',
@@ -76,10 +87,10 @@ class Variables{
     'ATN NEWS',
     'MAASRANGA',
     'CHANNEL 9'
-    'INDEPENDENT',
+        'INDEPENDENT',
     'DESH TV'
-    'DBC NEWS'
-    'SA TV',
+        'DBC NEWS'
+        'SA TV',
     'BIJOY TV',
     'DURUNTO TELEVISION',
     'BANGLA TV',
@@ -101,11 +112,11 @@ class Variables{
     'ANANDA TV'
   ];
 
-  List getTVChannelList(){
+  List getTVChannelList() {
     return televidionChennelList;
   }
 
-  List audioChannelList=[
+  List audioChannelList = [
     'Bangladesh Betar',
     'Radio Today',
     'Radio Aamar',
@@ -120,21 +131,11 @@ class Variables{
     'Radio Capital',
     'Radio Dhol',
   ];
-  List getaudioChannelList(){
+  List getaudioChannelList() {
     return audioChannelList;
   }
 
-  List kendroList=[
-    'Dhaka Kendro',
-    'Chittagong & Khulna',
-    'Rajshahi , Rangpur, Sylhet'
-  ];
-
-  List getKendroNameList(){
-    return kendroList;
-  }
-
-  List audioMediaList =[
+  List audioMediaList = [
     'FM Radio Channel',
     'Community FM Radio Channel',
     'Music Industries Producer',
@@ -147,14 +148,14 @@ class Variables{
     'Voice Artist',
     'Recitor (Abritteekar)',
     'Musician',
-    'Rate Chart (All Radio Channel)',
     'Rate Chart',
     'Managment Information',
   ];
-  List getAudioMediaList(){
+  List getAudioMediaList() {
     return audioMediaList;
   }
-  List printingMediaList =[
+
+  List printingMediaList = [
     'Daily News Paper',
     'Magazine',
     'Cultural Journalist',
@@ -171,12 +172,12 @@ class Variables{
     'Freelancer Graphic Designer',
     'Managment Information',
     'BASISAS & MEJAB',
-
   ];
-  List getPrintingMediaList(){
+  List getPrintingMediaList() {
     return printingMediaList;
   }
-  List newMediaList=[
+
+  List newMediaList = [
     'Digital Audio - Video Content Provider',
     'Online News Portal',
     'Online Television Channel',
@@ -185,10 +186,11 @@ class Variables{
     'Website Developer',
     'Honorable Media Personality Death List',
   ];
-  List getNewMediaList(){
+  List getNewMediaList() {
     return newMediaList;
   }
-  List importentEmergencyList=[
+
+  List importentEmergencyList = [
     'Bangladesh : At A Glance',
     'Corporate Information',
     'Education Service-National & International',
@@ -198,7 +200,7 @@ class Variables{
     'Interior ,Exterior & Architect',
     'Importent & Emergency',
   ];
-  List getImportentEmergencyList(){
+  List getImportentEmergencyList() {
     return importentEmergencyList;
   }
 }
@@ -206,9 +208,7 @@ class Variables{
 class Entry {
   final String title;
   final IconData? iconData;
-  final List<Entry>children; //Since this is an expansion list...children can be another list of entries.
-  Entry(this.title,[this.iconData, this.children = const <Entry>[]]);
+  final List<Entry>
+      children; //Since this is an expansion list...children can be another list of entries.
+  Entry(this.title, [this.iconData, this.children = const <Entry>[]]);
 }
-
-
-

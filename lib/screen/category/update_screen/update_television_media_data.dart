@@ -4,81 +4,82 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
 class UpdateTelevisionData extends StatefulWidget {
-  String name;
-  String address;
-  String pabx;
-  String email;
-  String web;
-  String fax;
-  String phone;
-  String mobile;
-  String contact;
-  String facebook;
-  String image;
-  String businessType;
-  String camera;
-  String unit1;
-  String unit2;
-  String unit3;
-  String unit4;
-  String macPro;
-  String brunchOffice;
-  String programs;
-  String training;
-  String shooting;
-  String location;
-  String artist;
-  String representative;
-  String designation;
-  String companyName;
-  String regionalOffice;
-  String channelName;
-  String houseName;
-  String id;
-  String status;
-  String date;
+  String? name;
+  String? address;
+  String? pabx;
+  String? email;
+  String? web;
+  String? fax;
+  String? phone;
+  String? mobile;
+  String? contact;
+  String? facebook;
+  String? image;
+  String? businessType;
+  String? camera;
+  String? unit1;
+  String? unit2;
+  String? unit3;
+  String? unit4;
+  String? macPro;
+  String? brunchOffice;
+  String? programs;
+  String? training;
+  String? shooting;
+  String? location;
+  String? artist;
+  String? representative;
+  String? designation;
+  String? companyName;
+  String? regionalOffice;
+  String? channelName;
+  String? houseName;
+  String? id;
+  String? status;
+  String? date;
 
   UpdateTelevisionData(
       {
-        required this.name,
-        required this.address,
-        required this.pabx,
-        required this.email,
-        required this.web,
-        required this.fax,
-        required this.phone,
-        required this.mobile,
-        required this.contact,
-        required this.facebook,
-        required this.image,
-        required this.businessType,
-        required this.camera,
-        required this.unit1,
-        required this.unit2,
-        required this.unit3,
-        required this.unit4,
-        required this.macPro,
-        required this.brunchOffice,
-        required this.programs,
-        required this.training,
-        required this.shooting,
-        required this.location,
-        required this.artist,
-        required this.representative,
-        required this.designation,
-        required this.companyName,
-        required this.regionalOffice,
-        required this.channelName,
-        required this.houseName,
-        required this.id,
-        required this.status,
-        required this.date
+         this.name,
+         this.address,
+         this.pabx,
+         this.email,
+         this.web,
+         this.fax,
+         this.phone,
+         this.mobile,
+         this.contact,
+         this.facebook,
+         this.image,
+         this.businessType,
+         this.camera,
+         this.unit1,
+         this.unit2,
+         this.unit3,
+         this.unit4,
+         this.macPro,
+         this.brunchOffice,
+         this.programs,
+         this.training,
+         this.shooting,
+         this.location,
+         this.artist,
+         this.representative,
+         this.designation,
+         this.companyName,
+         this.regionalOffice,
+         this.channelName,
+         this.houseName,
+         this.id,
+         this.status,
+         this.date
       }
       );
 
@@ -132,160 +133,222 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
   String name='';
   String statusValue='Public';
   //FatchDataHelper _fatchDataHelper = new FatchDataHelper();
-  @override
-  void initState() {
-    super.initState();
-    // statusValue = widget.status;
-    _name.text = widget.name;
-    _address.text = widget.address;
-    _PABX.text = widget.pabx;
-    _email.text = widget.email;
-    _web.text = widget.web;
-    _fax.text = widget.fax;
-    _phonet_t.text = widget.phone;
-    _mobile.text = widget.mobile;
-    _caontact.text = widget.contact;
-    _facebook.text = widget.facebook;
-    _business_type.text = widget.businessType;
-    _camera.text = widget.camera;
-    _unit1.text = widget.unit1;
-    _unit2.text = widget.unit2;
-    _unit3.text = widget.unit3;
-    _unit4.text = widget.unit4;
-    _mac_pro.text = widget.macPro;
-    _branch_office.text = widget.brunchOffice;
-    _programs.text = widget.programs;
-    _training.text = widget.training;
-    _shooting.text = widget.shooting;
-    _location.text = widget.location;
-    _artist_type.text = widget.artist;
-    _representative.text = widget.representative;
-    _designation.text = widget.designation;
-    _company_name.text = widget.companyName;
-    _regionalSalesOffice.text = widget.regionalOffice;
-    _channelName.text = widget.channelName;
-    _houseName.text = widget.houseName;
-    // print(widget.profileImage);
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+
+    _name.text = dataProvider.televisionMediaModel.name!;
+    _address.text = dataProvider.televisionMediaModel.address!;
+    _PABX.text = dataProvider.televisionMediaModel.pabx!;
+    _email.text = dataProvider.televisionMediaModel.email!;
+    _web.text = dataProvider.televisionMediaModel.web!;
+    _fax.text = dataProvider.televisionMediaModel.fax!;
+    _phonet_t.text = dataProvider.televisionMediaModel.phone!;
+    _mobile.text = dataProvider.televisionMediaModel.mobile!;;
+    _caontact.text = dataProvider.televisionMediaModel.contact!;
+    _facebook.text = dataProvider.televisionMediaModel.facebook!;
+    _business_type.text = dataProvider.televisionMediaModel.businessType!;
+    _camera.text = dataProvider.televisionMediaModel.camera!;
+    _unit1.text = dataProvider.televisionMediaModel.unit1!;
+    _unit2.text = dataProvider.televisionMediaModel.unit2!;
+    _unit3.text = dataProvider.televisionMediaModel.unit3!;
+    _unit4.text = dataProvider.televisionMediaModel.unit4!;
+    _mac_pro.text = dataProvider.televisionMediaModel.macPro!;
+    _branch_office.text = dataProvider.televisionMediaModel.brunchOffice!;
+    _programs.text = dataProvider.televisionMediaModel.programs!;
+    _training.text = dataProvider.televisionMediaModel.training!;
+    _shooting.text = dataProvider.televisionMediaModel.shooting!;
+    _location.text = dataProvider.televisionMediaModel.location!;
+    _artist_type.text = dataProvider.televisionMediaModel.artist!;
+    _representative.text = dataProvider.televisionMediaModel.representative!;
+    _designation.text = dataProvider.televisionMediaModel.designation!;;
+    _company_name.text = dataProvider.televisionMediaModel.companyName!;
+    _regionalSalesOffice.text = dataProvider.televisionMediaModel.regionalOffice!;
+    _channelName.text = dataProvider.televisionMediaModel.channelName!;
+    _houseName.text = dataProvider.televisionMediaModel.houseName!;
   }
+
+  String dropdownValue = 'Television Channel';
+  List televisions = Variables().getTelevisionList();
+
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          height: size.height,
-          width: size.width,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Film Media",
-                      style: TextStyle(
-                          fontSize: size.height*.04,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data==null ? CircleAvatar(
-                            radius: size.height*.09,
-                            backgroundColor: Colors.white,
-                            child: widget.image.isEmpty?Icon(Icons.photo): Image.network(widget.image),
-                          ): Container(
-                            height: size.height*.1,
-                            width: size.height*.1,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
+    return  Container(
+      height: size.height,
+      width: size.width * .8,
+      color: Colors.blueGrey,
+          child: Column(
+            children: [
+              SizedBox(height: 3,),
+              Expanded(
+                child: Container(
+                  color: Color(0xffedf7fd),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                data == null
+                                    ? CircleAvatar(
+                                  radius: size.height * .09,
+                                  backgroundColor: Colors.grey,
+                                  child: CircleAvatar(
+                                    radius: size.height * .085,
+                                    backgroundColor: Colors.white,
+                                    child: dataProvider.televisionMediaModel.image!.isEmpty
+                                        ? Icon(Icons.photo)
+                                        : Image.network(
+                                        dataProvider.televisionMediaModel.image!),
+                                  ),
+                                )
+                                    : CircleAvatar(
+                                  radius: size.height * .09,
+                                  child: Image.memory(
+                                    data!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      pickedImage(dataProvider);
+                                    },
+                                    icon: Icon(Icons.camera_alt, color: Colors.black54))
+                              ],
                             ),
-                            child: Image.memory(data!,fit: BoxFit.fill,),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                uploadToStorage(dataProvider);
-                              },
-                              icon:
-                              Icon(Icons.camera_alt, color: Colors.black54))
+
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                                  width: size.width * .5,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025),),
+                                        DropdownButton<String>(
+                                          value: dropdownValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: televisions.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              dropdownValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              Container(
+                                  width: size.width * .2,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                                      Expanded(
+                                        child: DropdownButton<String>(
+                                          value: statusValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: staatus.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              statusValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            ],
+                          ),
+                          TelevisionMediaFild(size),
+
+                          SizedBox(height: size.height*.04,),
+
+                          _isLoading?
+                          Container(height: size.height * .06, child: fadingCircle):
+                          ElevatedButton(
+                            onPressed: () {
+
+
+                              updateData(dataProvider, firebaseProvider);
+
+
+                              //  Navigator.pop(context,true);
+
+                              // showToast(imageUrl);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                              child: Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .04,
+                                ),
+
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+
+                            ),
+
+                          ),
+
+
+                          SizedBox(height: size.height*.04,),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                            DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                  TelevisionMediaFild(size),
-
-                  SizedBox(height: size.height*.04,),
-
-                  if (_isLoading) Container(
-                      height: size.height*.06,
-                      child: fadingCircle) else ElevatedButton( onPressed: () {
-
-                    uploadPhoto(dataProvider, firebaseProvider);
-                    //  Navigator.pop(context,true);
-
-
-                    // showToast(imageUrl);
-                  },
-                      child: Text(
-                        'Update Data',
-                        style: TextStyle(color: Colors.white, fontSize: size.height*.04,),
-                      )
-                  ),
-                  SizedBox(height: size.height*.04,),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
   }
-  Future<void> uploadPhoto(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
+  Future<void> updateData(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
     if(data==null){
       setState(() {
-        imageUrl = widget.image;
+        imageUrl = dataProvider.televisionMediaModel.image!;
       });
       _submitData(dataProvider,firebaseProvider,);
     }else{
       firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(widget.id);
+      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(dataProvider.televisionMediaModel.id!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
@@ -303,7 +366,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
     }
 
   }
-  uploadToStorage(DataProvider dataProvider) async {
+  pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
@@ -361,22 +424,23 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
         'regionalOffice': _regionalSalesOffice.text,
         'channelName': _channelName.text,
         'houseName': _houseName.text,
-        'id': widget.id,
-        'category': dataProvider.subCategory,
+        'id': dataProvider.televisionMediaModel.id!,
+        'sub-category':dropdownValue.toLowerCase(),
         'status': statusValue.toLowerCase(),
         'date': dateData,
-        // 'category': dataProvider.subCategory,
-
       };
       setState(()=>_isLoading=true);
       await firebaseProvider.updateTelevisionMediaData(mapData, context).then((value){
         if(value){
-          setState(()=>_isLoading=false);
-          Navigator.pop(context,true);
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Television Media Screen";
           showToast('Data updated successful');
         }
         else{
-          setState(()=>_isLoading=false);
+          setState(() => _isLoading = false);
+          dataProvider.category=dataProvider.subCategory;
+          dataProvider.subCategory = "Television Media Screen";
           showToast('Data update failed!');
 
         }
@@ -391,7 +455,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width*.5,
+                width:  size.width*.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -429,7 +493,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                 ),
               ),
               Container(
-                width:  size.width*.5,
+                width:  size.width*.4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -540,7 +604,14 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
           : hint == 'Channel Name'
           ? _channelName
           : _houseName,
-      decoration: InputDecoration(hintText: hint),
+      decoration: InputDecoration(
+        hintText: hint,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(5.0),
+          borderSide: new BorderSide(width: 1),
+        ),
+      ),
+      maxLines: 2,
     );
   }
   }
