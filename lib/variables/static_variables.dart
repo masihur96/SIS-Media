@@ -16,8 +16,6 @@ class Variables {
       Entry('Banner', Icons.branding_watermark, <Entry>[
         Entry('Index Banner'),
         Entry('Content Banner'),
-        Entry('Top Banner'),
-        Entry('Bottom Banner'),
         Entry('Pop Up Banner'),
       ]),
     ];

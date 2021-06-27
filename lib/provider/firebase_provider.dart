@@ -94,6 +94,48 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> addIndexBannerData(Map<String, String> map) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("IndexBanner")
+          .doc(map['id'])
+          .set(map);
+
+      return true;
+    } catch (err) {
+      showToast(err.toString());
+      return false;
+    }
+  }
+
+  Future<bool> addContentBannerData(Map<String, String> map) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("ContentBanner")
+          .doc(map['id'])
+          .set(map);
+
+      return true;
+    } catch (err) {
+      showToast(err.toString());
+      return false;
+    }
+  }
+
+  Future<bool> addPopUpBannerData(Map<String, String> map) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("PopUpBanner")
+          .doc(map['id'])
+          .set(map);
+
+      return true;
+    } catch (err) {
+      showToast(err.toString());
+      return false;
+    }
+  }
+
   Future<bool> addTelevisionMediaChartData(Map<String, String> map) async {
     try {
       await FirebaseFirestore.instance
@@ -219,6 +261,48 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateBanerData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('IndexBanner')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateContentData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ContentBanner')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updatePopUpData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('PopUpBanner')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
   Future<bool> deleteFilmMediaData(String id, BuildContext context) async {
     try {
       await FirebaseFirestore.instance
@@ -316,6 +400,45 @@ class FirebaseProvider extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('ImportentEmergency')
+          .doc(id)
+          .delete();
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteIndexBannerData(String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('IndexBanner')
+          .doc(id)
+          .delete();
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteContentBannerData(String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ContentBanner')
+          .doc(id)
+          .delete();
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deletePopUpBannerData(String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('PopUpBanner')
           .doc(id)
           .delete();
       return true;

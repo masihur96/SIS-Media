@@ -4,6 +4,7 @@ import 'package:media_directory_admin/model/audio_rate_chart_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
+import 'package:media_directory_admin/model/index_banner_model.dart';
 import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
@@ -33,6 +34,85 @@ class FatchDataHelper extends ChangeNotifier {
 
   List<ImportentEmergencyModel> _importentMediadataList = [];
   get importentMediadataList => _importentMediadataList;
+
+  List<IndexBannerModel> _indexdataList = [];
+  get indexdataList => _indexdataList;
+
+  List<IndexBannerModel> _contentdataList = [];
+  get contentdataList => _contentdataList;
+
+   List<IndexBannerModel> _popUpdataList = [];
+  get popUpdataList => _popUpdataList;
+
+  Future<List<IndexBannerModel>> fetchIndexData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('IndexBanner')
+          .get()
+          .then((snapshot) {
+        _indexdataList.clear();
+        snapshot.docChanges.forEach((element) {
+          IndexBannerModel indexBannerModel = IndexBannerModel(
+            image: element.doc['image'],
+            id: element.doc['id'],
+            status: element.doc['status'],
+            date: element.doc['date'],
+          );
+          _indexdataList.add(indexBannerModel);
+        });
+      });
+      return indexdataList;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<IndexBannerModel>> fetchContentData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ContentBanner')
+          .get()
+          .then((snapshot) {
+        _contentdataList.clear();
+        snapshot.docChanges.forEach((element) {
+          IndexBannerModel indexBannerModel = IndexBannerModel(
+            image: element.doc['image'],
+            id: element.doc['id'],
+            status: element.doc['status'],
+            date: element.doc['date'],
+          );
+          _contentdataList.add(indexBannerModel);
+        });
+      });
+      return contentdataList;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  
+  Future<List<IndexBannerModel>> fetchPopUpData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('PopUpBanner')
+          .get()
+          .then((snapshot) {
+        _popUpdataList.clear();
+        snapshot.docChanges.forEach((element) {
+          IndexBannerModel indexBannerModel = IndexBannerModel(
+            image: element.doc['image'],
+            id: element.doc['id'],
+            status: element.doc['status'],
+            date: element.doc['date'],
+          );
+          _popUpdataList.add(indexBannerModel);
+        });
+      });
+      return popUpdataList;
+    } catch (error) {
+      return [];
+    }
+  }
 
   Future<List<FilmMediaModel>> fetchFilmMediaData() async {
     try {

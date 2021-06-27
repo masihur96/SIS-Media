@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
+import 'package:media_directory_admin/model/index_banner_model.dart';
 import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
 import 'package:media_directory_admin/model/television_rate_chart_model.dart';
-import 'package:media_directory_admin/screen/banner/bottom_banner.dart';
 import 'package:media_directory_admin/screen/banner/content_banner.dart';
 import 'package:media_directory_admin/screen/banner/index_banner.dart';
 import 'package:media_directory_admin/screen/banner/popup_banner.dart';
-import 'package:media_directory_admin/screen/banner/top_banner.dart';
+import 'package:media_directory_admin/screen/banner/update_banner_data.dart';
+import 'package:media_directory_admin/screen/banner/update_content_data.dart';
+import 'package:media_directory_admin/screen/banner/update_popup_data.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/update_audio_rate_chart.dart';
@@ -94,6 +96,14 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  IndexBannerModel _indexBannerModel = new IndexBannerModel();
+  IndexBannerModel get indexBannerModel => _indexBannerModel;
+  set indexBannerModel(IndexBannerModel model) {
+    model = IndexBannerModel();
+    _indexBannerModel = model;
+    notifyListeners();
+  }
+
 //  bool get isTapped => _isTapped;
 
   set subCategory(String value) {
@@ -165,93 +175,19 @@ class DataProvider extends ChangeNotifier {
       return AllDataAudioRateChart();
     else if (subCategory == 'Index Banner')
       return IndexBannerScreen();
+    else if (subCategory == 'Update Index Media')
+      return UpdateBannerData();
+    else if (subCategory == 'Banner Media Screen')
+      return IndexBannerScreen();
     else if (subCategory == 'Content Banner')
       return ContentBannerScreen();
-    else if (subCategory == 'Top Banner')
-      return TopBannerScreen();
-    else if (subCategory == 'Bottom Banner')
-      return BottomBannerScreen();
+    else if (subCategory == 'Update Content Data')
+      return UpdateContentData();
     else if (subCategory == 'Pop Up Banner')
       return PopUpBannerScreen();
+    else if (subCategory == 'Update PopUp Data')
+      return UpdatePopUpData();
     else
       return ImportentEmergency();
   }
-
-  // List<FilmMediaModel> _filmMediaList=[];
-  // List<FilmMediaModel> _tvMediaList=[];
-  // List<FilmMediaModel> _audioMediaList=[];
-  // List<FilmMediaModel> _printMediaList=[];
-  // List<FilmMediaModel> _newMediaList=[];
-  // List<FilmMediaModel> _importantMediaList=[];
-  //
-  // List<FilmMediaModel> _subCategoryList=[];
-  //
-  // get filmMediaList => _filmMediaList;
-  // get tvMediaList => _tvMediaList;
-  // get audioMediaList => _audioMediaList;
-  // get printMediaList => _printMediaList;
-  // get newMediaList => _newMediaList;
-  // get importantMediaList => _importantMediaList;
-  //
-  // get subCategoryList => _subCategoryList;
-  //
-  //
-  //
-  // void getSubFilmMediaList(String category,String subCategory){
-  //   _subCategoryList.clear();
-  //   int i=0;
-  //   if(category.toLowerCase()=='Film Media'.toLowerCase()){
-  //     while(i<_filmMediaList.length){
-  //       if(_filmMediaList[i].subCatagory.toLowerCase()==subCategory.toLowerCase()){
-  //         _subCategoryList.add(_filmMediaList[i]);
-  //       }
-  //       i++;
-  //     }
-  //     notifyListeners();
-  //     print(_subCategoryList.length);
-  //   }
-  // }
-
-// Widget sidebarControl(){
-  //   if(sideBarValue == 1 ) return HomePage();
-  //   else return DashBoard();
-  // }
-// int _sideBarValue=1;
-// int get sideBarValue => _sideBarValue;
-// set sideBarValue(int val){
-//     _sideBarValue =val;
-//     notifyListeners();
-//   }
-//
-
-//
-// String _channelForm = '';
-// String get channelForm => _channelForm;
-//
-// set channelForm(String value) {
-//   _channelForm = value;
-//   notifyListeners();
-// }
-//
-// Widget tvChannelForm(){
-//   if(channelForm == "Bangladesh Television")
-//     return TelevisionRateChartWidget().TelevisionRateChartforSponsorship();
-//   else if(channelForm == "Bangladesh Television"||channelForm=="Masaranga"|| channelForm == 'Channel 9'|| channelForm =='Bangla TV')
-//     return TelevisionRateChartWidget().TelevisionRateChartforchannelI();
-//     else
-//     return TelevisionRateChartWidget().TelevisionRateChartforSponsorship();
-// }
-
-  // Widget pageBody() {
-  //   if (subCategory == 'Film Media' ||
-  //       subCategory == 'Television Media' ||
-  //       subCategory == 'Audio Media' ||
-  //       subCategory == 'Printing Media' ||
-  //       subCategory == 'Importent & Emergency' ||
-  //       subCategory == 'New Media')
-  //     return HomePage();
-  //   else
-  //     return DashBoard();
-  // }
-
 }
