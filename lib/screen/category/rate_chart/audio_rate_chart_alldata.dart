@@ -404,70 +404,56 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Update Audio Media Chart";
 
-                      // dataProvider.televisionRateChartModel.id =
-                      //     _filteredList[index].id;
-                      // dataProvider.televisionRateChartModel.companyName =
-                      //     _filteredList[index].companyName;
-                      // dataProvider.televisionRateChartModel.address =
-                      //     _filteredList[index].address;
-                      // dataProvider.televisionRateChartModel.phone =
-                      //     _filteredList[index].phone;
-                      // dataProvider.televisionRateChartModel.fax =
-                      //     _filteredList[index].fax;
-                      // dataProvider.televisionRateChartModel.email =
-                      //     _filteredList[index].email;
-                      // dataProvider.televisionRateChartModel.web =
-                      //     _filteredList[index].web;
-                      // dataProvider
-                      //         .televisionRateChartModel.regionalSalesOffice =
-                      //     _filteredList[index].regionalSalesOffice;
-                      // dataProvider.televisionRateChartModel.effectiveForm =
-                      //     _filteredList[index].effectiveForm;
-                      // dataProvider.televisionRateChartModel.rateFor =
-                      //     _filteredList[index].rateFor;
-                      // dataProvider.televisionRateChartModel.programType =
-                      //     _filteredList[index].programType;
-                      // dataProvider.televisionRateChartModel.programDuration =
-                      //     _filteredList[index].programDuration;
-                      // dataProvider.televisionRateChartModel.addDuration =
-                      //     _filteredList[index].addDuration;
-                      // dataProvider.televisionRateChartModel.generalRate =
-                      //     _filteredList[index].generalRate;
-                      // dataProvider.televisionRateChartModel.fixedPosition =
-                      //     _filteredList[index].fixedPosition;
-                      // dataProvider.televisionRateChartModel.beforeNews =
-                      //     _filteredList[index].beforeNews;
-                      // dataProvider.televisionRateChartModel.midBreakInProgram =
-                      //     _filteredList[index].midBreakInProgram;
-                      // dataProvider.televisionRateChartModel.offPeakTime =
-                      //     _filteredList[index].offPeakTime;
-                      // dataProvider.televisionRateChartModel.peakTime =
-                      //     _filteredList[index].peakTime;
-                      // dataProvider.televisionRateChartModel.day =
-                      //     _filteredList[index].day;
-                      // dataProvider.televisionRateChartModel.specialNote =
-                      //     _filteredList[index].specialNote;
-                      // dataProvider.televisionRateChartModel.newsTime =
-                      //     _filteredList[index].newsTime;
-                      // dataProvider.televisionRateChartModel.popUp =
-                      //     _filteredList[index].popUp;
-                      // dataProvider.televisionRateChartModel.CMTime =
-                      //     _filteredList[index].CMTime;
-                      // dataProvider
-                      //         .televisionRateChartModel.extraCommercialTime =
-                      //     _filteredList[index].extraCommercialTime;
-                      // dataProvider.televisionRateChartModel.ordinery =
-                      //     _filteredList[index].ordinery;
-                      // dataProvider.televisionRateChartModel.banglaFilm =
-                      //     _filteredList[index].banglaFilm;
-                      // dataProvider.televisionRateChartModel.namingBranding =
-                      //     _filteredList[index].namingBranding;
-                      // dataProvider.televisionRateChartModel.tarifBrand =
-                      //     _filteredList[index].tarifBrand;
-                      // dataProvider.televisionRateChartModel.topDown =
-                      //     _filteredList[index].topDown;
-                      // dataProvider.televisionRateChartModel.LShap =
-                      //     _filteredList[index].LShap;
+                      dataProvider.audioRateChartModel.id =
+                          _filteredList[index].id;
+                      dataProvider.audioRateChartModel.companyName =
+                          _filteredList[index].companyName;
+                      dataProvider.audioRateChartModel.address =
+                          _filteredList[index].address;
+                      dataProvider.audioRateChartModel.phone =
+                          _filteredList[index].phone;
+                      dataProvider.audioRateChartModel.fax =
+                          _filteredList[index].fax;
+                      dataProvider.audioRateChartModel.email =
+                          _filteredList[index].email;
+                      dataProvider.audioRateChartModel.web =
+                          _filteredList[index].web;
+                      dataProvider.audioRateChartModel.regionalOffice =
+                          _filteredList[index].regionalOffice;
+                      dataProvider.audioRateChartModel.effectiveForm =
+                          _filteredList[index].effectiveForm;
+                      dataProvider.audioRateChartModel.rateFore =
+                          _filteredList[index].rateFore;
+                      dataProvider.audioRateChartModel.kendroName =
+                          _filteredList[index].kendroName;
+                      dataProvider.audioRateChartModel.spotDuration =
+                          _filteredList[index].spotDuration;
+                      dataProvider.audioRateChartModel.perSpot =
+                          _filteredList[index].perSpot;
+                      dataProvider.audioRateChartModel.sponsorFor =
+                          _filteredList[index].sponsorFor;
+                      dataProvider.audioRateChartModel.newsTime =
+                          _filteredList[index].newsTime;
+                      dataProvider.audioRateChartModel.midBreak =
+                          _filteredList[index].midBreak;
+                      dataProvider.audioRateChartModel.duration =
+                          _filteredList[index].duration;
+                      dataProvider.audioRateChartModel.time =
+                          _filteredList[index].time;
+                      dataProvider.audioRateChartModel.peakHour =
+                          _filteredList[index].peakHour;
+                      dataProvider.audioRateChartModel.offPeakHour =
+                          _filteredList[index].offPeakHour;
+                      dataProvider.audioRateChartModel.termsCondition =
+                          _filteredList[index].termsCondition;
+                      dataProvider.audioRateChartModel.branding =
+                          _filteredList[index].branding;
+                      dataProvider.audioRateChartModel.broadCastTime =
+                          _filteredList[index].broadCastTime;
+                      dataProvider.audioRateChartModel.RDC =
+                          _filteredList[index].RDC;
+                      dataProvider.audioRateChartModel.endorsement =
+                          _filteredList[index].endorsement;
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,

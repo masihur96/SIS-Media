@@ -219,6 +219,20 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateAudioMediaRateChartData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('AudioMediaChart')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
   Future<bool> updatePrintMediaData(
       Map<String, String> map, BuildContext context) async {
     try {

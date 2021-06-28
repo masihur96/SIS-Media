@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
+import 'package:media_directory_admin/model/audio_rate_chart_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/model/index_banner_model.dart';
@@ -67,6 +68,14 @@ class DataProvider extends ChangeNotifier {
   set audioMediaModel(AudioMediaModel model) {
     model = AudioMediaModel();
     _audioMediaModel = model;
+    notifyListeners();
+  }
+
+  AudioRateChartModel _audioRateChartModel = new AudioRateChartModel();
+  AudioRateChartModel get audioRateChartModel => _audioRateChartModel;
+  set audioRateChartModel(AudioRateChartModel model) {
+    model = AudioRateChartModel();
+    _audioRateChartModel = model;
     notifyListeners();
   }
 

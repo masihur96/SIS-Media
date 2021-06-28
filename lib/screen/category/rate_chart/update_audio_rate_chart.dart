@@ -112,21 +112,30 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
       counter++;
     });
 
-    // _name.text = dataProvider.importentEmergencyModel.name!;
-    // _address.text = dataProvider.importentEmergencyModel.address!;
-    // _PABX.text = dataProvider.importentEmergencyModel.pabx!;
-    // _email.text = dataProvider.importentEmergencyModel.email!;
-    // _web.text = dataProvider.importentEmergencyModel.web!;
-    // _fax.text = dataProvider.importentEmergencyModel.fax!;
-    // _phonet_t.text = dataProvider.importentEmergencyModel.phone!;
-    // _mobile.text = dataProvider.importentEmergencyModel.mobile!;
-    // _contact.text = dataProvider.importentEmergencyModel.contact!;
-    // _facebook.text = dataProvider.importentEmergencyModel.facebook!;
-    // _corporateOffice.text =
-    //     dataProvider.importentEmergencyModel.corporateOffice!;
-    // _headOffice.text = dataProvider.importentEmergencyModel.headOffice!;
-    // _position.text = dataProvider.importentEmergencyModel.position!;
-    // _businessType.text = dataProvider.importentEmergencyModel.businessType!;
+    _companyName.text = dataProvider.audioRateChartModel.companyName!;
+    _address.text = dataProvider.audioRateChartModel.address!;
+    _phone.text = dataProvider.audioRateChartModel.phone!;
+    _email.text = dataProvider.audioRateChartModel.email!;
+    _web.text = dataProvider.audioRateChartModel.web!;
+    _fax.text = dataProvider.audioRateChartModel.fax!;
+    _kendroName.text = dataProvider.audioRateChartModel.kendroName!;
+    _effectiveForm.text = dataProvider.audioRateChartModel.effectiveForm!;
+    _spotDuration.text = dataProvider.audioRateChartModel.spotDuration!;
+    _perSpot.text = dataProvider.audioRateChartModel.perSpot!;
+    __sponsorFor.text = dataProvider.audioRateChartModel.sponsorFor!;
+    _newsTime.text = dataProvider.audioRateChartModel.newsTime!;
+    _midBreak.text = dataProvider.audioRateChartModel.midBreak!;
+    _regionalStation.text = dataProvider.audioRateChartModel.regionalOffice!;
+    _duration.text = dataProvider.audioRateChartModel.duration!;
+    _time.text = dataProvider.audioRateChartModel.time!;
+    _peakHour.text = dataProvider.audioRateChartModel.peakHour!;
+    _offPeakHour.text = dataProvider.audioRateChartModel.offPeakHour!;
+    _termsCondition.text = dataProvider.audioRateChartModel.termsCondition!;
+    _branding.text = dataProvider.audioRateChartModel.branding!;
+    _broadCastTime.text = dataProvider.audioRateChartModel.broadCastTime!;
+    _rateFor.text = dataProvider.audioRateChartModel.rateFore!;
+    _RDC.text = dataProvider.audioRateChartModel.RDC!;
+    _endorsement.text = dataProvider.audioRateChartModel.endorsement!;
   }
 
   @override
@@ -343,8 +352,7 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                   ))
                 : ElevatedButton(
                     onPressed: () {
-                      uuid = Uuid().v1();
-                      // uploadData(dataProvider, firebaseProvider);
+                      updateData(dataProvider, firebaseProvider);
                       setState(() {});
                     },
                     child: Padding(
@@ -366,6 +374,72 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
         ),
       ),
     );
+  }
+
+  Future<void> updateData(
+      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+    _submitData(
+      dataProvider,
+      firebaseProvider,
+    );
+  }
+
+  Future<void> _submitData(
+    DataProvider dataProvider,
+    FirebaseProvider firebaseProvider,
+  ) async {
+    DateTime date = DateTime.now();
+    String dateData = '${date.month}-${date.day}-${date.year}';
+    if (statusValue.isNotEmpty) {
+      setState(() => _isLoading = true);
+      Map<String, String> mapData = {
+        'channelName': channelValue,
+        'companyName': _companyName.text,
+        'address': _address.text,
+        'phone': _phone.text,
+        'fax': _fax.text,
+        'email': _email.text,
+        'web': _web.text,
+        'regionalOffice': _regionalStation.text,
+        'effectiveForm': _effectiveForm.text,
+        'kendroName': _kendroName.text,
+        'spotDuration': _spotDuration.text,
+        'perSpot': _perSpot.text,
+        'sponsorFor': __sponsorFor.text,
+        'newsTime': _newsTime.text,
+        'midBreak': _midBreak.text,
+        'duration': _duration.text,
+        'time': _time.text,
+        'peakHour': _peakHour.text,
+        'offPeakHour': _offPeakHour.text,
+        'termsCondition': _termsCondition.text,
+        'branding': _branding.text,
+        'broadCastTime': _broadCastTime.text,
+        'rateFore': _rateFor.text,
+        'RDC': _RDC.text,
+        'endorsement': _endorsement.text,
+        'status': statusValue.toLowerCase(),
+        'date': dateData,
+        'id': dataProvider.audioRateChartModel.id!,
+      };
+      setState(() => _isLoading = true);
+      await firebaseProvider
+          .updateAudioMediaRateChartData(mapData, context)
+          .then((value) {
+        if (value) {
+          setState(() => _isLoading = false);
+          dataProvider.category = dataProvider.subCategory;
+          dataProvider.subCategory = "Audio Media Chart Screen";
+          showToast('Data updated successful');
+        } else {
+          setState(() => _isLoading = false);
+          dataProvider.category = dataProvider.subCategory;
+          dataProvider.subCategory = "Audio Media Chart Screen";
+          showToast('Data update failed!');
+        }
+      });
+    } else
+      showToast("Select Status");
   }
 
   Widget _textFormBuilderForTelevisionChart(String hint) {
