@@ -224,7 +224,7 @@ class _UpdatePopUpDataState extends State<UpdatePopUpData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child(dataProvider.subCategory)
+          .child('PopUpBanner')
           .child(dataProvider.indexBannerModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);

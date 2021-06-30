@@ -27,6 +27,8 @@ class AudioRateChartModel {
   String? id;
   String? status;
   String? date;
+  String? category;
+  String? subCategory;
 
   AudioRateChartModel({
     this.channelName,
@@ -57,5 +59,7 @@ class AudioRateChartModel {
     this.id,
     this.status,
     this.date,
+    this.category,
+    this.subCategory,
   });
 }

@@ -1,11 +1,8 @@
-import 'dart:html';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/screen/main_page.dart';
+import 'package:media_directory_admin/screen/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
@@ -31,15 +28,14 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Media Directory Admin',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          backgroundColor: Color.fromRGBO(216, 211, 216, 1),
-          primarySwatch: Colors.green,
-          canvasColor: Colors.transparent,
-        ),
-        home: MainPage(),
-      ),
+          title: 'Media Directory Admin',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            backgroundColor: Color.fromRGBO(216, 211, 216, 1),
+            primarySwatch: Colors.green,
+            canvasColor: Colors.transparent,
+          ),
+          home: HomePage()),
     );
   }
 }

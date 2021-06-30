@@ -3,13 +3,9 @@ import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
-import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/screen/category/film_media_screen.dart';
-import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UpdateFilmMediaDataPage extends StatefulWidget {
@@ -53,6 +49,7 @@ class UpdateFilmMediaDataPage extends StatefulWidget {
   _UpdateFilmMediaDataPageState createState() =>
       _UpdateFilmMediaDataPageState();
 }
+
 class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
   TextEditingController _name = TextEditingController(text: '');
   TextEditingController _address = TextEditingController(text: '');
@@ -68,7 +65,6 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
   TextEditingController _hallname = TextEditingController(text: '');
 
   List staatus = ['Public', 'Private'];
-  List films = Variables().getFilmMediaList();
 
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -79,8 +75,6 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
   String name = '';
 
   String statusValue = 'Public';
-  String dropdownValue = "Film Institution";
-  FatchDataHelper _fatchDataHelper = new FatchDataHelper();
 
   int counter = 0;
   customInit(DataProvider dataProvider) async {
@@ -108,6 +102,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
+
     if (counter == 0) {
       customInit(dataProvider);
     }
@@ -117,15 +112,15 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
       color: Colors.blueGrey,
       child: Column(
         children: [
-          SizedBox(height: 3,),
+          SizedBox(
+            height: 3,
+          ),
           Expanded(
             child: Container(
               color: Color(0xffedf7fd),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-
                 child: Form(
-
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
@@ -136,29 +131,45 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
                           children: [
                             data == null
                                 ? CircleAvatar(
-                              radius: size.height * .09,
-                              backgroundColor: Colors.grey,
-                              child: CircleAvatar(
-                                radius: size.height * .085,
-                                backgroundColor: Colors.white,
-                                child: dataProvider.filmMediaModel.image!.isEmpty
-                                    ? Icon(Icons.photo)
-                                    : Image.network(
-                                    dataProvider.filmMediaModel.image!),
-                              ),
-                            )
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.grey,
+                                    child: dataProvider
+                                            .filmMediaModel.image!.isEmpty
+                                        ? CircleAvatar(
+                                            radius: size.height * .085,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: AssetImage(
+                                                'images/insert_image_icon.png'))
+                                        : CircleAvatar(
+                                            radius: size.height * .085,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: NetworkImage(
+                                                dataProvider
+                                                    .filmMediaModel.image!),
+                                          ),
+                                  )
                                 : CircleAvatar(
-                              radius: size.height * .09,
-                              child: Image.memory(
-                                data!,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.grey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .085,
+                                      backgroundColor: Colors.white,
+                                      child: ClipOval(
+                                        child: Image.memory(
+                                          data!,
+                                          width: size.height * .17,
+                                          height: size.height * .17,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                             IconButton(
                                 onPressed: () {
                                   pickedImage(dataProvider);
                                 },
-                                icon: Icon(Icons.add_photo_alternate_rounded, color: Colors.black54))
+                                icon: Icon(Icons.add_photo_alternate_rounded,
+                                    color: Colors.black54))
                           ],
                         ),
                       ),
@@ -167,52 +178,21 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              border: Border.all(width: 1,color: Colors.blueGrey),
-                            ),
-                            // width: size.width * .4,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
-                                  SizedBox(
-                                    width: size.height*.04,
-                                  ),
-                                  DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: dropdownValue,
-                                      elevation: 0,
-                                      dropdownColor: Colors.white,
-                                      style: TextStyle(color: Colors.black),
-                                      items: films.map((itemValue) {
-                                        return DropdownMenuItem<String>(
-                                          value: itemValue,
-                                          child: Text(itemValue),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          dropdownValue = newValue!;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1,color: Colors.blueGrey),
+                              border:
+                                  Border.all(width: 1, color: Colors.blueGrey),
                             ),
                             // width: size.width * .2,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
+                                  Text(
+                                    "Status : ",
+                                    style:
+                                        TextStyle(fontSize: size.height * .025),
+                                  ),
                                   DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: statusValue,
@@ -242,39 +222,28 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
                       SizedBox(
                         height: size.height * .04,
                       ),
-
-                      _isLoading?
-                        Container(height: size.height * .06, child: fadingCircle):
-                        ElevatedButton(
-                            onPressed: () {
-
-
-                              updateData(dataProvider, firebaseProvider);
-
-
-                              //  Navigator.pop(context,true);
-
-                              // showToast(imageUrl);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                              child: Text(
-                                'UPDATE',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: size.height * .04,
+                      _isLoading
+                          ? Container(
+                              height: size.height * .06, child: fadingCircle)
+                          : ElevatedButton(
+                              onPressed: () {
+                                updateData(dataProvider, firebaseProvider);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 10),
+                                child: Text(
+                                  'UPDATE',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: size.height * .04,
+                                  ),
                                 ),
-
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.grey,
                               ),
                             ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey,
-
-                          ),
-
-                        ),
-
-
                       SizedBox(
                         height: size.height * .04,
                       ),
@@ -303,7 +272,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child(dataProvider.subCategory)
+          .child('FilmMediaData')
           .child(dataProvider.filmMediaModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -312,7 +281,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
+
           setState(() {
             imageUrl = downloadUrl;
           });
@@ -322,11 +291,8 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
           );
         });
       });
-
-
     }
   }
-
 
   pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
@@ -351,6 +317,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
       });
     });
   }
+
   Future<void> _submitData(
     DataProvider dataProvider,
     FirebaseProvider firebaseProvider,
@@ -376,19 +343,17 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
         'id': dataProvider.filmMediaModel.id!,
         'image': imageUrl,
         'status': statusValue.toLowerCase(),
-        'sub-category':dropdownValue,
-        // 'category': dataProvider.subCategory,
       };
       setState(() => _isLoading = true);
       await firebaseProvider.updateData(mapData, context).then((value) {
         if (value) {
           setState(() => _isLoading = false);
-          dataProvider.category=dataProvider.subCategory;
+          dataProvider.category = dataProvider.subCategory;
           dataProvider.subCategory = "Film Media Screen";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
-          dataProvider.category=dataProvider.subCategory;
+          dataProvider.category = dataProvider.subCategory;
           dataProvider.subCategory = "Film Media Screen";
           showToast('Data update failed!');
         }

@@ -130,47 +130,6 @@ class _UpdateContentDataState extends State<UpdateContentData> {
                               SizedBox(
                                 width: size.width * .04,
                               ),
-                              Container(
-                                width: size.width * .15,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1, color: Colors.blueGrey),
-                                ),
-                                // width: size.width * .2,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Places : ",
-                                        style: TextStyle(
-                                            fontSize: size.height * .025),
-                                      ),
-                                      DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          value: categoryValue,
-                                          elevation: 0,
-                                          dropdownColor: Colors.white,
-                                          style: TextStyle(color: Colors.black),
-                                          items: categorys.map((itemValue) {
-                                            return DropdownMenuItem<String>(
-                                              value: itemValue,
-                                              child: Text(itemValue),
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              categoryValue = newValue!;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ]),
                       ),
                       Padding(
@@ -271,7 +230,7 @@ class _UpdateContentDataState extends State<UpdateContentData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child(dataProvider.subCategory)
+          .child('ContentBanner')
           .child(dataProvider.indexBannerModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -305,7 +264,6 @@ class _UpdateContentDataState extends State<UpdateContentData> {
         'image': imageUrl,
         'id': dataProvider.indexBannerModel.id!,
         'date': dateData,
-        'category': categoryValue,
         'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);

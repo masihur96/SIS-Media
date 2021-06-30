@@ -159,7 +159,6 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
     _extraCommercialTime.text =
         dataProvider.televisionRateChartModel.extraCommercialTime!;
     _ordinery.text = dataProvider.televisionRateChartModel.ordinery!;
-    ;
     _banglaFilm.text = dataProvider.televisionRateChartModel.banglaFilm!;
     _namingBranding.text =
         dataProvider.televisionRateChartModel.namingBranding!;
@@ -554,38 +553,5 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
       ),
       maxLines: 2,
     );
-  }
-
-  _emptyFildCreator() {
-    _companyName.clear();
-    _address.clear();
-    _phone.clear();
-    _email.clear();
-    _web.clear();
-    _fax.clear();
-    _regionalSalesOffice.clear();
-    _effectiveForm.clear();
-    _rateFor.clear();
-    _programType.clear();
-    __programDuration.clear();
-    _addDuration.clear();
-    _generalRate.clear();
-    _fixedPosition.clear();
-    _beforeNews.clear();
-    _midBreakProgram.clear();
-    _offPeack.clear();
-    _peakTime.clear();
-    _day.clear();
-    _spacialNote.clear();
-    _newsTime.clear();
-    _popUp.clear();
-    _cmTime.clear();
-    _extraCommercialTime.clear();
-    _ordinery.clear();
-    _banglaFilm.clear();
-    _namingBranding.clear();
-    _tarifBrand.clear();
-    _topDown.clear();
-    _LShape.clear();
   }
 }

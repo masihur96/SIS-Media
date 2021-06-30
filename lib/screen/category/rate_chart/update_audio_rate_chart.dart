@@ -4,7 +4,6 @@ import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class UpdateAudioRateChart extends StatefulWidget {
   String? channelName;
@@ -502,32 +501,5 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
       ),
       maxLines: 2,
     );
-  }
-
-  _emptyFildCreator() {
-    _companyName.clear();
-    _address.clear();
-    _phone.clear();
-    _email.clear();
-    _web.clear();
-    _fax.clear();
-    _regionalStation.clear();
-    _effectiveForm.clear();
-    _rateFor.clear();
-    _kendroName.clear();
-    _spotDuration.clear();
-    _perSpot.clear();
-    __sponsorFor.clear();
-    _newsTime.clear();
-    _midBreak.clear();
-    _duration.clear();
-    _time.clear();
-    _peakHour.clear();
-    _offPeakHour.clear();
-    _termsCondition.clear();
-    _branding.clear();
-    _broadCastTime.clear();
-    _RDC.clear();
-    _endorsement.clear();
   }
 }

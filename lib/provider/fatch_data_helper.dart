@@ -9,6 +9,7 @@ import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
 import 'package:media_directory_admin/model/television_rate_chart_model.dart';
+import 'package:media_directory_admin/model/user_request_model.dart';
 
 class FatchDataHelper extends ChangeNotifier {
   List<FilmMediaModel> _filmMediadataList = [];
@@ -41,8 +42,11 @@ class FatchDataHelper extends ChangeNotifier {
   List<IndexBannerModel> _contentdataList = [];
   get contentdataList => _contentdataList;
 
-   List<IndexBannerModel> _popUpdataList = [];
+  List<IndexBannerModel> _popUpdataList = [];
   get popUpdataList => _popUpdataList;
+
+  List<UserRequestModel> _userRequestdataList = [];
+  get userRequestdataList => _userRequestdataList;
 
   Future<List<IndexBannerModel>> fetchIndexData() async {
     try {
@@ -90,7 +94,6 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  
   Future<List<IndexBannerModel>> fetchPopUpData() async {
     try {
       await FirebaseFirestore.instance
@@ -118,6 +121,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('FilmMediaData')
+          .orderBy('name')
           .get()
           .then((snapshot) {
         _filmMediadataList.clear();
@@ -154,6 +158,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('TelevisionMediaData')
+          .orderBy('name')
           .get()
           .then((snapshot) {
         _televisionMediadataList.clear();
@@ -206,6 +211,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('TelevisionMediaChart')
+          .orderBy('channelName')
           .get()
           .then((snapshot) {
         _televisionRateChartList.clear();
@@ -259,6 +265,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('AudioMediaData')
+          .orderBy('name')
           .get()
           .then((snapshot) {
         _audioMediadataList.clear();
@@ -302,6 +309,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('AudioMediaChart')
+          .orderBy('channelName')
           .get()
           .then((snapshot) {
         _audioRateChartList.clear();
@@ -349,6 +357,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('PrintMediaData')
+          .orderBy('name')
           .get()
           .then((snapshot) {
         _printMediaDataList.clear();
@@ -386,6 +395,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('NewMediaData')
+          .orderBy('name')
           .get()
           .then((snapshot) {
         _newMediadataList.clear();
@@ -425,6 +435,7 @@ class FatchDataHelper extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('ImportentEmergency')
+          .orderBy('name')
           .get()
           .then((snapshot) {
         _importentMediadataList.clear();
@@ -454,6 +465,35 @@ class FatchDataHelper extends ChangeNotifier {
         });
       });
       return importentMediadataList;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<ImportentEmergencyModel>> fetchRequestData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('UserRequest')
+          .orderBy('name')
+          .get()
+          .then((snapshot) {
+        _userRequestdataList.clear();
+        snapshot.docChanges.forEach((element) {
+          UserRequestModel userRequestModel = UserRequestModel(
+              name: element.doc['name'],
+              id: element.doc['id'],
+              category: element.doc['category'],
+              request_date: element.doc['request_date'],
+              sub_category: element.doc['sub_category'],
+              user_address: element.doc['user_address'],
+              user_email: element.doc['user_email'],
+              user_name: element.doc['user_name'],
+              user_phone: element.doc['user_phone']);
+
+          _userRequestdataList.add(userRequestModel);
+        });
+      });
+      return userRequestdataList;
     } catch (error) {
       return [];
     }

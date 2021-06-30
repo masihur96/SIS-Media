@@ -1,13 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:media_directory_admin/model/audio_media_model.dart';
-import 'package:media_directory_admin/model/film_media_model.dart';
-import 'package:media_directory_admin/model/importent_emergency_model.dart';
-import 'package:media_directory_admin/model/new_media_model.dart';
-import 'package:media_directory_admin/model/print_media_model.dart';
-import 'package:media_directory_admin/model/television_media_model.dart';
 import '../widgets/notificastion.dart';
-import 'package:uuid/uuid.dart';
 
 class FirebaseProvider extends ChangeNotifier {
   Future<bool> addFilmMediaData(Map<String, String> map) async {
@@ -42,6 +35,20 @@ class FirebaseProvider extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection("AudioMediaData")
+          .doc(map['id'])
+          .set(map);
+
+      return true;
+    } catch (err) {
+      showToast(err.toString());
+      return false;
+    }
+  }
+
+  Future<bool> addRegisteredData(Map<String, String> map) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("AdminPanel")
           .doc(map['id'])
           .set(map);
 
@@ -453,6 +460,19 @@ class FirebaseProvider extends ChangeNotifier {
     try {
       await FirebaseFirestore.instance
           .collection('PopUpBanner')
+          .doc(id)
+          .delete();
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteRequestData(String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('UserRequest')
           .doc(id)
           .delete();
       return true;

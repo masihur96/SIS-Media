@@ -300,6 +300,8 @@ class _AudioRateChartInsertState extends State<AudioRateChartInsert> {
         'RDC': _RDC.text,
         'endorsement': _endorsement.text,
         'status': statusValue.toLowerCase(),
+        'category': dataProvider.subCategory,
+        'subCategory': 'Rate Chart',
         'date': dateData,
         'id': uuid!,
       };

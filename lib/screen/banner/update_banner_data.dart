@@ -23,10 +23,14 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
   String? error;
   String name = '';
   List staatus = ['Public', 'Private'];
-  String statusValue = "Public";
+  String statusValue = 'Public';
 
-  List categorys = ['Top', 'Bottom'];
-  String categoryValue = 'Top';
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,9 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
 
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
     return Expanded(
       child: Container(
         child: Column(
@@ -119,50 +126,6 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
                                           onChanged: (newValue) {
                                             setState(() {
                                               statusValue = newValue!;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: size.width * .04,
-                              ),
-                              Container(
-                                width: size.width * .15,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1, color: Colors.blueGrey),
-                                ),
-                                // width: size.width * .2,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Places : ",
-                                        style: TextStyle(
-                                            fontSize: size.height * .025),
-                                      ),
-                                      DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          value: categoryValue,
-                                          elevation: 0,
-                                          dropdownColor: Colors.white,
-                                          style: TextStyle(color: Colors.black),
-                                          items: categorys.map((itemValue) {
-                                            return DropdownMenuItem<String>(
-                                              value: itemValue,
-                                              child: Text(itemValue),
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              categoryValue = newValue!;
                                             });
                                           },
                                         ),
@@ -271,7 +234,7 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child(dataProvider.subCategory)
+          .child('IndexBanner')
           .child(dataProvider.indexBannerModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -305,7 +268,6 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
         'image': imageUrl,
         'id': dataProvider.indexBannerModel.id!,
         'date': dateData,
-        'category': categoryValue,
         'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);

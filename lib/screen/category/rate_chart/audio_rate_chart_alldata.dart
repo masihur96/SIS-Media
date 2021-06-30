@@ -17,6 +17,7 @@ class AllDataAudioRateChart extends StatefulWidget {
 
 class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
   bool _isLoading = false;
+
   List channels = Variables().getaudioChannelList();
   String channelValue = 'Bangladesh Betar';
 

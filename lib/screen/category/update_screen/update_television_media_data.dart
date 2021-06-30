@@ -9,7 +9,6 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-
 class UpdateTelevisionData extends StatefulWidget {
   String? name;
   String? address;
@@ -46,50 +45,45 @@ class UpdateTelevisionData extends StatefulWidget {
   String? date;
 
   UpdateTelevisionData(
-      {
-         this.name,
-         this.address,
-         this.pabx,
-         this.email,
-         this.web,
-         this.fax,
-         this.phone,
-         this.mobile,
-         this.contact,
-         this.facebook,
-         this.image,
-         this.businessType,
-         this.camera,
-         this.unit1,
-         this.unit2,
-         this.unit3,
-         this.unit4,
-         this.macPro,
-         this.brunchOffice,
-         this.programs,
-         this.training,
-         this.shooting,
-         this.location,
-         this.artist,
-         this.representative,
-         this.designation,
-         this.companyName,
-         this.regionalOffice,
-         this.channelName,
-         this.houseName,
-         this.id,
-         this.status,
-         this.date
-      }
-      );
-
+      {this.name,
+      this.address,
+      this.pabx,
+      this.email,
+      this.web,
+      this.fax,
+      this.phone,
+      this.mobile,
+      this.contact,
+      this.facebook,
+      this.image,
+      this.businessType,
+      this.camera,
+      this.unit1,
+      this.unit2,
+      this.unit3,
+      this.unit4,
+      this.macPro,
+      this.brunchOffice,
+      this.programs,
+      this.training,
+      this.shooting,
+      this.location,
+      this.artist,
+      this.representative,
+      this.designation,
+      this.companyName,
+      this.regionalOffice,
+      this.channelName,
+      this.houseName,
+      this.id,
+      this.status,
+      this.date});
 
   @override
   _UpdateTelevisionDataState createState() => _UpdateTelevisionDataState();
 }
 
 class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
-
   TextEditingController _name = TextEditingController(text: '');
   TextEditingController _address = TextEditingController(text: '');
   TextEditingController _PABX = TextEditingController(text: '');
@@ -119,20 +113,18 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
   TextEditingController _regionalSalesOffice = TextEditingController(text: '');
   TextEditingController _channelName = TextEditingController(text: '');
   TextEditingController _houseName = TextEditingController(text: '');
-  List staatus=[
-    'Public',
-    'Private'
-  ];
 
-  bool _isLoading=false;
+  List staatus = ['Public', 'Private'];
+  String statusValue = 'Public';
+
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
   var file;
   String imageUrl = '';
   String? error;
-  String name='';
-  String statusValue='Public';
-  //FatchDataHelper _fatchDataHelper = new FatchDataHelper();
+  String name = '';
+
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
@@ -146,7 +138,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
     _web.text = dataProvider.televisionMediaModel.web!;
     _fax.text = dataProvider.televisionMediaModel.fax!;
     _phonet_t.text = dataProvider.televisionMediaModel.phone!;
-    _mobile.text = dataProvider.televisionMediaModel.mobile!;;
+    _mobile.text = dataProvider.televisionMediaModel.mobile!;
     _caontact.text = dataProvider.televisionMediaModel.contact!;
     _facebook.text = dataProvider.televisionMediaModel.facebook!;
     _business_type.text = dataProvider.televisionMediaModel.businessType!;
@@ -163,9 +155,10 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
     _location.text = dataProvider.televisionMediaModel.location!;
     _artist_type.text = dataProvider.televisionMediaModel.artist!;
     _representative.text = dataProvider.televisionMediaModel.representative!;
-    _designation.text = dataProvider.televisionMediaModel.designation!;;
+    _designation.text = dataProvider.televisionMediaModel.designation!;
     _company_name.text = dataProvider.televisionMediaModel.companyName!;
-    _regionalSalesOffice.text = dataProvider.televisionMediaModel.regionalOffice!;
+    _regionalSalesOffice.text =
+        dataProvider.televisionMediaModel.regionalOffice!;
     _channelName.text = dataProvider.televisionMediaModel.channelName!;
     _houseName.text = dataProvider.televisionMediaModel.houseName!;
   }
@@ -176,224 +169,227 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
-    final FirebaseProvider firebaseProvider = Provider.of<FirebaseProvider>(context);
+    final FirebaseProvider firebaseProvider =
+        Provider.of<FirebaseProvider>(context);
     Size size = MediaQuery.of(context).size;
     if (counter == 0) {
       customInit(dataProvider);
     }
-    return  Container(
+    return Container(
       height: size.height,
       width: size.width * .8,
       color: Colors.blueGrey,
-          child: Column(
-            children: [
-              SizedBox(height: 3,),
-              Expanded(
-                child: Container(
-                  color: Color(0xffedf7fd),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                data == null
-                                    ? CircleAvatar(
-                                  radius: size.height * .09,
-                                  backgroundColor: Colors.grey,
-                                  child: CircleAvatar(
-                                    radius: size.height * .085,
-                                    backgroundColor: Colors.white,
-                                    child: dataProvider.televisionMediaModel.image!.isEmpty
-                                        ? Icon(Icons.photo)
-                                        : Image.network(
-                                        dataProvider.televisionMediaModel.image!),
-                                  ),
-                                )
-                                    : CircleAvatar(
-                                  radius: size.height * .09,
-                                  child: Image.memory(
-                                    data!,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      pickedImage(dataProvider);
-                                    },
-                                    icon: Icon(Icons.camera_alt, color: Colors.black54))
-                              ],
-                            ),
-                          ),
-
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                                  width: size.width * .5,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text("Please Select Your Sub-Category : ",style: TextStyle(fontSize: size.height*.025),),
-                                        DropdownButton<String>(
-                                          value: dropdownValue,
-                                          elevation: 0,
-                                          dropdownColor: Colors.white,
-                                          style: TextStyle(color: Colors.black),
-                                          items: televisions.map((itemValue) {
-                                            return DropdownMenuItem<String>(
-                                              value: itemValue,
-                                              child: Text(itemValue),
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              dropdownValue = newValue!;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                              Container(
-                                  width: size.width * .2,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text("Status : ",style: TextStyle(fontSize: size.height*.025),),
-                                      Expanded(
-                                        child: DropdownButton<String>(
-                                          value: statusValue,
-                                          elevation: 0,
-                                          dropdownColor: Colors.white,
-                                          style: TextStyle(color: Colors.black),
-                                          items: staatus.map((itemValue) {
-                                            return DropdownMenuItem<String>(
-                                              value: itemValue,
-                                              child: Text(itemValue),
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              statusValue = newValue!;
-                                            });
-                                          },
+      child: Column(
+        children: [
+          SizedBox(
+            height: 3,
+          ),
+          Expanded(
+            child: Container(
+              color: Color(0xffedf7fd),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            data == null
+                                ? CircleAvatar(
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.grey,
+                                    child: dataProvider
+                                            .televisionMediaModel.image!.isEmpty
+                                        ? CircleAvatar(
+                                            radius: size.height * .085,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: AssetImage(
+                                                'images/insert_image_icon.png'))
+                                        : CircleAvatar(
+                                            radius: size.height * .085,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: NetworkImage(
+                                                dataProvider
+                                                    .televisionMediaModel
+                                                    .image!),
+                                          ),
+                                  )
+                                : CircleAvatar(
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.grey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .085,
+                                      backgroundColor: Colors.white,
+                                      child: ClipOval(
+                                        child: Image.memory(
+                                          data!,
+                                          width: size.height * .17,
+                                          height: size.height * .17,
+                                          fit: BoxFit.fill,
                                         ),
                                       ),
-                                    ],
-                                  )),
+                                    ),
+                                  ),
+                            IconButton(
+                                onPressed: () {
+                                  pickedImage(dataProvider);
+                                },
+                                icon: Icon(Icons.camera_alt,
+                                    color: Colors.black54))
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: size.width * .13,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.blueGrey),
+                        ),
+                        // width: size.width * .2,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Status : ",
+                                style: TextStyle(fontSize: size.height * .025),
+                              ),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: statusValue,
+                                  elevation: 0,
+                                  dropdownColor: Colors.white,
+                                  style: TextStyle(color: Colors.black),
+                                  items: staatus.map((itemValue) {
+                                    return DropdownMenuItem<String>(
+                                      value: itemValue,
+                                      child: Text(itemValue),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      statusValue = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
                             ],
                           ),
-                          TelevisionMediaFild(size),
-
-                          SizedBox(height: size.height*.04,),
-
-                          _isLoading?
-                          Container(height: size.height * .06, child: fadingCircle):
-                          ElevatedButton(
-                            onPressed: () {
-
-
-                              updateData(dataProvider, firebaseProvider);
-
-
-                              //  Navigator.pop(context,true);
-
-                              // showToast(imageUrl);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                              child: Text(
-                                'UPDATE',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: size.height * .04,
+                        ),
+                      ),
+                      TelevisionMediaFild(size),
+                      SizedBox(
+                        height: size.height * .04,
+                      ),
+                      _isLoading
+                          ? Container(
+                              height: size.height * .06, child: fadingCircle)
+                          : ElevatedButton(
+                              onPressed: () {
+                                updateData(dataProvider, firebaseProvider);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 10),
+                                child: Text(
+                                  'UPDATE',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: size.height * .04,
+                                  ),
                                 ),
-
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.grey,
                               ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.grey,
-
-                            ),
-
-                          ),
-
-
-                          SizedBox(height: size.height*.04,),
-                        ],
+                      SizedBox(
+                        height: size.height * .04,
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-        );
+        ],
+      ),
+    );
   }
-  Future<void> updateData(DataProvider dataProvider ,FirebaseProvider firebaseProvider)async{
-    if(data==null){
+
+  Future<void> updateData(
+      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+    if (data == null) {
       setState(() {
         imageUrl = dataProvider.televisionMediaModel.image!;
       });
-      _submitData(dataProvider,firebaseProvider,);
-    }else{
-      firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(dataProvider.televisionMediaModel.id!);
-      firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
+      _submitData(
+        dataProvider,
+        firebaseProvider,
+      );
+    } else {
+      firebase_storage.Reference storageReference = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child('TelevisionMediaData')
+          .child(dataProvider.televisionMediaModel.id!);
+      firebase_storage.UploadTask storageUploadTask =
+          storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
         taskSnapshot = value;
-        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(dataProvider,firebaseProvider,);
+          _submitData(
+            dataProvider,
+            firebaseProvider,
+          );
         });
       });
-
     }
-
   }
+
   pickedImage(DataProvider dataProvider) async {
     html.FileUploadInputElement input = html.FileUploadInputElement()
       ..accept = 'image/*';
     input.click();
     input.onChange.listen((event) {
       file = input.files!.first;
-      final reader1 =   html.FileReader();
+      final reader1 = html.FileReader();
       reader1.readAsDataUrl(input.files![0]);
-      reader1.onError.listen((err) => setState((){
-        error = err.toString();
-      }) );
-      reader1.onLoad.first.then((res){
+      reader1.onError.listen((err) => setState(() {
+            error = err.toString();
+          }));
+      reader1.onLoad.first.then((res) {
         final encoded = reader1.result as String;
-        final stripped = encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+        final stripped =
+            encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
         setState(() {
           name = input.files![0].name;
-          data  =base64.decode(stripped);
+          data = base64.decode(stripped);
           error = null;
         });
       });
     });
   }
-  Future<void> _submitData(DataProvider dataProvider,FirebaseProvider firebaseProvider,) async{
+
+  Future<void> _submitData(
+    DataProvider dataProvider,
+    FirebaseProvider firebaseProvider,
+  ) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
-    if(statusValue.isNotEmpty){
-      setState(()=> _isLoading=true);
-      Map<String,String> mapData ={
+    if (statusValue.isNotEmpty) {
+      setState(() => _isLoading = true);
+      Map<String, String> mapData = {
         'name': _name.text,
         'address': _address.text,
         'pabx': _PABX.text,
@@ -425,28 +421,29 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
         'channelName': _channelName.text,
         'houseName': _houseName.text,
         'id': dataProvider.televisionMediaModel.id!,
-        'sub-category':dropdownValue.toLowerCase(),
         'status': statusValue.toLowerCase(),
         'date': dateData,
       };
-      setState(()=>_isLoading=true);
-      await firebaseProvider.updateTelevisionMediaData(mapData, context).then((value){
-        if(value){
+      setState(() => _isLoading = true);
+      await firebaseProvider
+          .updateTelevisionMediaData(mapData, context)
+          .then((value) {
+        if (value) {
           setState(() => _isLoading = false);
-          dataProvider.category=dataProvider.subCategory;
+          dataProvider.category = dataProvider.subCategory;
           dataProvider.subCategory = "Television Media Screen";
           showToast('Data updated successful');
-        }
-        else{
+        } else {
           setState(() => _isLoading = false);
-          dataProvider.category=dataProvider.subCategory;
+          dataProvider.category = dataProvider.subCategory;
           dataProvider.subCategory = "Television Media Screen";
           showToast('Data update failed!');
-
         }
       });
-    }else showToast("Select Status");
+    } else
+      showToast("Select Status");
   }
+
   Widget TelevisionMediaFild(Size size) {
     return Container(
       child: Column(
@@ -455,7 +452,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width:  size.width*.4,
+                width: size.width * .4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -487,13 +484,12 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                       _textFormBuilderForTelevision('Unit 3'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Unit 4'),
-
                     ],
                   ),
                 ),
               ),
               Container(
-                width:  size.width*.4,
+                width: size.width * .4,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -525,7 +521,6 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                       _textFormBuilderForTelevision('Regional Sales Office'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Channel Name'),
-
                     ],
                   ),
                 ),
@@ -533,7 +528,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
             ],
           ),
           Container(
-            width: size.width*.4,
+            width: size.width * .4,
             child: Column(
               children: [
                 SizedBox(height: 20),
@@ -545,65 +540,68 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
       ),
     );
   }
+
   Widget _textFormBuilderForTelevision(String hint) {
     return TextFormField(
       controller: hint == 'Name'
           ? _name
           : hint == 'Address'
-          ? _address
-          : hint == 'PABX'
-          ? _PABX
-          : hint == 'email'
-          ? _email
-          : hint == 'Web'
-          ? _web
-          : hint == 'Fax'
-          ? _fax
-          : hint == 'Phone(T&T)'
-          ? _phonet_t
-          : hint == 'Mobile'
-          ? _mobile
-          : hint == 'Contact'
-          ? _caontact
-          : hint == 'Facebook'
-          ? _facebook
-          : hint == 'Business Type'
-          ? _business_type
-          : hint == 'Camera'
-          ? _camera
-          : hint == 'Unit 1'
-          ? _unit1
-          : hint == 'Unit 2'
-          ? _unit2
-          : hint == 'Unit 3'
-          ? _unit3
-          : hint == 'Unit 4'
-          ? _unit4
-          : hint == 'Mac Pro'
-          ? _mac_pro
-          : hint == 'Branch Office'
-          ? _branch_office
-          : hint == 'Programs'
-          ? _programs
-          : hint == 'Training Course'
-          ? _training
-          : hint == 'Shooting Facilities'
-          ? _shooting
-          : hint == 'Location'
-          ? _location
-          : hint == 'Artist Type'
-          ? _artist_type
-          : hint == 'Representative'
-          ? _representative
-          : hint == 'Designation / Position'
-          ? _designation
-          : hint == 'Company Name'
-          ? _company_name
-          : hint == 'Regional Sales Office'
-          ? _regionalSalesOffice
-          : hint == 'Channel Name'
-          ? _channelName
-          : _houseName,
+              ? _address
+              : hint == 'PABX'
+                  ? _PABX
+                  : hint == 'email'
+                      ? _email
+                      : hint == 'Web'
+                          ? _web
+                          : hint == 'Fax'
+                              ? _fax
+                              : hint == 'Phone(T&T)'
+                                  ? _phonet_t
+                                  : hint == 'Mobile'
+                                      ? _mobile
+                                      : hint == 'Contact'
+                                          ? _caontact
+                                          : hint == 'Facebook'
+                                              ? _facebook
+                                              : hint == 'Business Type'
+                                                  ? _business_type
+                                                  : hint == 'Camera'
+                                                      ? _camera
+                                                      : hint == 'Unit 1'
+                                                          ? _unit1
+                                                          : hint == 'Unit 2'
+                                                              ? _unit2
+                                                              : hint == 'Unit 3'
+                                                                  ? _unit3
+                                                                  : hint ==
+                                                                          'Unit 4'
+                                                                      ? _unit4
+                                                                      : hint ==
+                                                                              'Mac Pro'
+                                                                          ? _mac_pro
+                                                                          : hint == 'Branch Office'
+                                                                              ? _branch_office
+                                                                              : hint == 'Programs'
+                                                                                  ? _programs
+                                                                                  : hint == 'Training Course'
+                                                                                      ? _training
+                                                                                      : hint == 'Shooting Facilities'
+                                                                                          ? _shooting
+                                                                                          : hint == 'Location'
+                                                                                              ? _location
+                                                                                              : hint == 'Artist Type'
+                                                                                                  ? _artist_type
+                                                                                                  : hint == 'Representative'
+                                                                                                      ? _representative
+                                                                                                      : hint == 'Designation / Position'
+                                                                                                          ? _designation
+                                                                                                          : hint == 'Company Name'
+                                                                                                              ? _company_name
+                                                                                                              : hint == 'Regional Sales Office'
+                                                                                                                  ? _regionalSalesOffice
+                                                                                                                  : hint == 'Channel Name'
+                                                                                                                      ? _channelName
+                                                                                                                      : _houseName,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(
@@ -614,8 +612,4 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
       maxLines: 2,
     );
   }
-  }
-
-
-
-
+}

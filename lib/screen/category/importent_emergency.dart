@@ -82,6 +82,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
               .contains(searchItem.toLowerCase())))
           .toList();
     });
+    return _filteredList.sort();
   }
 
   int counter = 0;
@@ -106,6 +107,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         _filteredList = _subList;
       });
     }
+
+    _filterSubCategoryList('Bangladesh : At A Glance');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -252,40 +255,75 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: size.width * .02,
-                  ),
-                  GestureDetector(
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
                       onTap: () {
                         getData(fatchDataHelper);
                       },
-                      child: Icon(Icons.refresh_outlined)),
-                ],
-              ),
-            ),
-            _isLoading
-                ? Container(
-                    child: Column(
-                    children: [
-                      SizedBox(
-                        height: size.height * .4,
-                      ),
-                      fadingCircle,
-                    ],
-                  ))
-                : Expanded(
-                    child: SizedBox(
-                      height: 500.0,
-                      child: new ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: _filteredList.length,
-                        itemBuilder: (context, index) {
-                          return _listItem(index, size, firebaseProvider,
-                              dataProvider, fatchDataHelper);
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Container(
+                          // width: size.width * .1,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(color: Colors.blueGrey)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text('Refresh '),
+                                SizedBox(
+                                  width: size.width * .02,
+                                ),
+                                Icon(Icons.refresh_outlined),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            ),
+            _filteredList.isEmpty
+                ? Container(
+                    child: Column(
+                    children: [
+                      SizedBox(height: 200),
+                      Text("Item is Not Found",
+                          style: TextStyle(
+                              fontSize: 25,
+                              letterSpacing: 2,
+                              color: Colors.grey)),
+                    ],
+                  ))
+                : _isLoading
+                    ? Container(
+                        child: Column(
+                        children: [
+                          SizedBox(
+                            height: size.height * .4,
+                          ),
+                          fadingCircle,
+                        ],
+                      ))
+                    : Expanded(
+                        child: SizedBox(
+                          height: 500.0,
+                          child: new ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: _filteredList.length,
+                            itemBuilder: (context, index) {
+                              return _listItem(index, size, firebaseProvider,
+                                  dataProvider, fatchDataHelper);
+                            },
+                          ),
+                        ),
+                      ),
           ],
         ),
       );
@@ -522,6 +560,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
+                              Navigator.pop(context);
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteImportentEmergencyData(
@@ -535,11 +574,11 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
-                                  Navigator.pop(context);
+
                                   showToast('Data deleted successful');
                                 } else {
                                   setState(() => _isLoading = false);
-                                  Navigator.pop(context);
+
                                   showToast('Data delete unsuccessful');
                                 }
                               });
@@ -742,6 +781,9 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           primary: Colors.grey,
                         ),
                       ),
+                SizedBox(
+                  height: size.height * .04,
+                ),
               ],
             ),
           ),
@@ -941,7 +983,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child(dataProvider.subCategory)
+          .child('ImportentEmergency')
           .child(uuid!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -118,9 +117,7 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
     'Private'
   ];
   String statusValue='Public';
-  List newMedia = Variables().getNewMediaList();
-  String dropdownValue = "Digital Audio - Video Content Provider";
-
+ 
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
@@ -155,22 +152,37 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                                     ? CircleAvatar(
                                   radius: size.height * .09,
                                   backgroundColor: Colors.grey,
-                                  child: CircleAvatar(
-                                    radius: size.height * .085,
-                                    backgroundColor: Colors.white,
-                                    child: dataProvider.newMediaModel.image!.isEmpty
-                                        ? Icon(Icons.photo)
-                                        : Image.network(
-                                        dataProvider.newMediaModel.image!),
-                                  ),
+                                  child: dataProvider
+                                            .newMediaModel.image!.isEmpty
+                                        ? CircleAvatar(
+                                            radius: size.height * .085,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: AssetImage(
+                                                'images/insert_image_icon.png'))
+                                        : CircleAvatar(
+                                            radius: size.height * .085,
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: NetworkImage(
+                                                dataProvider
+                                                    .newMediaModel.image!),
+                                          ),
                                 )
                                     : CircleAvatar(
-                                  radius: size.height * .09,
-                                  child: Image.memory(
-                                    data!,
-                                    fit: BoxFit.fill,
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.grey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .085,
+                                      backgroundColor: Colors.white,
+                                      child: ClipOval(
+                                        child: Image.memory(
+                                          data!,
+                                          width: size.height * .17,
+                                          height: size.height * .17,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
                                 IconButton(
                                     onPressed: () {
                                       pickedImage(dataProvider);
@@ -182,43 +194,6 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(width: 1,color: Colors.blueGrey),
-                                ),
-                                // width: size.width * .4,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text("Please Select Your Sub-Category :",style: TextStyle(fontSize: size.height*.025),),
-                                      SizedBox(
-                                        width: size.height*.04,
-                                      ),
-                                      DropdownButtonHideUnderline(
-                                        child: DropdownButton<String>(
-                                          value: dropdownValue,
-                                          elevation: 0,
-                                          dropdownColor: Colors.white,
-                                          style: TextStyle(color: Colors.black),
-                                          items: newMedia.map((itemValue) {
-                                            return DropdownMenuItem<String>(
-                                              value: itemValue,
-                                              child: Text(itemValue),
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              dropdownValue = newValue!;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
                               Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(width: 1,color: Colors.blueGrey),
@@ -263,14 +238,7 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                           Container(height: size.height * .06, child: fadingCircle):
                           ElevatedButton(
                             onPressed: () {
-
-
                               updateData(dataProvider, firebaseProvider);
-
-
-                              //  Navigator.pop(context,true);
-
-                              // showToast(imageUrl);
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 10),
@@ -485,14 +453,14 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
       _submitData(dataProvider,firebaseProvider,);
     }else{
       firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance.ref().child(dataProvider.subCategory).child(dataProvider.newMediaModel.id!);
+      firebase_storage.FirebaseStorage.instance.ref().child('NewMediaData').child(dataProvider.newMediaModel.id!);
       firebase_storage.UploadTask storageUploadTask = storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
       storageUploadTask.then((value) {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl){
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
+      
           setState(() {
             imageUrl = downloadUrl;
           });

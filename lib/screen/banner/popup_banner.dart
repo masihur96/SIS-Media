@@ -140,13 +140,35 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
       DataProvider dataProvider, FatchDataHelper fatchDataHelper) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
+        Align(
+          alignment: Alignment.topRight,
           child: GestureDetector(
-              onTap: () {
-                getData(fatchDataHelper);
-              },
-              child: Icon(Icons.refresh_outlined)),
+            onTap: () {
+              getData(fatchDataHelper);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                width: size.width * .13,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    border: Border.all(color: Colors.blueGrey)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text('Refresh '),
+                      SizedBox(
+                        width: size.width * .02,
+                      ),
+                      Icon(Icons.refresh_outlined),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
         Container(
           child: _isLoading
@@ -460,6 +482,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                           ))
                         : ElevatedButton(
                             onPressed: () {
+                              _isLoading = true;
                               uuid = Uuid().v1();
                               uploadData(firebaseProvider);
                               setState(() {
@@ -490,6 +513,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
 
   Future<void> uploadData(FirebaseProvider firebaseProvider) async {
     if (data != null) {
+      _isLoading = true;
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -522,6 +546,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
         'image': imageUrl,
         'id': uuid!,
         'date': dateData,
+        'category': 'popup',
         'status': statusValue.toLowerCase(),
       };
       await firebaseProvider.addPopUpBannerData(map).then((value) {

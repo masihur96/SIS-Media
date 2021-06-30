@@ -3,14 +3,11 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
-import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_insert.dart';
-import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_insert.dart';
-import 'update_screen/update_audio_media_data.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -94,6 +91,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
           .toList();
     });
   }
+
   customInit(FatchDataHelper fatchDataHelper) async {
     setState(() {
       counter++;
@@ -115,6 +113,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         _filteredList = _subList;
       });
     }
+
+    _filterSubCategoryList('FM Radio Channel');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -258,7 +258,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 1, color: Colors.blueGrey),
                         ),
-                        width: size.width * .3,
+                        width: size.width * .2,
                         child: TextField(
                           decoration: InputDecoration(
                               hintText: "Please Search your Query",
@@ -269,45 +269,84 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: size.width * .02,
-                  ),
                   Visibility(
                     visible: dropdownValue != 'Rate Chart',
-                    child: GestureDetector(
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
                         onTap: () {
                           getData(fatchDataHelper);
                         },
-                        child: Icon(Icons.refresh_outlined)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Container(
+                            // width: size.width * .1,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                border: Border.all(color: Colors.blueGrey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text('Refresh '),
+                                  SizedBox(
+                                    width: size.width * .02,
+                                  ),
+                                  Icon(Icons.refresh_outlined),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
             dropdownValue == 'Rate Chart'
                 ? AllDataAudioRateChart()
-                : _isLoading
+                : _filteredList.isEmpty
                     ? Container(
                         child: Column(
                         children: [
-                          SizedBox(
-                            height: size.height * .4,
-                          ),
-                          fadingCircle,
+                          SizedBox(height: 200),
+                          Text("Item is Not Found",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  letterSpacing: 2,
+                                  color: Colors.grey)),
                         ],
                       ))
-                    : Expanded(
-                        child: SizedBox(
-                          height: 500.0,
-                          child: new ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: _filteredList.length,
-                            itemBuilder: (context, index) {
-                              return _listItem(index, size, firebaseProvider,
-                                  dataProvider, fatchDataHelper);
-                            },
+                    : _isLoading
+                        ? Container(
+                            child: Column(
+                            children: [
+                              SizedBox(
+                                height: size.height * .4,
+                              ),
+                              fadingCircle,
+                            ],
+                          ))
+                        : Expanded(
+                            child: SizedBox(
+                              height: 500.0,
+                              child: new ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: _filteredList.length,
+                                itemBuilder: (context, index) {
+                                  return _listItem(
+                                      index,
+                                      size,
+                                      firebaseProvider,
+                                      dataProvider,
+                                      fatchDataHelper);
+                                },
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
           ],
         ),
       );
@@ -600,6 +639,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
+                              Navigator.pop(context);
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteAudioData(
@@ -613,11 +653,11 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
-                                  Navigator.pop(context);
+
                                   showToast('Data deleted successful');
                                 } else {
                                   setState(() => _isLoading = false);
-                                  Navigator.pop(context);
+
                                   showToast('Data delete unsuccessful');
                                 }
                               });
@@ -847,6 +887,9 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                             primary: Colors.grey,
                           ),
                         ),
+                ),
+                SizedBox(
+                  height: size.height * .04,
                 ),
               ],
             ),

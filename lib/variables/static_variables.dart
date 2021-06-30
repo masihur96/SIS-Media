@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class Variables {
   static List<Entry> sideBarMenuList() {
     final List<Entry> data = <Entry>[
+      Entry('DashBoard', Icons.dashboard, <Entry>[
+        Entry('DashBoard'),
+        Entry('Request Details'),
+      ]),
       Entry('All Category', Icons.category_outlined, <Entry>[
-        Entry(
-          'Film Media',
-        ),
+        Entry('Film Media'),
         Entry('Television Media'),
         Entry('Audio Media'),
         Entry('Print Media'),
@@ -17,6 +19,9 @@ class Variables {
         Entry('Index Banner'),
         Entry('Content Banner'),
         Entry('Pop Up Banner'),
+      ]),
+      Entry('Settings', Icons.settings_applications_outlined, <Entry>[
+        Entry('Change Password'),
       ]),
     ];
 
@@ -40,6 +45,7 @@ class Variables {
     'Important Telephone Number',
     'Cinema Hall',
   ];
+
   List getFilmMediaList() {
     return filmMediaList;
   }
@@ -56,7 +62,7 @@ class Variables {
     'Archive & Media Monitoring Company',
     'Shooting Location',
     'Satellite Channel Distributor',
-    'Group Teacher',
+    'Group Theater',
     'Artist',
     'Magician',
     'Script Writer & Director',
@@ -84,11 +90,11 @@ class Variables {
     'RTV',
     'ATN NEWS',
     'MAASRANGA',
-    'CHANNEL 9'
-        'INDEPENDENT',
-    'DESH TV'
-        'DBC NEWS'
-        'SA TV',
+    'CHANNEL 9',
+    'INDEPENDENT',
+    'DESH TV',
+    'DBC NEWS',
+    'SA TV',
     'BIJOY TV',
     'DURUNTO TELEVISION',
     'BANGLA TV',

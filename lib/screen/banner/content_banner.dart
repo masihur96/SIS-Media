@@ -10,7 +10,6 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'dart:html' as html;
-
 import 'package:uuid/uuid.dart';
 
 class ContentBannerScreen extends StatefulWidget {
@@ -140,13 +139,35 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       DataProvider dataProvider, FatchDataHelper fatchDataHelper) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
+        Align(
+          alignment: Alignment.topRight,
           child: GestureDetector(
-              onTap: () {
-                getData(fatchDataHelper);
-              },
-              child: Icon(Icons.refresh_outlined)),
+            onTap: () {
+              getData(fatchDataHelper);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                width: size.width * .13,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    border: Border.all(color: Colors.blueGrey)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text('Refresh '),
+                      SizedBox(
+                        width: size.width * .02,
+                      ),
+                      Icon(Icons.refresh_outlined),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
         Container(
           child: _isLoading
@@ -338,6 +359,12 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(categoryValue == 'Top'
+                    ? 'Please Upload Top Banner Size: 85*360'
+                    : 'Please Upload Bottom Banner Size: 55*360'),
+              ),
               data != null
                   ? Container(
                       height: size.height * .35,
@@ -462,7 +489,9 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       onPressed: () {
                         html.FileUploadInputElement input =
                             html.FileUploadInputElement()..accept = 'image/*';
+
                         input.click();
+
                         input.onChange.listen((event) {
                           file = input.files!.first;
                           final reader1 = html.FileReader();
@@ -470,6 +499,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                           reader1.onError.listen((err) => setState(() {
                                 error = err.toString();
                               }));
+
                           reader1.onLoad.first.then((res) {
                             final encoded = reader1.result as String;
                             final stripped = encoded.replaceFirst(
@@ -504,6 +534,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                           ))
                         : ElevatedButton(
                             onPressed: () {
+                              _isLoading = true;
                               uuid = Uuid().v1();
                               uploadData(firebaseProvider);
                               setState(() {
@@ -526,7 +557,6 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                   ],
                 ),
               ),
-              Center(child: Text("Add Index Image")),
             ],
           )),
     );
@@ -534,6 +564,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
 
   Future<void> uploadData(FirebaseProvider firebaseProvider) async {
     if (data != null) {
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -554,6 +585,8 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
           );
         });
       });
+    } else {
+      showToast('You have no Selected Image');
     }
   }
 
@@ -561,12 +594,11 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
-      setState(() => _isLoading = true);
       Map<String, String> map = {
         'image': imageUrl,
         'id': uuid!,
         'date': dateData,
-        'category': categoryValue,
+        'category': categoryValue == 'Top' ? 'contenttop' : 'contentbottom',
         'status': statusValue.toLowerCase(),
       };
       await firebaseProvider.addContentBannerData(map).then((value) {

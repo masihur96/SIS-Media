@@ -14,6 +14,7 @@ import 'package:media_directory_admin/screen/banner/popup_banner.dart';
 import 'package:media_directory_admin/screen/banner/update_banner_data.dart';
 import 'package:media_directory_admin/screen/banner/update_content_data.dart';
 import 'package:media_directory_admin/screen/banner/update_popup_data.dart';
+import 'package:media_directory_admin/screen/category/change_password_screen.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/update_audio_rate_chart.dart';
@@ -24,6 +25,8 @@ import 'package:media_directory_admin/screen/category/update_screen/update_impor
 import 'package:media_directory_admin/screen/category/update_screen/update_new_media.dart';
 import 'package:media_directory_admin/screen/category/update_screen/update_print_media_data.dart';
 import 'package:media_directory_admin/screen/category/update_screen/update_television_media_data.dart';
+import 'package:media_directory_admin/screen/dash_board.dart';
+import 'package:media_directory_admin/screen/request_details.dart';
 import '../screen/category/audio_media_screen.dart';
 import '../screen/category/importent_emergency.dart';
 import '../screen/category/new_media.dart';
@@ -136,7 +139,7 @@ class DataProvider extends ChangeNotifier {
     if (_category.isNotEmpty && _subCategory.isNotEmpty)
       return '$_category \u276D $_subCategory';
     else
-      return 'Home';
+      return 'Dashboard';
   }
 
   Widget categoryPage() {
@@ -150,6 +153,8 @@ class DataProvider extends ChangeNotifier {
       return PrintingMedia();
     else if (subCategory == 'New Media')
       return NewMedia();
+    else if (subCategory == 'Importent & Emergency')
+      return ImportentEmergency();
     else if (subCategory == 'Update Film Media')
       return UpdateFilmMediaDataPage();
     else if (subCategory == 'Film Media Screen')
@@ -196,7 +201,13 @@ class DataProvider extends ChangeNotifier {
       return PopUpBannerScreen();
     else if (subCategory == 'Update PopUp Data')
       return UpdatePopUpData();
+    else if (subCategory == 'DashBoard')
+      return DashBoardPage();
+    else if (subCategory == 'Request Details')
+      return RequestPage();
+    else if (subCategory == 'Change Password')
+      return ChangePassword();
     else
-      return ImportentEmergency();
+      return DashBoardPage();
   }
 }
