@@ -101,38 +101,10 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> addIndexBannerData(Map<String, String> map) async {
+  Future<bool> addBannerData(Map<String, String> map) async {
     try {
       await FirebaseFirestore.instance
-          .collection("IndexBanner")
-          .doc(map['id'])
-          .set(map);
-
-      return true;
-    } catch (err) {
-      showToast(err.toString());
-      return false;
-    }
-  }
-
-  Future<bool> addContentBannerData(Map<String, String> map) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("ContentBanner")
-          .doc(map['id'])
-          .set(map);
-
-      return true;
-    } catch (err) {
-      showToast(err.toString());
-      return false;
-    }
-  }
-
-  Future<bool> addPopUpBannerData(Map<String, String> map) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("PopUpBanner")
+          .collection("Banner")
           .doc(map['id'])
           .set(map);
 

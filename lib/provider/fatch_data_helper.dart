@@ -39,19 +39,19 @@ class FatchDataHelper extends ChangeNotifier {
   List<IndexBannerModel> _indexdataList = [];
   get indexdataList => _indexdataList;
 
-  List<IndexBannerModel> _contentdataList = [];
-  get contentdataList => _contentdataList;
+  // List<IndexBannerModel> _contentdataList = [];
+  // get contentdataList => _contentdataList;
 
-  List<IndexBannerModel> _popUpdataList = [];
-  get popUpdataList => _popUpdataList;
+  // List<IndexBannerModel> _popUpdataList = [];
+  // get popUpdataList => _popUpdataList;
 
   List<UserRequestModel> _userRequestdataList = [];
   get userRequestdataList => _userRequestdataList;
 
-  Future<List<IndexBannerModel>> fetchIndexData() async {
+  Future<List<IndexBannerModel>> fetchBannerData() async {
     try {
       await FirebaseFirestore.instance
-          .collection('IndexBanner')
+          .collection('Banner')
           .get()
           .then((snapshot) {
         _indexdataList.clear();
@@ -61,6 +61,7 @@ class FatchDataHelper extends ChangeNotifier {
             id: element.doc['id'],
             status: element.doc['status'],
             date: element.doc['date'],
+            category: element.doc['category'],
           );
           _indexdataList.add(indexBannerModel);
         });
@@ -71,51 +72,52 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  Future<List<IndexBannerModel>> fetchContentData() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('ContentBanner')
-          .get()
-          .then((snapshot) {
-        _contentdataList.clear();
-        snapshot.docChanges.forEach((element) {
-          IndexBannerModel indexBannerModel = IndexBannerModel(
-            image: element.doc['image'],
-            id: element.doc['id'],
-            status: element.doc['status'],
-            date: element.doc['date'],
-          );
-          _contentdataList.add(indexBannerModel);
-        });
-      });
-      return contentdataList;
-    } catch (error) {
-      return [];
-    }
-  }
+  // Future<List<IndexBannerModel>> fetchContentData() async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('Banner')
+  //         .get()
+  //         .then((snapshot) {
+  //       _contentdataList.clear();
+  //       snapshot.docChanges.forEach((element) {
+  //         IndexBannerModel indexBannerModel = IndexBannerModel(
+  //           image: element.doc['image'],
+  //           id: element.doc['id'],
+  //           status: element.doc['status'],
+  //           date: element.doc['date'],
+  //           category: element.doc['category'],
+  //         );
+  //         _contentdataList.add(indexBannerModel);
+  //       });
+  //     });
+  //     return contentdataList;
+  //   } catch (error) {
+  //     return [];
+  //   }
+  // }
 
-  Future<List<IndexBannerModel>> fetchPopUpData() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('PopUpBanner')
-          .get()
-          .then((snapshot) {
-        _popUpdataList.clear();
-        snapshot.docChanges.forEach((element) {
-          IndexBannerModel indexBannerModel = IndexBannerModel(
-            image: element.doc['image'],
-            id: element.doc['id'],
-            status: element.doc['status'],
-            date: element.doc['date'],
-          );
-          _popUpdataList.add(indexBannerModel);
-        });
-      });
-      return popUpdataList;
-    } catch (error) {
-      return [];
-    }
-  }
+  // Future<List<IndexBannerModel>> fetchPopUpData() async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('PopUpBanner')
+  //         .get()
+  //         .then((snapshot) {
+  //       _popUpdataList.clear();
+  //       snapshot.docChanges.forEach((element) {
+  //         IndexBannerModel indexBannerModel = IndexBannerModel(
+  //           image: element.doc['image'],
+  //           id: element.doc['id'],
+  //           status: element.doc['status'],
+  //           date: element.doc['date'],
+  //         );
+  //         _popUpdataList.add(indexBannerModel);
+  //       });
+  //     });
+  //     return popUpdataList;
+  //   } catch (error) {
+  //     return [];
+  //   }
+  // }
 
   Future<List<FilmMediaModel>> fetchFilmMediaData() async {
     try {

@@ -8,8 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RequestPage extends StatefulWidget {
-  const RequestPage({Key? key}) : super(key: key);
-
   @override
   _RequestPageState createState() => _RequestPageState();
 }

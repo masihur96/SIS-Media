@@ -52,8 +52,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   var file;
   String? error;
 
-  // FatchDataHelper _databaseHelper = FatchDataHelper();
-
   List<FilmMediaModel> _subList = [];
   List<FilmMediaModel> _filteredList = [];
 
@@ -82,6 +80,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     setState(() {
       counter++;
     });
+
     if (fatchDataHelper.filmMediadataList.isEmpty) {
       setState(() {
         _isLoading = true;
@@ -305,6 +304,10 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                         children: [
                           SizedBox(
                             height: size.height * .4,
+                          ),
+                          Text(
+                            'Please Wait ..........',
+                            style: TextStyle(fontSize: 15, color: Colors.black),
                           ),
                           fadingCircle,
                         ],

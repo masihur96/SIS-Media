@@ -9,6 +9,7 @@ import 'package:media_directory_admin/model/television_media_model.dart';
 import 'package:media_directory_admin/model/user_request_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
+import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 
 class DashBoardPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class DashBoardPage extends StatefulWidget {
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
+  bool _isLoading = false;
   int counter = 0;
   List<FilmMediaModel> _filmTotalDataList = [];
   List<FilmMediaModel> _filmPrivateDataList = [];
@@ -40,6 +42,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
   ) async {
     setState(() {
       counter++;
+      _isLoading = true;
     });
     if (_filmTotalDataList.isEmpty) {
       await fatchDataHelper.fetchFilmMediaData().then((value) {
@@ -121,6 +124,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
             _requestTodayRequestList.add(_requestTotalDataList[i]);
           }
         }
+
+        _isLoading = false;
       });
     });
   }
@@ -141,84 +146,101 @@ class _DashBoardPageState extends State<DashBoardPage> {
       height: size.height,
       color: Colors.grey.shade50,
       alignment: Alignment.center,
-      child: GridView(
-        scrollDirection: Axis.vertical,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: size.width < 600
-                ? 1
-                : size.width < 700
-                    ? 2
-                    : size.width < 1300
-                        ? 3
-                        : 4,
-            childAspectRatio: 1.3),
-        children: [
-          _gridViewTile(
-              size,
-              'Film  Media',
-              Color(0xff9D7CFD),
-              'Total Data',
-              'Private Data',
-              _filmTotalDataList.length.toString(),
-              _filmPrivateDataList.length.toString(),
-              dataProvider),
-          _gridViewTile(
-              size,
-              'Television Media',
-              Color(0xff00B5C9),
-              'Total Data',
-              'Private Data',
-              _televisionTotalDataList.length.toString(),
-              _televisionPrivateDataList.length.toString(),
-              dataProvider),
-          _gridViewTile(
-              size,
-              'Audio Media',
-              Color(0xffFF8C00),
-              'Total Data',
-              'Private Data',
-              _audioTotalDataList.length.toString(),
-              _audioPrivateDataList.length.toString(),
-              dataProvider),
-          _gridViewTile(
-              size,
-              'Print Media',
-              Color(0xff00A958),
-              'Total Data',
-              'Private Data',
-              _printingTotalDataList.length.toString(),
-              _printingPrivateDataList.length.toString(),
-              dataProvider),
-          _gridViewTile(
-              size,
-              'New Media',
-              Color(0xff00C4FE),
-              'Total Data',
-              'Private Data',
-              _newTotalDataList.length.toString(),
-              _newPrivateDataList.length.toString(),
-              dataProvider),
-          _gridViewTile(
-              size,
-              'Importent & Imergecy',
-              Color(0xffFF8C00),
-              'Total Data',
-              'Private Data',
-              _importentTotalDataList.length.toString(),
-              _importentPrivateDataList.length.toString(),
-              dataProvider),
-          _gridViewTile(
-            size,
-            'Request Data',
-            Color(0xff00C4FE),
-            'Total Request',
-            'Today  Request',
-            _requestTotalDataList.length.toString(),
-            _requestTodayRequestList.length.toString(),
-            dataProvider,
-          ),
-        ],
-      ),
+      child: _isLoading
+          ? Container(
+              child: Column(
+              children: [
+                SizedBox(
+                  height: size.height * .4,
+                ),
+                fadingCircle,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    'Please Wait ..........',
+                    style: TextStyle(fontSize: 20, color: Colors.blueGrey),
+                  ),
+                ),
+              ],
+            ))
+          : GridView(
+              scrollDirection: Axis.vertical,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: size.width < 600
+                      ? 1
+                      : size.width < 700
+                          ? 2
+                          : size.width < 1300
+                              ? 3
+                              : 4,
+                  childAspectRatio: 1.3),
+              children: [
+                _gridViewTile(
+                    size,
+                    'Film' + "\n" 'Media',
+                    Color(0xff9D7CFD),
+                    'Total Data',
+                    'Private Data',
+                    _filmTotalDataList.length.toString(),
+                    _filmPrivateDataList.length.toString(),
+                    dataProvider),
+                _gridViewTile(
+                    size,
+                    'Television' + "\n" 'Media',
+                    Color(0xff00B5C9),
+                    'Total Data',
+                    'Private Data',
+                    _televisionTotalDataList.length.toString(),
+                    _televisionPrivateDataList.length.toString(),
+                    dataProvider),
+                _gridViewTile(
+                    size,
+                    'Audio' + "\n" 'Media',
+                    Color(0xffFF8C00),
+                    'Total Data',
+                    'Private Data',
+                    _audioTotalDataList.length.toString(),
+                    _audioPrivateDataList.length.toString(),
+                    dataProvider),
+                _gridViewTile(
+                    size,
+                    'Print' + "\n" 'Media',
+                    Color(0xff00A958),
+                    'Total Data',
+                    'Private Data',
+                    _printingTotalDataList.length.toString(),
+                    _printingPrivateDataList.length.toString(),
+                    dataProvider),
+                _gridViewTile(
+                    size,
+                    'New' + "\n" 'Media',
+                    Color(0xff00C4FE),
+                    'Total Data',
+                    'Private Data',
+                    _newTotalDataList.length.toString(),
+                    _newPrivateDataList.length.toString(),
+                    dataProvider),
+                _gridViewTile(
+                    size,
+                    'Importent ' + "\n" '& ' + "\n" 'Imergecy',
+                    Color(0xffFF8C00),
+                    'Total Data',
+                    'Private Data',
+                    _importentTotalDataList.length.toString(),
+                    _importentPrivateDataList.length.toString(),
+                    dataProvider),
+                _gridViewTile(
+                  size,
+                  'Request' + "\n" 'Data',
+                  Color(0xff00C4FE),
+                  'Total Request',
+                  'Today  Request',
+                  _requestTotalDataList.length.toString(),
+                  _requestTodayRequestList.length.toString(),
+                  dataProvider,
+                ),
+              ],
+            ),
     );
   }
 
@@ -290,30 +312,31 @@ class _DashBoardPageState extends State<DashBoardPage> {
               ),
               TextButton(
                   onPressed: () {
-                    if (title == "Film  Media") {
+                    if (title == 'Film' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Film Media Screen";
-                    } else if (title == "Television Media") {
+                    } else if (title == 'Television' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Television Media Screen";
-                    } else if (title == "Audio Media") {
+                    } else if (title == 'Audio' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Audio Media Screen";
-                    } else if (title == "Print Media") {
+                    } else if (title == 'Print' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Print Media Screen";
-                    } else if (title == "New Media") {
+                    } else if (title == 'New' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "New Media Screen";
-                    } else if (title == "Importent & Imergecy") {
+                    } else if (title ==
+                        'Importent ' + "\n" '& ' + "\n" 'Imergecy') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Importent & Emergency";
-                    } else if (title == "Request Data") {
+                    } else if (title == 'Request' + "\n" 'Data') {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Request Details";
                     }
                   },
-                  child: Text('View Category',
+                  child: Text('View All',
                       style: TextStyle(
                         fontSize: size.height * .016,
                         fontWeight: FontWeight.w400,

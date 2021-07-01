@@ -9,8 +9,6 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 
 class UpdateContentData extends StatefulWidget {
-  const UpdateContentData({Key? key}) : super(key: key);
-
   @override
   _UpdateContentDataState createState() => _UpdateContentDataState();
 }

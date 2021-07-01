@@ -21,7 +21,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
         ),

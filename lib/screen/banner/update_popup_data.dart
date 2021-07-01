@@ -9,8 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UpdatePopUpData extends StatefulWidget {
-  const UpdatePopUpData({Key? key}) : super(key: key);
-
   @override
   _UpdatePopUpDataState createState() => _UpdatePopUpDataState();
 }

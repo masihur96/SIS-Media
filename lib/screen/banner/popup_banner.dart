@@ -46,37 +46,54 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
   String name = '';
 
   List<IndexBannerModel> _subList = [];
+  List<IndexBannerModel> _filteredList = [];
+
+  _filterSubCategoryList(String searchItem) {
+    setState(() {
+      _filteredList = _subList
+          .where((element) => (element.category!
+              .toLowerCase()
+              .contains(searchItem.toLowerCase())))
+          .toList();
+    });
+  }
 
   int counter = 0;
   customInit(FatchDataHelper fatchDataHelper) async {
     setState(() {
       counter++;
     });
-    if (fatchDataHelper.popUpdataList.isEmpty) {
+    if (fatchDataHelper.indexdataList.isEmpty) {
       setState(() {
         _isLoading = true;
       });
-      await fatchDataHelper.fetchPopUpData().then((value) {
+      await fatchDataHelper.fetchBannerData().then((value) {
         setState(() {
-          _subList = fatchDataHelper.popUpdataList;
+          _subList = fatchDataHelper.indexdataList;
 
           _isLoading = false;
         });
       });
     } else {
       setState(() {
-        _subList = fatchDataHelper.popUpdataList;
+        _subList = fatchDataHelper.indexdataList;
       });
     }
+
+    _filterSubCategoryList('popup');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
     setState(() {
       _isLoading = true;
     });
-    await fatchDataHelper.fetchPopUpData().then((value) {
+    await fatchDataHelper.fetchBannerData().then((value) {
       setState(() {
-        _subList = fatchDataHelper.popUpdataList;
+        _subList = fatchDataHelper.indexdataList;
+        _filteredList = _subList
+            .where((element) =>
+                (element.category!.toLowerCase().contains('popup')))
+            .toList();
         _isLoading = false;
       });
     });
@@ -186,7 +203,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                     height: 500.0,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: _subList.length,
+                      itemCount: _filteredList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 5.0,
@@ -460,7 +477,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                           });
                         });
                       },
-                      child: Text('PIKED BANNER'),
+                      child: Text('PICK BANNER'),
                       style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
                           padding: EdgeInsets.symmetric(
@@ -517,7 +534,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('PopUpBanner')
+          .child('Banner')
           .child(uuid!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -549,7 +566,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
         'category': 'popup',
         'status': statusValue.toLowerCase(),
       };
-      await firebaseProvider.addPopUpBannerData(map).then((value) {
+      await firebaseProvider.addBannerData(map).then((value) {
         if (value) {
           setState(() => _isLoading = false);
           showToast('Success');

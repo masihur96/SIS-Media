@@ -9,8 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UpdateBannerData extends StatefulWidget {
-  const UpdateBannerData({Key? key}) : super(key: key);
-
   @override
   _UpdateBannerDataState createState() => _UpdateBannerDataState();
 }

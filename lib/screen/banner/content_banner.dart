@@ -24,8 +24,8 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List categorys = ['Top', 'Bottom'];
-  String categoryValue = 'Top';
+  List categorys = ['ContentTop', 'ContentBottom'];
+  String categoryValue = 'ContentTop';
 
   String? uuid;
 
@@ -45,37 +45,57 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
   String name = '';
 
   List<IndexBannerModel> _subList = [];
+  List<IndexBannerModel> _filteredList = [];
+
+  _filterSubCategoryList(String searchItem) {
+    setState(() {
+      _filteredList = _subList
+          .where((element) => (element.category!
+              .toLowerCase()
+              .contains(searchItem.toLowerCase())))
+          .toList();
+    });
+  }
 
   int counter = 0;
   customInit(FatchDataHelper fatchDataHelper) async {
     setState(() {
       counter++;
     });
-    if (fatchDataHelper.contentdataList.isEmpty) {
+
+    if (fatchDataHelper.indexdataList.isEmpty) {
       setState(() {
         _isLoading = true;
       });
-      await fatchDataHelper.fetchContentData().then((value) {
+      await fatchDataHelper.fetchBannerData().then((value) {
         setState(() {
-          _subList = fatchDataHelper.contentdataList;
-
+          _subList = fatchDataHelper.indexdataList;
+          _filteredList = _subList;
           _isLoading = false;
         });
       });
     } else {
       setState(() {
-        _subList = fatchDataHelper.contentdataList;
+        _subList = fatchDataHelper.indexdataList;
+        _filteredList = _subList;
       });
     }
+
+    _filterSubCategoryList('ContentTop');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
     setState(() {
       _isLoading = true;
     });
-    await fatchDataHelper.fetchContentData().then((value) {
+    await fatchDataHelper.fetchBannerData().then((value) {
       setState(() {
-        _subList = fatchDataHelper.contentdataList;
+        _subList = fatchDataHelper.indexdataList;
+        _filteredList = _subList
+            .where((element) =>
+                (element.category!.toLowerCase().contains('contenttop') ||
+                    element.category!.toLowerCase().contains('contentbottom')))
+            .toList();
         _isLoading = false;
       });
     });
@@ -139,35 +159,84 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       DataProvider dataProvider, FatchDataHelper fatchDataHelper) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: GestureDetector(
-            onTap: () {
-              getData(fatchDataHelper);
-            },
-            child: Padding(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
-                width: size.width * .13,
+                width: size.width * .2,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: Colors.blueGrey)),
+                    border: Border.all(width: 1, color: Colors.blueGrey),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                // width: size.width * .2,
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text('Refresh '),
-                      SizedBox(
-                        width: size.width * .02,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Category : ",
+                        style: TextStyle(fontSize: size.height * .025),
                       ),
-                      Icon(Icons.refresh_outlined),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: categoryValue,
+                          elevation: 0,
+                          dropdownColor: Colors.white,
+                          style: TextStyle(color: Colors.black),
+                          items: categorys.map((itemValue) {
+                            return DropdownMenuItem<String>(
+                              value: itemValue,
+                              child: Text(itemValue),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              categoryValue = newValue!;
+                            });
+
+                            _filterSubCategoryList(categoryValue);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
+            Align(
+              alignment: Alignment.topRight,
+              child: GestureDetector(
+                onTap: () {
+                  getData(fatchDataHelper);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    width: size.width * .13,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(color: Colors.blueGrey)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text('Refresh '),
+                          SizedBox(
+                            width: size.width * .02,
+                          ),
+                          Icon(Icons.refresh_outlined),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         Container(
           child: _isLoading
@@ -185,7 +254,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     height: 500.0,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: _subList.length,
+                      itemCount: _filteredList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 5.0,
@@ -218,13 +287,14 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             Container(
                 height: size.height * .35,
                 width: size.width * .7,
-                child: _subList[index].image!.isEmpty
+                child: _filteredList[index].image!.isEmpty
                     ? Icon(
                         Icons.photo,
                         size: size.height * .16,
                         color: Colors.grey,
                       )
-                    : Image.network(_subList[index].image!, fit: BoxFit.fill)),
+                    : Image.network(_filteredList[index].image!,
+                        fit: BoxFit.fill)),
             Container(
               width: size.width * .5,
               child: Column(
@@ -236,16 +306,16 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     child: Container(
                         height: 2, width: size.width, color: Colors.grey),
                   ),
-                  _subList[index].status!.isEmpty
+                  _filteredList[index].status!.isEmpty
                       ? Container()
                       : Text(
-                          _subList[index].status!,
+                          'Status: ${_filteredList[index].status}',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _subList[index].date!.isEmpty
+                  _filteredList[index].date!.isEmpty
                       ? Container()
-                      : Text('Date: ${_subList[index].date}',
+                      : Text('Date: ${_filteredList[index].date}',
                           style: TextStyle(
                             fontSize: 12,
                           )),
@@ -263,14 +333,15 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Update Content Data";
                       dataProvider.indexBannerModel.image =
-                          _subList[index].image;
-                      dataProvider.indexBannerModel.id = _subList[index].id;
+                          _filteredList[index].image;
+                      dataProvider.indexBannerModel.id =
+                          _filteredList[index].id;
                       dataProvider.indexBannerModel.status =
-                          _subList[index].status;
-                      dataProvider.indexBannerModel.date = _subList[index].date;
-                      //   addImageUI(size, firebaseProvider);
+                          _filteredList[index].status;
+                      dataProvider.indexBannerModel.date =
+                          _filteredList[index].date;
                       dataProvider.indexBannerModel.category =
-                          _subList[index].category;
+                          _filteredList[index].category;
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
@@ -312,13 +383,13 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteContentBannerData(
-                                      _subList[index].id!, context)
+                                      _filteredList[index].id!, context)
                                   .then((value) {
                                 if (value == true) {
                                   firebase_storage.FirebaseStorage.instance
                                       .ref()
                                       .child('ContentBanner')
-                                      .child(_subList[index].id!)
+                                      .child(_filteredList[index].id!)
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
@@ -361,7 +432,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(categoryValue == 'Top'
+                child: Text(categoryValue == 'ContentTop'
                     ? 'Please Upload Top Banner Size: 85*360'
                     : 'Please Upload Bottom Banner Size: 55*360'),
               ),
@@ -512,7 +583,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                           });
                         });
                       },
-                      child: Text('PIKED BANNER'),
+                      child: Text('PICK BANNER'),
                       style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
                           padding: EdgeInsets.symmetric(
@@ -568,7 +639,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('ContentBanner')
+          .child('Banner')
           .child(uuid!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -598,10 +669,11 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
         'image': imageUrl,
         'id': uuid!,
         'date': dateData,
-        'category': categoryValue == 'Top' ? 'contenttop' : 'contentbottom',
+        'category':
+            categoryValue == 'ContentTop' ? 'contenttop' : 'contentbottom',
         'status': statusValue.toLowerCase(),
       };
-      await firebaseProvider.addContentBannerData(map).then((value) {
+      await firebaseProvider.addBannerData(map).then((value) {
         if (value) {
           setState(() => _isLoading = false);
           showToast('Success');
