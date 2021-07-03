@@ -20,16 +20,31 @@ class _UpdatePopUpDataState extends State<UpdatePopUpData> {
   String imageUrl = '';
   String? error;
   String name = '';
-  List staatus = ['Public', 'Private'];
-  String statusValue = "Public";
+
   List categorys = ['Top', 'Bottom'];
   String categoryValue = 'Top';
+
+  List staatus = ['public', 'private'];
+  String statusValue = '';
+
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+
+    statusValue = dataProvider.indexBannerModel.status.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
     return Expanded(
       child: Container(
         child: Column(
@@ -222,7 +237,7 @@ class _UpdatePopUpDataState extends State<UpdatePopUpData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('PopUpBanner')
+          .child('Banner')
           .child(dataProvider.indexBannerModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -259,17 +274,17 @@ class _UpdatePopUpDataState extends State<UpdatePopUpData> {
         'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);
-      await firebaseProvider.updatePopUpData(mapData, context).then((value) {
+      await firebaseProvider.updateBanerData(mapData, context).then((value) {
         if (value) {
-          setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
           dataProvider.subCategory = "Pop Up Banner";
           showToast('Data updated successful');
-        } else {
           setState(() => _isLoading = false);
+        } else {
           dataProvider.category = dataProvider.subCategory;
           dataProvider.subCategory = "Pop Up Banner";
           showToast('Data update failed!');
+          setState(() => _isLoading = false);
         }
       });
     } else

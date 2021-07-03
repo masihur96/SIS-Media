@@ -114,8 +114,8 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
   TextEditingController _channelName = TextEditingController(text: '');
   TextEditingController _houseName = TextEditingController(text: '');
 
-  List staatus = ['Public', 'Private'];
-  String statusValue = 'Public';
+  List staatus = ['public', 'private'];
+  String statusValue = '';
 
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -161,6 +161,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
         dataProvider.televisionMediaModel.regionalOffice!;
     _channelName.text = dataProvider.televisionMediaModel.channelName!;
     _houseName.text = dataProvider.televisionMediaModel.houseName!;
+    statusValue = dataProvider.televisionMediaModel.status.toString();
   }
 
   String dropdownValue = 'Television Channel';
@@ -176,8 +177,8 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
       customInit(dataProvider);
     }
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       color: Colors.blueGrey,
       child: Column(
         children: [
@@ -295,12 +296,12 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 10),
+                                    horizontal: 50, vertical: 7),
                                 child: Text(
                                   'UPDATE',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: size.height * .04,
+                                    fontSize: size.height * .03,
                                   ),
                                 ),
                               ),
@@ -431,12 +432,12 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Television Media Screen";
+          dataProvider.subCategory = "Television Media";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Television Media Screen";
+          dataProvider.subCategory = "Television Media";
           showToast('Data update failed!');
         }
       });
@@ -452,7 +453,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -489,7 +490,7 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
                 ),
               ),
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

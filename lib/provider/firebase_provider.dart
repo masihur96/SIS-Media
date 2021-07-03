@@ -34,7 +34,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> addAudioMediaData(Map<String, String> map) async {
     try {
       await FirebaseFirestore.instance
-          .collection("AudioMediaData")
+          .collection("AudioData")
           .doc(map['id'])
           .set(map);
 
@@ -188,7 +188,7 @@ class FirebaseProvider extends ChangeNotifier {
       Map<String, String> map, BuildContext context) async {
     try {
       await FirebaseFirestore.instance
-          .collection('AudioMediaData')
+          .collection('AudioData')
           .doc(map['id'])
           .update(map);
       return true;
@@ -258,7 +258,7 @@ class FirebaseProvider extends ChangeNotifier {
       Map<String, String> map, BuildContext context) async {
     try {
       await FirebaseFirestore.instance
-          .collection('IndexBanner')
+          .collection('Banner')
           .doc(map['id'])
           .update(map);
       return true;
@@ -268,33 +268,33 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateContentData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('ContentBanner')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updateContentData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('ContentBanner')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
-  Future<bool> updatePopUpData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('PopUpBanner')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updatePopUpData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('PopUpBanner')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> deleteFilmMediaData(String id, BuildContext context) async {
     try {
@@ -338,10 +338,7 @@ class FirebaseProvider extends ChangeNotifier {
 
   Future<bool> deleteAudioData(String id, BuildContext context) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('AudioMediaData')
-          .doc(id)
-          .delete();
+      await FirebaseFirestore.instance.collection('AudioData').doc(id).delete();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -402,12 +399,9 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteIndexBannerData(String id, BuildContext context) async {
+  Future<bool> deleteBannerData(String id, BuildContext context) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('IndexBanner')
-          .doc(id)
-          .delete();
+      await FirebaseFirestore.instance.collection('Banner').doc(id).delete();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -415,31 +409,31 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteContentBannerData(String id, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('ContentBanner')
-          .doc(id)
-          .delete();
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> deleteContentBannerData(String id, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('ContentBanner')
+  //         .doc(id)
+  //         .delete();
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
-  Future<bool> deletePopUpBannerData(String id, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('PopUpBanner')
-          .doc(id)
-          .delete();
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> deletePopUpBannerData(String id, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('PopUpBanner')
+  //         .doc(id)
+  //         .delete();
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> deleteRequestData(String id, BuildContext context) async {
     try {

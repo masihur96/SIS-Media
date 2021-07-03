@@ -20,11 +20,20 @@ class _UpdateContentDataState extends State<UpdateContentData> {
   String imageUrl = '';
   String? error;
   String name = '';
-  List staatus = ['Public', 'Private'];
-  String statusValue = "Public";
-
   List categorys = ['Top', 'Bottom'];
   String categoryValue = 'Top';
+
+  List staatus = ['public', 'private'];
+  String statusValue = '';
+
+  int counter = 0;
+  customInit(DataProvider dataProvider) async {
+    setState(() {
+      counter++;
+    });
+
+    statusValue = dataProvider.indexBannerModel.status.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +41,9 @@ class _UpdateContentDataState extends State<UpdateContentData> {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
-
+    if (counter == 0) {
+      customInit(dataProvider);
+    }
     return Expanded(
       child: Container(
         child: Column(
@@ -228,7 +239,7 @@ class _UpdateContentDataState extends State<UpdateContentData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('ContentBanner')
+          .child('Banner')
           .child(dataProvider.indexBannerModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -265,7 +276,7 @@ class _UpdateContentDataState extends State<UpdateContentData> {
         'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);
-      await firebaseProvider.updateContentData(mapData, context).then((value) {
+      await firebaseProvider.updateBanerData(mapData, context).then((value) {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;

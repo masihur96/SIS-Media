@@ -55,6 +55,8 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
         _subList = fatchDataHelper.audioRateChartList;
         _filteredList = _subList;
       });
+
+      getData(fatchDataHelper);
     }
   }
 
@@ -135,11 +137,30 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                 SizedBox(
                   width: size.width * .02,
                 ),
-                GestureDetector(
-                    onTap: () {
-                      getData(fatchDataHelper);
-                    },
-                    child: Icon(Icons.refresh_outlined)),
+                InkWell(
+                  onTap: () {
+                    getData(fatchDataHelper);
+                  },
+                  child: Container(
+                    // width: size.width * .1,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(color: Colors.blueGrey)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text('Refresh '),
+                          SizedBox(
+                            width: size.width * .02,
+                          ),
+                          Icon(Icons.refresh_outlined),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             _isLoading
@@ -455,6 +476,8 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                           _filteredList[index].RDC;
                       dataProvider.audioRateChartModel.endorsement =
                           _filteredList[index].endorsement;
+                      dataProvider.audioRateChartModel.status =
+                          _filteredList[index].status;
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
@@ -492,6 +515,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
+                              Navigator.pop(context);
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteAudioRateChartData(
@@ -500,11 +524,11 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                                 if (value == true) {
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
-                                  Navigator.pop(context);
                                   showToast('Data deleted successful');
                                 } else {
-                                  setState(() => _isLoading = false);
                                   Navigator.pop(context);
+                                  setState(() => _isLoading = false);
+
                                   showToast('Data delete unsuccessful');
                                 }
                               });

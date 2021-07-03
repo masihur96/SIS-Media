@@ -132,7 +132,7 @@ class DataProvider extends ChangeNotifier {
     if (size.width < 1200)
       return size.width;
     else
-      return size.width * .8;
+      return size.width * .83;
   }
 
   String pageHeader() {
@@ -157,42 +157,28 @@ class DataProvider extends ChangeNotifier {
       return ImportentEmergency();
     else if (subCategory == 'Update Film Media')
       return UpdateFilmMediaDataPage();
-    else if (subCategory == 'Film Media Screen')
-      return FilmMediaScreen();
     else if (subCategory == 'Update Television Media')
       return UpdateTelevisionData();
-    else if (subCategory == 'Television Media Screen')
-      return TelevisionMediaScreen();
     else if (subCategory == 'Update Audio Media')
       return UpdateAdioData();
-    else if (subCategory == 'Audio Media Screen')
-      return AudioMediaScreen();
     else if (subCategory == 'Update Print Media')
       return UpdatePrintMedia();
-    else if (subCategory == 'Print Media Screen')
-      return PrintingMedia();
     else if (subCategory == 'Update New Media')
       return UpdateNewMedia();
-    else if (subCategory == 'New Media Screen')
-      return NewMedia();
     else if (subCategory == 'Update Importent Media')
       return UpdateImportentEmergencyData();
-    else if (subCategory == 'Important Media Screen')
-      return ImportentEmergency();
-    else if (subCategory == 'Update Television Media Chart')
-      return UpdateTelevisionRateChart();
     else if (subCategory == 'Television Media Chart Screen')
       return AllDataTelevisionRate();
-    else if (subCategory == 'Update Audio Media Chart')
-      return UpdateAudioRateChart();
+    else if (subCategory == 'Update Television Media Chart')
+      return UpdateTelevisionRateChart();
     else if (subCategory == 'Audio Media Chart Screen')
       return AllDataAudioRateChart();
+    else if (subCategory == 'Update Audio Media Chart')
+      return UpdateAudioRateChart();
     else if (subCategory == 'Index Banner')
       return IndexBannerScreen();
     else if (subCategory == 'Update Index Media')
       return UpdateBannerData();
-    else if (subCategory == 'Banner Media Screen')
-      return IndexBannerScreen();
     else if (subCategory == 'Content Banner')
       return ContentBannerScreen();
     else if (subCategory == 'Update Content Data')
@@ -201,12 +187,12 @@ class DataProvider extends ChangeNotifier {
       return PopUpBannerScreen();
     else if (subCategory == 'Update PopUp Data')
       return UpdatePopUpData();
-    else if (subCategory == 'DashBoard')
-      return DashBoardPage();
     else if (subCategory == 'Request Details')
       return RequestPage();
     else if (subCategory == 'Change Password')
       return ChangePassword();
+    else if (subCategory == 'DashBoard')
+      return DashBoardPage();
     else
       return DashBoardPage();
   }

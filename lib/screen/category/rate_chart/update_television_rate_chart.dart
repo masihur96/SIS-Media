@@ -115,8 +115,8 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
   TextEditingController _tarifBrand = TextEditingController();
   TextEditingController _extraCommercialTime = TextEditingController();
 
-  List staatus = ['Public', 'Private'];
-  String statusValue = "Public";
+  List staatus = ['public', 'private'];
+  String statusValue = '';
 
   List channels = Variables().getTVChannelList();
   String channelValue = 'Bangladesh Television';
@@ -126,6 +126,7 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
+      statusValue = dataProvider.televisionRateChartModel.status.toString();
       counter++;
     });
 
@@ -178,12 +179,13 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
       customInit(dataProvider);
     }
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            SizedBox(height: size.height * .02),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -270,7 +272,7 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                 Expanded(
                   child: Container(
                     width:
-                        size.width > 1200 ? size.width * .4 : size.width * .5,
+                        size.width > 1200 ? size.width * .415 : size.width * .5,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -304,7 +306,7 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                 Expanded(
                   child: Container(
                     width:
-                        size.width > 1200 ? size.width * .4 : size.width * .5,
+                        size.width > 1200 ? size.width * .415 : size.width * .5,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -388,12 +390,12 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 10),
+                          horizontal: 50, vertical: 7),
                       child: Text(
                         'UPDATE',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: size.height * .04,
+                          fontSize: size.height * .03,
                         ),
                       ),
                     ),
@@ -401,6 +403,9 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                       primary: Colors.grey,
                     ),
                   ),
+            SizedBox(
+              height: size.height * .04,
+            ),
           ],
         ),
       ),

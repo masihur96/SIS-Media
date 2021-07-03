@@ -96,8 +96,8 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
   TextEditingController _RDC = TextEditingController();
   TextEditingController _endorsement = TextEditingController();
 
-  List staatus = ['Public', 'Private'];
-  String statusValue = "Public";
+  List staatus = ['public', 'private'];
+  String statusValue = '';
 
   List channels = Variables().getaudioChannelList();
   String channelValue = 'Bangladesh Betar';
@@ -108,6 +108,7 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
+      statusValue = dataProvider.audioRateChartModel.status.toString();
       counter++;
     });
 
@@ -149,17 +150,13 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
     }
 
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Container(
-              height: 2,
-              width: size.width * .8,
-              color: Colors.blueGrey,
-            ),
+            SizedBox(height: size.height * .02),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
@@ -249,8 +246,9 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                 children: <Widget>[
                   Expanded(
                     child: Container(
-                      width:
-                          size.width > 1200 ? size.width * .4 : size.width * .5,
+                      width: size.width > 1200
+                          ? size.width * .415
+                          : size.width * .5,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -280,8 +278,9 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                   ),
                   Expanded(
                     child: Container(
-                      width:
-                          size.width > 1200 ? size.width * .4 : size.width * .5,
+                      width: size.width > 1200
+                          ? size.width * .415
+                          : size.width * .5,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -356,12 +355,12 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 10),
+                          horizontal: 50, vertical: 7),
                       child: Text(
                         'SUBMIT',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: size.height * .04,
+                          fontSize: size.height * .03,
                         ),
                       ),
                     ),
@@ -369,6 +368,9 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                       primary: Colors.grey,
                     ),
                   ),
+            SizedBox(
+              height: size.height * .04,
+            ),
           ],
         ),
       ),

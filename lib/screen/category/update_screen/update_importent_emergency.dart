@@ -71,6 +71,9 @@ class _UpdateImportentEmergencyDataState
   TextEditingController _position = TextEditingController(text: '');
   TextEditingController _businessType = TextEditingController(text: '');
 
+  List staatus = ['public', 'private'];
+  String statusValue = '';
+
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
@@ -92,6 +95,8 @@ class _UpdateImportentEmergencyDataState
     _headOffice.text = dataProvider.importentEmergencyModel.headOffice!;
     _position.text = dataProvider.importentEmergencyModel.position!;
     _businessType.text = dataProvider.importentEmergencyModel.businessType!;
+
+    statusValue = dataProvider.importentEmergencyModel.status.toString();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -100,8 +105,6 @@ class _UpdateImportentEmergencyDataState
   String imageUrl = '';
   String? error;
   String name = '';
-  List staatus = ['Public', 'Private'];
-  String statusValue = 'Public';
 
   @override
   Widget build(BuildContext context) {
@@ -114,8 +117,8 @@ class _UpdateImportentEmergencyDataState
       customInit(dataProvider);
     }
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       color: Colors.blueGrey,
       child: Column(
         children: [
@@ -239,12 +242,12 @@ class _UpdateImportentEmergencyDataState
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 10),
+                                    horizontal: 50, vertical: 7),
                                 child: Text(
                                   'UPDATE',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: size.height * .04,
+                                    fontSize: size.height * .03,
                                   ),
                                 ),
                               ),
@@ -325,12 +328,12 @@ class _UpdateImportentEmergencyDataState
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Important Media Screen";
+          dataProvider.subCategory = "Importent & Emergency";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Important Media Screen";
+          dataProvider.subCategory = "Importent & Emergency";
           showToast('Data update failed!');
         }
       });
@@ -346,7 +349,7 @@ class _UpdateImportentEmergencyDataState
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -369,7 +372,7 @@ class _UpdateImportentEmergencyDataState
                 ),
               ),
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

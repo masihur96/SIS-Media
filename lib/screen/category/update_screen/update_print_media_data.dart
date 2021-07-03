@@ -69,6 +69,8 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   TextEditingController _director = TextEditingController();
   TextEditingController _position = TextEditingController();
 
+  List staatus = ['public', 'private'];
+  String statusValue = '';
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
@@ -88,6 +90,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
     _business_type.text = dataProvider.printMediaModel.businessType!;
     _director.text = dataProvider.printMediaModel.director!;
     _position.text = dataProvider.printMediaModel.position!;
+    statusValue = dataProvider.printMediaModel.status.toString();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -96,8 +99,6 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   String imageUrl = '';
   String? error;
   String name = '';
-  List staatus = ['Public', 'Private'];
-  String statusValue = 'Public';
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +110,8 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
       customInit(dataProvider);
     }
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       color: Colors.blueGrey,
       child: Column(
         children: [
@@ -233,12 +234,12 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 10),
+                                    horizontal: 50, vertical: 7),
                                 child: Text(
                                   'UPDATE',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: size.height * .04,
+                                    fontSize: size.height * .03,
                                   ),
                                 ),
                               ),
@@ -268,7 +269,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -291,7 +292,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
                 ),
               ),
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -419,12 +420,12 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Print Media Screen";
+          dataProvider.subCategory = "Print Media";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Print Media Screen";
+          dataProvider.subCategory = "Print Media";
           showToast('Data update failed!');
         }
       });

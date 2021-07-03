@@ -86,6 +86,8 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   TextEditingController _ddgProgram = TextEditingController();
   TextEditingController _ddgNews = TextEditingController();
 
+  List staatus = ['public', 'private'];
+  String statusValue = '';
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
@@ -113,6 +115,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     _channelName.text = dataProvider.audioMediaModel.channelName!;
     _ddgNews.text = dataProvider.audioMediaModel.ddgNews!;
     _ddgProgram.text = dataProvider.audioMediaModel.ddgprogram!;
+    statusValue = dataProvider.audioMediaModel.status.toString();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -121,8 +124,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   String imageUrl = '';
   String? error;
   String name = '';
-  List staatus = ['Public', 'Private'];
-  String statusValue = 'Public';
+
   @override
   Widget build(BuildContext context) {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
@@ -134,8 +136,8 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
       customInit(dataProvider);
     }
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       color: Colors.blueGrey,
       child: Column(
         children: [
@@ -258,12 +260,12 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 10),
+                                    horizontal: 50, vertical: 7),
                                 child: Text(
                                   'UPDATE',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: size.height * .04,
+                                    fontSize: size.height * .03,
                                   ),
                                 ),
                               ),
@@ -350,10 +352,12 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Audio Media Screen";
+          dataProvider.subCategory = "Audio Media";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
+          dataProvider.category = dataProvider.subCategory;
+          dataProvider.subCategory = "Audio Media";
           showToast('Data update failed!');
         }
       });
@@ -369,7 +373,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -398,7 +402,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                 ),
               ),
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

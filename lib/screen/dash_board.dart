@@ -25,8 +25,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
   List<TelevisionMediaModel> _televisionTotalDataList = [];
   List<TelevisionMediaModel> _televisionPrivateDataList = [];
+
   List<AudioMediaModel> _audioTotalDataList = [];
   List<AudioMediaModel> _audioPrivateDataList = [];
+
   List<PrintMediaModel> _printingTotalDataList = [];
   List<PrintMediaModel> _printingPrivateDataList = [];
   List<NewMediaModel> _newTotalDataList = [];
@@ -44,43 +46,39 @@ class _DashBoardPageState extends State<DashBoardPage> {
       counter++;
       _isLoading = true;
     });
-    if (_filmTotalDataList.isEmpty) {
-      await fatchDataHelper.fetchFilmMediaData().then((value) {
-        setState(() {
-          _filmTotalDataList = fatchDataHelper.filmMediadataList;
-          for (int i = 0; i < _filmTotalDataList.length; i++) {
-            if (_filmTotalDataList[i].status == 'private') {
-              _filmPrivateDataList.add(_filmTotalDataList[i]);
-            }
-          }
-        });
-      });
-    }
 
-    if (_televisionTotalDataList.isEmpty) {
-      await fatchDataHelper.fetchTelevisionData().then((value) {
-        setState(() {
-          _televisionTotalDataList = fatchDataHelper.televisionMediadataList;
-          for (int i = 0; i < _televisionTotalDataList.length; i++) {
-            if (_televisionTotalDataList[i].status == 'private') {
-              _televisionPrivateDataList.add(_televisionTotalDataList[i]);
-            }
+    await fatchDataHelper.fetchFilmMediaData().then((value) {
+      setState(() {
+        _filmTotalDataList = fatchDataHelper.filmMediadataList;
+        for (int i = 0; i < _filmTotalDataList.length; i++) {
+          if (_filmTotalDataList[i].status == 'private') {
+            _filmPrivateDataList.add(_filmTotalDataList[i]);
           }
-        });
+        }
       });
-    }
-    if (_audioTotalDataList.isEmpty) {
-      await fatchDataHelper.fetchAudioData().then((value) {
-        setState(() {
-          _audioTotalDataList = fatchDataHelper.audioMediadataList;
-          for (int i = 0; i < _audioTotalDataList.length; i++) {
-            if (_audioTotalDataList[i].status == 'private') {
-              _audioPrivateDataList.add(_audioTotalDataList[i]);
-            }
+    });
+
+    await fatchDataHelper.fetchTelevisionData().then((value) {
+      setState(() {
+        _televisionTotalDataList = fatchDataHelper.televisionMediadataList;
+        for (int i = 0; i < _televisionTotalDataList.length; i++) {
+          if (_televisionTotalDataList[i].status == 'private') {
+            _televisionPrivateDataList.add(_televisionTotalDataList[i]);
           }
-        });
+        }
       });
-    }
+    });
+
+    await fatchDataHelper.fetchAudioData().then((value) {
+      setState(() {
+        _audioTotalDataList = fatchDataHelper.audioMediadataList;
+        for (int i = 0; i < _audioTotalDataList.length; i++) {
+          if (_audioTotalDataList[i].status == 'private') {
+            _audioPrivateDataList.add(_audioTotalDataList[i]);
+          }
+        }
+      });
+    });
 
     await fatchDataHelper.fetchPrintData().then((value) {
       setState(() {
@@ -92,6 +90,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
         }
       });
     });
+
     await fatchDataHelper.fetchNewData().then((value) {
       setState(() {
         _newTotalDataList = fatchDataHelper.newMediadataList;
@@ -102,6 +101,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
         }
       });
     });
+
     await fatchDataHelper.fetchImportentEmergencyData().then((value) {
       setState(() {
         _importentTotalDataList = fatchDataHelper.importentMediadataList;
@@ -232,7 +232,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                 _gridViewTile(
                   size,
                   'Request' + "\n" 'Data',
-                  Color(0xff00C4FE),
+                  Color(0xff9D7CFD),
                   'Total Request',
                   'Today  Request',
                   _requestTotalDataList.length.toString(),
@@ -314,19 +314,19 @@ class _DashBoardPageState extends State<DashBoardPage> {
                   onPressed: () {
                     if (title == 'Film' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Film Media Screen";
+                      dataProvider.subCategory = "Film Media";
                     } else if (title == 'Television' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Television Media Screen";
+                      dataProvider.subCategory = "Television Media";
                     } else if (title == 'Audio' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Audio Media Screen";
+                      dataProvider.subCategory = "Audio Media";
                     } else if (title == 'Print' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Print Media Screen";
+                      dataProvider.subCategory = "Print Media";
                     } else if (title == 'New' + "\n" 'Media') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "New Media Screen";
+                      dataProvider.subCategory = "New Media";
                     } else if (title ==
                         'Importent ' + "\n" '& ' + "\n" 'Imergecy') {
                       dataProvider.category = dataProvider.subCategory;

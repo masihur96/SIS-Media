@@ -14,7 +14,28 @@ class RequestPage extends StatefulWidget {
 
 class _RequestPageState extends State<RequestPage> {
   bool _isLoading = false;
+
+  List requests = ['All Request', 'Today Request'];
+  String requestValue = "All Request";
+
   List<UserRequestModel> _subList = [];
+  List<UserRequestModel> _filteredList = [];
+
+  _filterSubRequestList(String searchItem) {
+    DateTime date = DateTime.now();
+    String dateData = '${date.day}-${date.month}-${date.year}';
+    setState(() {
+      if (searchItem == 'All Request') {
+        _filteredList = _subList;
+      } else {
+        _filteredList = _subList
+            .where((element) =>
+                (element.request_date!.toLowerCase().contains(dateData)))
+            .toList();
+      }
+    });
+  }
+
   int counter = 0;
   customInit(FatchDataHelper fatchDataHelper) async {
     setState(() {
@@ -36,6 +57,8 @@ class _RequestPageState extends State<RequestPage> {
         _subList = fatchDataHelper.userRequestdataList;
       });
     }
+
+    _filterSubRequestList('All Request');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -75,37 +98,79 @@ class _RequestPageState extends State<RequestPage> {
               color: Colors.blueGrey,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // SizedBox(width: 30),
-                // Text(
-                //   "Request Details List",
-                //   style: TextStyle(fontSize: 20),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.blueGrey),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    // width: size.width * .5,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 0.0),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Requst Type : ",
+                            style: TextStyle(fontSize: size.height * .025),
+                          ),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: requestValue,
+                              elevation: 0,
+                              dropdownColor: Colors.white,
+                              style: TextStyle(color: Colors.black),
+                              items: requests.map((itemValue) {
+                                return DropdownMenuItem<String>(
+                                  value: itemValue,
+                                  child: Text(itemValue),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  requestValue = newValue!;
+                                });
+                                _filterSubRequestList(requestValue);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(color: Colors.blueGrey)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('Refresh '),
-                            SizedBox(
-                              width: size.width * .02,
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  getData(fatchDataHelper);
-                                },
-                                child: Icon(Icons.refresh_outlined)),
-                          ],
+                    child: InkWell(
+                      onTap: () {
+                        getData(fatchDataHelper);
+                      },
+                      child: Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.blueGrey)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Refresh '),
+                              SizedBox(
+                                width: size.width * .02,
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    getData(fatchDataHelper);
+                                  },
+                                  child: Icon(Icons.refresh_outlined)),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -128,7 +193,7 @@ class _RequestPageState extends State<RequestPage> {
                       height: 500.0,
                       child: new ListView.builder(
                         scrollDirection: Axis.vertical,
-                        itemCount: _subList.length,
+                        itemCount: _filteredList.length,
                         itemBuilder: (context, index) {
                           return _listItem(index, size, firebaseProvider,
                               fatchDataHelper, dataProvider);
@@ -160,54 +225,55 @@ class _RequestPageState extends State<RequestPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _subList[index].name!.isEmpty
+                  _filteredList[index].name!.isEmpty
                       ? Container()
                       : Text(
-                          'Name: ${_subList[index].name}',
+                          'Name: ${_filteredList[index].name}',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _subList[index].category!.isEmpty
+                  _filteredList[index].category!.isEmpty
                       ? Container()
                       : Text(
-                          'Category: ${_subList[index].category}',
+                          'Category: ${_filteredList[index].category}',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _subList[index].request_date!.isEmpty
+                  _filteredList[index].request_date!.isEmpty
                       ? Container()
                       : Text(
-                          'Request Date: ${_subList[index].request_date}',
+                          'Request Date: ${_filteredList[index].request_date}',
                           style: TextStyle(fontSize: 12),
                         ),
-                  _subList[index].sub_category!.isEmpty
-                      ? Container()
-                      : Text('Sub-Category: ${_subList[index].sub_category}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          )),
-                  _subList[index].user_address!.isEmpty
-                      ? Container()
-                      : Text('Address: ${_subList[index].user_address}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          )),
-                  _subList[index].user_email!.isEmpty
-                      ? Container()
-                      : Text('E-mail: ${_subList[index].user_email}',
-                          style: TextStyle(fontSize: 12)),
-                  _subList[index].user_name!.isEmpty
+                  _filteredList[index].sub_category!.isEmpty
                       ? Container()
                       : Text(
-                          'User Name: ${_subList[index].user_name}',
+                          'Sub-Category: ${_filteredList[index].sub_category}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+                  _filteredList[index].user_address!.isEmpty
+                      ? Container()
+                      : Text('Address: ${_filteredList[index].user_address}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+                  _filteredList[index].user_email!.isEmpty
+                      ? Container()
+                      : Text('E-mail: ${_filteredList[index].user_email}',
+                          style: TextStyle(fontSize: 12)),
+                  _filteredList[index].user_name!.isEmpty
+                      ? Container()
+                      : Text(
+                          'User Name: ${_filteredList[index].user_name}',
                           style: TextStyle(
                             fontSize: 12,
                           ),
                         ),
-                  _subList[index].user_phone!.isEmpty
+                  _filteredList[index].user_phone!.isEmpty
                       ? Container()
                       : Text(
-                          'User Phone: ${_subList[index].user_phone}',
+                          'User Phone: ${_filteredList[index].user_phone}',
                           style: TextStyle(
                             fontSize: 12,
                           ),
@@ -254,7 +320,7 @@ class _RequestPageState extends State<RequestPage> {
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteRequestData(
-                                      _subList[index].id!, context)
+                                      _filteredList[index].id!, context)
                                   .then((value) async {
                                 if (value == true) {
                                   setState(() => _isLoading = false);

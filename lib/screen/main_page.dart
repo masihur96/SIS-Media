@@ -21,63 +21,59 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    radius: size.height * .04,
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage("images/atnbanglalogo.jpg"),
-                  ),
-                  SizedBox(
-                    width: size.height * .04,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Media",
-                        style: TextStyle(
-                            fontSize: size.height * .03,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.blue),
-                      ),
-                      Text(
-                        " Directory",
-                        style: TextStyle(
-                            fontSize: size.height * .03,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.redAccent),
-                      ),
-                    ],
-                  ),
-                ],
+          automaticallyImplyLeading: size.width < 1200 ? true : false,
+          iconTheme: IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                        height: size.height * .06,
+                        width: size.height * .06,
+                        child: Image.asset(
+                          'images/book.png',
+                          color: Colors.white,
+                          fit: BoxFit.fill,
+                        )),
+                    SizedBox(
+                      width: size.height * .02,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "SIS-",
+                          style: TextStyle(
+                              fontSize: size.height * .025,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          "MEDIA",
+                          style: TextStyle(
+                              fontSize: size.height * .025,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Align(
-                alignment: Alignment.center,
-                child: Text(
-                  dataProvider.pageHeader(),
-                  style: TextStyle(
-                      fontSize: size.height * .030,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.blueGrey),
-                )),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                border:
-                    Border.all(width: size.height * .004, color: Colors.grey),
-              ),
-              child: GestureDetector(
+              Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    dataProvider.pageHeader(),
+                    style: TextStyle(
+                        fontSize: size.height * .030,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  )),
+              InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
@@ -88,19 +84,26 @@ class _MainPageState extends State<MainPage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: Center(
-                      child: Text(
-                    "Logout",
-                    style: TextStyle(
-                        fontSize: size.height * .025, color: Colors.black),
+                      child: Row(
+                    children: [
+                      Text(
+                        "Logout",
+                        style: TextStyle(
+                            fontSize: size.height * .025, color: Colors.white),
+                      ),
+                      SizedBox(width: size.height * .02),
+                      Icon(
+                        Icons.logout_outlined,
+                        size: size.height * .03,
+                      ),
+                    ],
                   )),
                 ),
               ),
-            ),
-          ],
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
+            ],
+          ),
+          elevation: 0,
+          backgroundColor: Colors.blueGrey),
       drawer: size.width < 1200 ? NavigationDrawer() : null,
       body: _bodyUI(size, dataProvider),
     );
@@ -131,7 +134,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
         child: Drawer(
           elevation: 0.0,
           child: Container(
-            width: size.width < 1200 ? 0.0 : size.width * .2,
+            width: size.width < 1200 ? 0.0 : size.width * .17,
             height: size.height,
             color: Colors.blueGrey,
             //color: Colors.white,

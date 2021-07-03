@@ -27,115 +27,123 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: size.height * .5,
-          width: size.width * .35,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blueAccent),
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
+      body: Container(
+        height: size.height,
+        width: size.width,
+        color: Color(0xffedf7fd),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                error,
+                style: TextStyle(
+                    color: Colors.redAccent, fontSize: size.height * .04),
+              ),
             ),
-          ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  error,
-                  style: TextStyle(
-                      color: Colors.redAccent, fontSize: size.height * .02),
+            Container(
+              height: size.height * .5,
+              width: size.width * .35,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blueAccent),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(height: size.height * .04),
                     Text(
                       "LOGIN",
                       style: TextStyle(fontSize: size.height * .04),
                     ),
-                  ],
-                ),
-                SizedBox(height: size.height * .02),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _name,
-                    decoration: InputDecoration(
-                      labelText: 'User Name',
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                        borderSide: new BorderSide(width: 1),
-                      ),
-                    ),
-                    maxLines: 1,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _password,
-                    obscureText: _passwordVisible!,
-                    decoration: InputDecoration(
-                      labelText: 'User Password',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          // Based on passwordVisible state choose the icon
-                          _passwordVisible!
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                    SizedBox(height: size.height * .02),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _name,
+                        decoration: InputDecoration(
+                          labelText: 'User Name',
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(width: 1),
+                          ),
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible!;
-                          });
-                        },
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                        borderSide: new BorderSide(width: 1),
+                        maxLines: 1,
                       ),
                     ),
-                    maxLines: 1,
-                  ),
-                ),
-                SizedBox(height: size.height * .05),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _isLoading
-                        ? Container(
-                            child: Column(
-                            children: [
-                              fadingCircle,
-                            ],
-                          ))
-                        : ElevatedButton(
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _password,
+                        obscureText: _passwordVisible!,
+                        decoration: InputDecoration(
+                          labelText: 'User Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              // Based on passwordVisible state choose the icon
+                              _passwordVisible!
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                             onPressed: () {
-                              _isLoading = true;
-
-                              fatchAdminData();
+                              setState(() {
+                                _passwordVisible = !_passwordVisible!;
+                              });
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Text(
-                                'Login',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: size.height * .04,
+                          ),
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(width: 1),
+                          ),
+                        ),
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: size.height * .05),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _isLoading
+                            ? Container(
+                                child: Column(
+                                children: [
+                                  fadingCircle,
+                                ],
+                              ))
+                            : ElevatedButton(
+                                onPressed: () {
+                                  _isLoading = true;
+
+                                  fatchAdminData();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 5.0),
+                                  child: Text(
+                                    'LOGIN',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: size.height * .03,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.grey,
-                            ),
-                          )
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey,
+                                ),
+                              )
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

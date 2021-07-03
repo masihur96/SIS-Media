@@ -130,15 +130,15 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.white54,
                         bottom: TabBar(
                           labelStyle: TextStyle(
                             fontSize: size.height * .03,
                           ),
                           tabs: _ktabs,
-                          indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.white60,
-                          labelColor: Colors.white,
+                          indicatorColor: Colors.black,
+                          unselectedLabelColor: Colors.grey,
+                          labelColor: Colors.black,
                         ),
                       ),
                     ),
@@ -208,12 +208,12 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: GestureDetector(
-                onTap: () {
-                  getData(fatchDataHelper);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: InkWell(
+                  onTap: () {
+                    getData(fatchDataHelper);
+                  },
                   child: Container(
                     width: size.width * .13,
                     decoration: BoxDecoration(
@@ -224,7 +224,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text('Refresh '),
+                          Text('Refresh To All'),
                           SizedBox(
                             width: size.width * .02,
                           ),
@@ -380,24 +380,25 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
+                              Navigator.pop(context);
                               setState(() => _isLoading = true);
                               firebaseProvider
-                                  .deleteContentBannerData(
+                                  .deleteBannerData(
                                       _filteredList[index].id!, context)
                                   .then((value) {
                                 if (value == true) {
                                   firebase_storage.FirebaseStorage.instance
                                       .ref()
-                                      .child('ContentBanner')
+                                      .child('Banner')
                                       .child(_filteredList[index].id!)
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
-                                  Navigator.pop(context);
+
                                   showToast('Data deleted successful');
                                 } else {
-                                  setState(() => _isLoading = false);
                                   Navigator.pop(context);
+                                  setState(() => _isLoading = false);
                                   showToast('Data delete unsuccessful');
                                 }
                               });

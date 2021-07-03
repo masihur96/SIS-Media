@@ -39,12 +39,6 @@ class FatchDataHelper extends ChangeNotifier {
   List<IndexBannerModel> _indexdataList = [];
   get indexdataList => _indexdataList;
 
-  // List<IndexBannerModel> _contentdataList = [];
-  // get contentdataList => _contentdataList;
-
-  // List<IndexBannerModel> _popUpdataList = [];
-  // get popUpdataList => _popUpdataList;
-
   List<UserRequestModel> _userRequestdataList = [];
   get userRequestdataList => _userRequestdataList;
 
@@ -71,53 +65,6 @@ class FatchDataHelper extends ChangeNotifier {
       return [];
     }
   }
-
-  // Future<List<IndexBannerModel>> fetchContentData() async {
-  //   try {
-  //     await FirebaseFirestore.instance
-  //         .collection('Banner')
-  //         .get()
-  //         .then((snapshot) {
-  //       _contentdataList.clear();
-  //       snapshot.docChanges.forEach((element) {
-  //         IndexBannerModel indexBannerModel = IndexBannerModel(
-  //           image: element.doc['image'],
-  //           id: element.doc['id'],
-  //           status: element.doc['status'],
-  //           date: element.doc['date'],
-  //           category: element.doc['category'],
-  //         );
-  //         _contentdataList.add(indexBannerModel);
-  //       });
-  //     });
-  //     return contentdataList;
-  //   } catch (error) {
-  //     return [];
-  //   }
-  // }
-
-  // Future<List<IndexBannerModel>> fetchPopUpData() async {
-  //   try {
-  //     await FirebaseFirestore.instance
-  //         .collection('PopUpBanner')
-  //         .get()
-  //         .then((snapshot) {
-  //       _popUpdataList.clear();
-  //       snapshot.docChanges.forEach((element) {
-  //         IndexBannerModel indexBannerModel = IndexBannerModel(
-  //           image: element.doc['image'],
-  //           id: element.doc['id'],
-  //           status: element.doc['status'],
-  //           date: element.doc['date'],
-  //         );
-  //         _popUpdataList.add(indexBannerModel);
-  //       });
-  //     });
-  //     return popUpdataList;
-  //   } catch (error) {
-  //     return [];
-  //   }
-  // }
 
   Future<List<FilmMediaModel>> fetchFilmMediaData() async {
     try {
@@ -266,7 +213,7 @@ class FatchDataHelper extends ChangeNotifier {
   Future<List<AudioMediaModel>> fetchAudioData() async {
     try {
       await FirebaseFirestore.instance
-          .collection('AudioMediaData')
+          .collection('AudioData')
           .orderBy('name')
           .get()
           .then((snapshot) {
@@ -297,7 +244,9 @@ class FatchDataHelper extends ChangeNotifier {
               date: element.doc['date'],
               ddgNews: element.doc['ddgNews'],
               ddgprogram: element.doc['ddgProgram'],
+              category: element.doc['category'],
               subCategory: element.doc['sub-category']);
+
           _audioMediadataList.add(audioMediaModel);
         });
       });
@@ -317,35 +266,35 @@ class FatchDataHelper extends ChangeNotifier {
         _audioRateChartList.clear();
         snapshot.docChanges.forEach((element) {
           AudioRateChartModel audioRateChartModel = AudioRateChartModel(
-            channelName: element.doc['channelName'],
-            companyName: element.doc['companyName'],
-            address: element.doc['address'],
-            phone: element.doc['phone'],
-            fax: element.doc['fax'],
-            email: element.doc['email'],
-            web: element.doc['web'],
-            regionalOffice: element.doc['regionalOffice'],
-            effectiveForm: element.doc['effectiveForm'],
-            rateFore: element.doc['rateFore'],
-            kendroName: element.doc['kendroName'],
-            spotDuration: element.doc['spotDuration'],
-            perSpot: element.doc['perSpot'],
-            sponsorFor: element.doc['sponsorFor'],
-            newsTime: element.doc['newsTime'],
-            midBreak: element.doc['midBreak'],
-            duration: element.doc['duration'],
-            time: element.doc['time'],
-            peakHour: element.doc['peakHour'],
-            offPeakHour: element.doc['offPeakHour'],
-            termsCondition: element.doc['termsCondition'],
-            branding: element.doc['branding'],
-            broadCastTime: element.doc['broadCastTime'],
-            RDC: element.doc['RDC'],
-            endorsement: element.doc['endorsement'],
-            id: element.doc['id'],
-            status: element.doc['status'],
-            date: element.doc['date'],
-          );
+              channelName: element.doc['channelName'],
+              companyName: element.doc['companyName'],
+              address: element.doc['address'],
+              phone: element.doc['phone'],
+              fax: element.doc['fax'],
+              email: element.doc['email'],
+              web: element.doc['web'],
+              regionalOffice: element.doc['regionalOffice'],
+              effectiveForm: element.doc['effectiveForm'],
+              rateFore: element.doc['rateFore'],
+              kendroName: element.doc['kendroName'],
+              spotDuration: element.doc['spotDuration'],
+              perSpot: element.doc['perSpot'],
+              sponsorFor: element.doc['sponsorFor'],
+              newsTime: element.doc['newsTime'],
+              midBreak: element.doc['midBreak'],
+              duration: element.doc['duration'],
+              time: element.doc['time'],
+              peakHour: element.doc['peakHour'],
+              offPeakHour: element.doc['offPeakHour'],
+              termsCondition: element.doc['termsCondition'],
+              branding: element.doc['branding'],
+              broadCastTime: element.doc['broadCastTime'],
+              RDC: element.doc['RDC'],
+              endorsement: element.doc['endorsement'],
+              id: element.doc['id'],
+              status: element.doc['status'],
+              date: element.doc['date'],
+              category: element.doc['category']);
           _audioRateChartList.add(audioRateChartModel);
         });
       });

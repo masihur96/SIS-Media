@@ -106,6 +106,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         _subList = fatchDataHelper.importentMediadataList;
         _filteredList = _subList;
       });
+
+      getData(fatchDataHelper);
     }
 
     _filterSubCategoryList('Bangladesh : At A Glance');
@@ -153,15 +155,15 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.white54,
                         bottom: TabBar(
                           labelStyle: TextStyle(
                             fontSize: size.height * .03,
                           ),
                           tabs: _ktabs,
-                          indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.white60,
-                          labelColor: Colors.white,
+                          indicatorColor: Colors.black,
+                          unselectedLabelColor: Colors.blueGrey,
+                          labelColor: Colors.grey,
                         ),
                       ),
                     ),
@@ -257,30 +259,26 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                   ),
                   Align(
                     alignment: Alignment.topRight,
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         getData(fatchDataHelper);
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Container(
-                          // width: size.width * .1,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(color: Colors.blueGrey)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text('Refresh '),
-                                SizedBox(
-                                  width: size.width * .02,
-                                ),
-                                Icon(Icons.refresh_outlined),
-                              ],
-                            ),
+                      child: Container(
+                        // width: size.width * .1,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.blueGrey)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Refresh '),
+                              SizedBox(
+                                width: size.width * .02,
+                              ),
+                              Icon(Icons.refresh_outlined),
+                            ],
                           ),
                         ),
                       ),
@@ -768,12 +766,12 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 10),
+                              horizontal: 50, vertical: 7),
                           child: Text(
                             'SUBMIT',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: size.height * .04,
+                              fontSize: size.height * .03,
                             ),
                           ),
                         ),
@@ -856,7 +854,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width > 1200 ? size.width * .4 : size.width * .5,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -879,7 +877,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                 ),
               ),
               Container(
-                width: size.width > 1200 ? size.width * .4 : size.width * .5,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

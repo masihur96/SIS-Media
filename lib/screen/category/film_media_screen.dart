@@ -88,18 +88,20 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       await fatchDataHelper.fetchFilmMediaData().then((value) {
         setState(() {
           _subList = fatchDataHelper.filmMediadataList;
-
           _filteredList = _subList;
+          _filterSubCategoryList('Film Institution');
           _isLoading = false;
         });
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
+        _filterSubCategoryList('Film Institution');
         _filteredList = _subList;
       });
     }
-    _filterSubCategoryList('Film Institution');
+
+    getData(fatchDataHelper);
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -110,6 +112,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
         _filteredList = _subList;
+        _filterSubCategoryList('Film Institution');
         _isLoading = false;
       });
     });
@@ -149,16 +152,15 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.white54,
                         bottom: TabBar(
-                          labelStyle: TextStyle(
-                            fontSize: size.height * .03,
-                          ),
-                          tabs: _ktabs,
-                          indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.white60,
-                          labelColor: Colors.white,
-                        ),
+                            labelStyle: TextStyle(
+                              fontSize: size.height * .03,
+                            ),
+                            tabs: _ktabs,
+                            indicatorColor: Colors.black,
+                            unselectedLabelColor: Colors.blueGrey,
+                            labelColor: Colors.black),
                       ),
                     ),
                     body: TabBarView(children: [
@@ -254,30 +256,27 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                   ),
                   Align(
                     alignment: Alignment.topRight,
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         getData(fatchDataHelper);
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Container(
-                          // width: size.width * .1,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(color: Colors.blueGrey)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text('Refresh '),
-                                SizedBox(
-                                  width: size.width * .02,
-                                ),
-                                Icon(Icons.refresh_outlined),
-                              ],
-                            ),
+                      child: Container(
+                        // width: size.width * .1,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.blueGrey)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Refresh '),
+                              SizedBox(
+                                width: size.width * .02,
+                              ),
+                              Icon(Icons.refresh_outlined),
+                            ],
                           ),
                         ),
                       ),
@@ -499,6 +498,8 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                             _filteredList[index].hallname;
                         dataProvider.filmMediaModel.image =
                             _filteredList[index].image;
+                        dataProvider.filmMediaModel.status =
+                            _filteredList[index].status;
                       },
                       style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
@@ -752,12 +753,12 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 10),
+                              horizontal: 50, vertical: 7),
                           child: Text(
                             'SUBMIT',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: size.height * .04,
+                              fontSize: size.height * .03,
                             ),
                           ),
                         ),
@@ -896,7 +897,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width > 1200 ? size.width * .4 : size.width * .5,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -918,7 +919,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                 ),
               ),
               Container(
-                width: size.width > 1200 ? size.width * .4 : size.width * .5,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

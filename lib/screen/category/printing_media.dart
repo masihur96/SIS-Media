@@ -102,6 +102,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
         _subList = fatchDataHelper.printMediaDataList;
         _filteredList = _subList;
       });
+      getData(fatchDataHelper);
     }
 
     _filterSubCategoryList('Daily News Paper');
@@ -149,15 +150,15 @@ class _PrintingMediaState extends State<PrintingMedia> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.white54,
                         bottom: TabBar(
                           labelStyle: TextStyle(
                             fontSize: size.height * .03,
                           ),
                           tabs: _ktabs,
-                          indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.white60,
-                          labelColor: Colors.white,
+                          indicatorColor: Colors.black,
+                          unselectedLabelColor: Colors.blueGrey,
+                          labelColor: Colors.black,
                         ),
                       ),
                     ),
@@ -253,30 +254,26 @@ class _PrintingMediaState extends State<PrintingMedia> {
                   ),
                   Align(
                     alignment: Alignment.topRight,
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         getData(fatchDataHelper);
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Container(
-                          // width: size.width * .1,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              border: Border.all(color: Colors.blueGrey)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text('Refresh '),
-                                SizedBox(
-                                  width: size.width * .02,
-                                ),
-                                Icon(Icons.refresh_outlined),
-                              ],
-                            ),
+                      child: Container(
+                        // width: size.width * .1,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.blueGrey)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Refresh '),
+                              SizedBox(
+                                width: size.width * .02,
+                              ),
+                              Icon(Icons.refresh_outlined),
+                            ],
                           ),
                         ),
                       ),
@@ -759,12 +756,12 @@ class _PrintingMediaState extends State<PrintingMedia> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 10),
+                              horizontal: 50, vertical: 7),
                           child: Text(
                             'SUBMIT',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: size.height * .04,
+                              fontSize: size.height * .03,
                             ),
                           ),
                         ),
@@ -848,7 +845,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width > 1200 ? size.width * .4 : size.width * .5,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -871,7 +868,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                 ),
               ),
               Container(
-                width: size.width > 1200 ? size.width * .4 : size.width * .5,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

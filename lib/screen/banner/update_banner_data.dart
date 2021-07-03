@@ -20,14 +20,17 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
   String imageUrl = '';
   String? error;
   String name = '';
-  List staatus = ['Public', 'Private'];
-  String statusValue = 'Public';
+
+  List staatus = ['public', 'private'];
+  String statusValue = '';
 
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    statusValue = dataProvider.indexBannerModel.status.toString();
   }
 
   @override
@@ -232,7 +235,7 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('IndexBanner')
+          .child('Banner')
           .child(dataProvider.indexBannerModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -273,12 +276,12 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Content Media Screen";
+          dataProvider.subCategory = "Index Banner";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Content Media Screen";
+          dataProvider.subCategory = "Index Banner";
           showToast('Data update failed!');
         }
       });

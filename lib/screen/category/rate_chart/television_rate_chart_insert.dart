@@ -262,13 +262,13 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
                     setState(() {});
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 10),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 50, vertical: 7),
                     child: Text(
                       'SUBMIT',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: size.height * .04,
+                        fontSize: size.height * .03,
                       ),
                     ),
                   ),
@@ -276,6 +276,9 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
                     primary: Colors.grey,
                   ),
                 ),
+          SizedBox(
+            height: size.height * .04,
+          ),
         ],
       ),
     );

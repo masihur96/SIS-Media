@@ -61,6 +61,8 @@ flutter:
     - images/atnbanglalogo.jpg
     - images/icon_warning.png
     - images/insert_image_icon.png
+    - images/book.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

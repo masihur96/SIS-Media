@@ -64,8 +64,6 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
   TextEditingController _designation = TextEditingController(text: '');
   TextEditingController _hallname = TextEditingController(text: '');
 
-  List staatus = ['Public', 'Private'];
-
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   Uint8List? data;
@@ -74,7 +72,8 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
   String? error;
   String name = '';
 
-  String statusValue = 'Public';
+  List staatus = ['public', 'private'];
+  String statusValue = '';
 
   int counter = 0;
   customInit(DataProvider dataProvider) async {
@@ -94,6 +93,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
     _facebook.text = dataProvider.filmMediaModel.facebook!;
     _designation.text = dataProvider.filmMediaModel.designation!;
     _hallname.text = dataProvider.filmMediaModel.hallname!;
+    statusValue = dataProvider.filmMediaModel.status.toString();
   }
 
   @override
@@ -107,8 +107,8 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
       customInit(dataProvider);
     }
     return Container(
+      width: dataProvider.pageWidth(size),
       height: size.height,
-      width: size.width * .8,
       color: Colors.blueGrey,
       child: Column(
         children: [
@@ -231,12 +231,12 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 50, vertical: 10),
+                                    horizontal: 50, vertical: 7),
                                 child: Text(
                                   'UPDATE',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: size.height * .04,
+                                    fontSize: size.height * .03,
                                   ),
                                 ),
                               ),
@@ -349,12 +349,12 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Film Media Screen";
+          dataProvider.subCategory = "Film Media";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Film Media Screen";
+          dataProvider.subCategory = "Film Media";
           showToast('Data update failed!');
         }
       });
@@ -370,7 +370,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -392,7 +392,7 @@ class _UpdateFilmMediaDataPageState extends State<UpdateFilmMediaDataPage> {
                 ),
               ),
               Container(
-                width: size.width * .4,
+                width: size.width > 1200 ? size.width * .415 : size.width * .5,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

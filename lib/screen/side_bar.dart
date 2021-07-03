@@ -10,7 +10,7 @@ class SideBar extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     return Container(
-      width: size.width < 1200 ? 0.0 : size.width * .2,
+      width: size.width < 1200 ? 0.0 : size.width * .17,
       height: size.height,
       color: Colors.blueGrey,
       //color: Colors.white,

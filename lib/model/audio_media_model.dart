@@ -1,6 +1,4 @@
-
-class AudioMediaModel{
-
+class AudioMediaModel {
   String? id;
   String? name;
   String? address;
@@ -26,34 +24,34 @@ class AudioMediaModel{
   String? ddgNews;
   String? ddgprogram;
   String? subCategory;
+  String? category;
 
-AudioMediaModel(
-      {
-         this.id,
-         this.name,
-         this.address,
-         this.pabx,
-         this.email,
-         this.web,
-         this.fax,
-         this.phone,
-         this.mobile,
-         this.contact,
-         this.facebook,
-         this.image,
-         this.chiefEngineer,
-         this.director,
-         this.regionalStation,
-         this.salesContact,
-         this.whatApp,
-         this.hotlineNumber,
-         this.businessType,
-         this.channelName,
-         this.status,
-         this.date,
-         this.ddgNews,
-         this.ddgprogram,
-         this.subCategory,
-      }
-      );
+  AudioMediaModel({
+    this.id,
+    this.name,
+    this.address,
+    this.pabx,
+    this.email,
+    this.web,
+    this.fax,
+    this.phone,
+    this.mobile,
+    this.contact,
+    this.facebook,
+    this.image,
+    this.chiefEngineer,
+    this.director,
+    this.regionalStation,
+    this.salesContact,
+    this.whatApp,
+    this.hotlineNumber,
+    this.businessType,
+    this.channelName,
+    this.status,
+    this.date,
+    this.ddgNews,
+    this.ddgprogram,
+    this.subCategory,
+    this.category,
+  });
 }

@@ -130,15 +130,15 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                       preferredSize: Size.fromHeight(50),
                       child: AppBar(
                         elevation: 0.0,
-                        backgroundColor: Colors.blueGrey,
+                        backgroundColor: Colors.white54,
                         bottom: TabBar(
                           labelStyle: TextStyle(
                             fontSize: size.height * .03,
                           ),
                           tabs: _ktabs,
-                          indicatorColor: Colors.white,
-                          unselectedLabelColor: Colors.white60,
-                          labelColor: Colors.white,
+                          indicatorColor: Colors.black,
+                          unselectedLabelColor: Colors.blueGrey,
+                          labelColor: Colors.black,
                         ),
                       ),
                     ),
@@ -208,12 +208,12 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: GestureDetector(
-                onTap: () {
-                  getData(fatchDataHelper);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: InkWell(
+                  onTap: () {
+                    getData(fatchDataHelper);
+                  },
                   child: Container(
                     width: size.width * .13,
                     decoration: BoxDecoration(
@@ -224,7 +224,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text('Refresh '),
+                          Text('Refresh To All'),
                           SizedBox(
                             width: size.width * .02,
                           ),
@@ -379,24 +379,24 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () {
+                              Navigator.pop(context);
                               setState(() => _isLoading = true);
                               firebaseProvider
-                                  .deleteIndexBannerData(
+                                  .deleteBannerData(
                                       _filteredList[index].id!, context)
                                   .then((value) {
                                 if (value == true) {
                                   firebase_storage.FirebaseStorage.instance
                                       .ref()
-                                      .child('IndexBanner')
+                                      .child('Banner')
                                       .child(_filteredList[index].id!)
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
-                                  Navigator.pop(context);
                                   showToast('Data deleted successful');
                                 } else {
-                                  setState(() => _isLoading = false);
                                   Navigator.pop(context);
+                                  setState(() => _isLoading = false);
                                   showToast('Data delete unsuccessful');
                                 }
                               });
@@ -666,7 +666,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
         'id': uuid!,
         'date': dateData,
         'category': categoryValue == 'IndexTop' ? 'indextop' : 'indexbottom',
-        'status': statusValue.toLowerCase(),
+        'status': statusValue,
       };
       await firebaseProvider.addBannerData(map).then((value) {
         if (value) {
