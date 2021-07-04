@@ -124,8 +124,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         _filterSubCategoryList('Television Channel');
       });
     }
-
-    getData(fatchDataHelper);
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -315,6 +313,20 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             ),
             dropdownValue == 'Rate Chart'
                 ? AllDataTelevisionRate()
+                :     _isLoading
+                ? Container(
+                    child: Column(
+                    children: [
+                      SizedBox(
+                        height: size.height * .4,
+                      ),
+                      fadingCircle,
+                      Text(
+                        'Please Wait ..........',
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
+                    ],
+                  ))
                 : _filteredList.isEmpty
                     ? Container(
                         child: Column(
@@ -327,21 +339,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                                   color: Colors.grey)),
                         ],
                       ))
-                    : _isLoading
-                        ? Container(
-                            child: Column(
-                            children: [
-                              SizedBox(
-                                height: size.height * .4,
-                              ),
-                              fadingCircle,
-                              Text(
-                                'Please Wait ..........',
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.black),
-                              ),
-                            ],
-                          ))
                         : Expanded(
                             child: SizedBox(
                               height: 500.0,
@@ -760,8 +757,10 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                                       .child(dataProvider.subCategory)
                                       .child(_filteredList[index].id!)
                                       .delete();
+
+                                  _filteredList.removeWhere((item) =>
+                                      item.id == _filteredList[index].id!);
                                   setState(() => _isLoading = false);
-                                  getData(fatchDataHelper);
 
                                   showToast('Data deleted successful');
                                 } else {
@@ -974,8 +973,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                         ))
                       : ElevatedButton(
                           onPressed: () {
-                           final String  uuid = Uuid().v1();
-                            uploadData(dataProvider, firebaseProvider,uuid);
+                            final String uuid = Uuid().v1();
+                            uploadData(dataProvider, firebaseProvider, uuid);
                             setState(() {
                               data = null;
                             });
@@ -1005,8 +1004,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         ),
       );
 
-  Future<void> _submitData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider,String uuid) async {
+  Future<void> _submitData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -1118,15 +1117,10 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     });
   }
 
-  Future<void> uploadData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider,String uuid) async {
+  Future<void> uploadData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data == null) {
-      _submitData(
-        dataProvider,
-        firebaseProvider,
-        uuid
-
-      );
+      _submitData(dataProvider, firebaseProvider, uuid);
     } else {
       setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
@@ -1144,11 +1138,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(
-            dataProvider,
-            firebaseProvider,
-            uuid
-          );
+          _submitData(dataProvider, firebaseProvider, uuid);
         });
       });
     }

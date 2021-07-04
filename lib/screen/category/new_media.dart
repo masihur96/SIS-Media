@@ -94,6 +94,7 @@ class _NewMediaState extends State<NewMedia> {
         setState(() {
           _subList = fatchDataHelper.newMediadataList;
           _filteredList = _subList;
+          _filterSubCategoryList('Digital Audio - Video Content Provider');
           _isLoading = false;
         });
       });
@@ -101,11 +102,10 @@ class _NewMediaState extends State<NewMedia> {
       setState(() {
         _subList = fatchDataHelper.newMediadataList;
         _filteredList = _subList;
+        _filterSubCategoryList('Digital Audio - Video Content Provider');
+        _isLoading = false;
       });
-      getData(fatchDataHelper);
     }
-
-    _filterSubCategoryList('Digital Audio - Video Content Provider');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -281,30 +281,30 @@ class _NewMediaState extends State<NewMedia> {
                 ],
               ),
             ),
-            _filteredList.isEmpty
+                _isLoading
                 ? Container(
                     child: Column(
                     children: [
-                      SizedBox(height: 200),
-                      Text("Item is Not Found",
-                          style: TextStyle(
-                              fontSize: 25,
-                              letterSpacing: 2,
-                              color: Colors.grey)),
+                      SizedBox(
+                        height: size.height * .4,
+                      ),
+                      fadingCircle,
+                      Text(
+                        'Please Wait ..........',
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
                     ],
                   ))
-                : _isLoading
+                : _filteredList.isEmpty
                     ? Container(
                         child: Column(
                         children: [
-                          SizedBox(
-                            height: size.height * .4,
-                          ),
-                          fadingCircle,
-                          Text(
-                            'Please Wait ..........',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
+                          SizedBox(height: 200),
+                          Text("Item is Not Found",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  letterSpacing: 2,
+                                  color: Colors.grey)),
                         ],
                       ))
                     : Expanded(
@@ -585,8 +585,9 @@ class _NewMediaState extends State<NewMedia> {
                                       .child(dataProvider.subCategory)
                                       .child(_filteredList[index].id!)
                                       .delete();
+                                  _filteredList.removeWhere((item) =>
+                                      item.id == _filteredList[index].id!);
                                   setState(() => _isLoading = false);
-                                  getData(fatchDataHelper);
 
                                   showToast('Data deleted successful');
                                 } else {

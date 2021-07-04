@@ -96,12 +96,10 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     } else {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
-        _filterSubCategoryList('Film Institution');
         _filteredList = _subList;
+        _filterSubCategoryList('Film Institution');
       });
     }
-
-    getData(fatchDataHelper);
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -281,30 +279,30 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                 ],
               ),
             ),
-            _filteredList.isEmpty
+            _isLoading
                 ? Container(
                     child: Column(
                     children: [
-                      SizedBox(height: 200),
-                      Text("Item is Not Found",
-                          style: TextStyle(
-                              fontSize: 25,
-                              letterSpacing: 2,
-                              color: Colors.grey)),
+                      SizedBox(
+                        height: size.height * .4,
+                      ),
+                      fadingCircle,
+                      Text(
+                        'Please Wait ..........',
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
                     ],
                   ))
-                : _isLoading
+                : _filteredList.isEmpty
                     ? Container(
                         child: Column(
                         children: [
-                          SizedBox(
-                            height: size.height * .4,
-                          ),
-                          fadingCircle,
-                          Text(
-                            'Please Wait ..........',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
+                          SizedBox(height: 200),
+                          Text("Item is Not Found",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  letterSpacing: 2,
+                                  color: Colors.grey)),
                         ],
                       ))
                     : Expanded(
@@ -466,6 +464,8 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                         dataProvider.category = dataProvider.subCategory;
                         dataProvider.subCategory = "Update Film Media";
 
+                        //    fatchDataHelper.filmMediadataList
+
                         dataProvider.filmMediaModel.id =
                             _filteredList[index].id;
                         dataProvider.filmMediaModel.name =
@@ -546,9 +546,10 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                                         .child(dataProvider.subCategory)
                                         .child(_filteredList[index].id!)
                                         .delete();
-                                    setState(() => _isLoading = false);
 
-                                    getData(fatchDataHelper);
+                                    _filteredList.removeWhere((item) =>
+                                        item.id == _filteredList[index].id!);
+                                    setState(() => _isLoading = false);
 
                                     showToast('Data deleted successful');
                                   } else {

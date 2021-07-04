@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
+import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -105,6 +106,8 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
+    final FatchDataHelper fatchDataHelper =
+        Provider.of<FatchDataHelper>(context);
     Size size = MediaQuery.of(context).size;
     if (counter == 0) {
       customInit(dataProvider);
@@ -230,7 +233,8 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
                               height: size.height * .06, child: fadingCircle)
                           : ElevatedButton(
                               onPressed: () {
-                                updateData(dataProvider, firebaseProvider);
+                                updateData(dataProvider, firebaseProvider,
+                                    fatchDataHelper);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -386,9 +390,9 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   }
 
   Future<void> _submitData(
-    DataProvider dataProvider,
-    FirebaseProvider firebaseProvider,
-  ) async {
+      DataProvider dataProvider,
+      FirebaseProvider firebaseProvider,
+      FatchDataHelper fatchDataHelper) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -414,7 +418,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
         'date': dateData,
       };
       setState(() => _isLoading = true);
-      await firebaseProvider
+      await fatchDataHelper
           .updatePrintMediaData(mapData, context)
           .then((value) {
         if (value) {
@@ -434,15 +438,14 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
   }
 
   Future<void> updateData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+      DataProvider dataProvider,
+      FirebaseProvider firebaseProvider,
+      FatchDataHelper fatchDataHelper) async {
     if (data == null) {
       setState(() {
         imageUrl = dataProvider.printMediaModel.image!;
       });
-      _submitData(
-        dataProvider,
-        firebaseProvider,
-      );
+      _submitData(dataProvider, firebaseProvider, fatchDataHelper);
     } else {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
@@ -459,10 +462,7 @@ class _UpdatePrintMediaState extends State<UpdatePrintMedia> {
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(
-            dataProvider,
-            firebaseProvider,
-          );
+          _submitData(dataProvider, firebaseProvider, fatchDataHelper);
         });
       });
     }

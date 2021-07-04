@@ -10,6 +10,7 @@ import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
 import 'package:media_directory_admin/model/television_rate_chart_model.dart';
 import 'package:media_directory_admin/model/user_request_model.dart';
+import 'package:media_directory_admin/widgets/notificastion.dart';
 
 class FatchDataHelper extends ChangeNotifier {
   List<FilmMediaModel> _filmMediadataList = [];
@@ -100,6 +101,110 @@ class FatchDataHelper extends ChangeNotifier {
       return filmMediadataList;
     } catch (error) {
       return [];
+    }
+  }
+
+  Future<bool> updateData(Map<String, String> map, BuildContext context) async {
+    try {
+      filmMediadataList.clear();
+      await FirebaseFirestore.instance
+          .collection('FilmMediaData')
+          .doc(map['id'])
+          .update(map);
+
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateTelevisionMediaData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      televisionMediadataList.clear();
+      await FirebaseFirestore.instance
+          .collection('TelevisionMediaData')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateAudioMediaData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      audioMediadataList.clear();
+      await FirebaseFirestore.instance
+          .collection('AudioData')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updatePrintMediaData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      printMediaDataList.clear();
+      await FirebaseFirestore.instance
+          .collection('PrintMediaData')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateNewMediaData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      newMediadataList.clear();
+      await FirebaseFirestore.instance
+          .collection('NewMediaData')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateImportentEmergencyData(
+      Map<String, String> map, BuildContext context) async {
+    try {
+      importentMediadataList.clear();
+      await FirebaseFirestore.instance
+          .collection('ImportentEmergency')
+          .doc(map['id'])
+          .update(map);
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteImportentEmergencyData(
+      String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ImportentEmergency')
+          .doc(id)
+          .delete();
+      return true;
+    } catch (error) {
+      showToast(error.toString());
+      return false;
     }
   }
 

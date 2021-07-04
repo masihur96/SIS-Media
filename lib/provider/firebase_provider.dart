@@ -143,32 +143,32 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateData(Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('FilmMediaData')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updateData(Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('FilmMediaData')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
-  Future<bool> updateTelevisionMediaData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('TelevisionMediaData')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updateTelevisionMediaData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('TelevisionMediaData')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> updateTelevisionMediaRateChartData(
       Map<String, String> map, BuildContext context) async {
@@ -184,19 +184,19 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateAudioMediaData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('AudioData')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updateAudioMediaData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('AudioData')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> updateAudioMediaRateChartData(
       Map<String, String> map, BuildContext context) async {
@@ -212,47 +212,47 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updatePrintMediaData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('PrintMediaData')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updatePrintMediaData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('PrintMediaData')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
-  Future<bool> updateNewMediaData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('NewMediaData')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updateNewMediaData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('NewMediaData')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
-  Future<bool> updateImportentEmergencyData(
-      Map<String, String> map, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('ImportentEmergency')
-          .doc(map['id'])
-          .update(map);
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> updateImportentEmergencyData(
+  //     Map<String, String> map, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('ImportentEmergency')
+  //         .doc(map['id'])
+  //         .update(map);
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> updateBanerData(
       Map<String, String> map, BuildContext context) async {
@@ -385,19 +385,19 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> deleteImportentEmergencyData(
-      String id, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('ImportentEmergency')
-          .doc(id)
-          .delete();
-      return true;
-    } catch (error) {
-      showToast(error.toString());
-      return false;
-    }
-  }
+  // Future<bool> deleteImportentEmergencyData(
+  //     String id, BuildContext context) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('ImportentEmergency')
+  //         .doc(id)
+  //         .delete();
+  //     return true;
+  //   } catch (error) {
+  //     showToast(error.toString());
+  //     return false;
+  //   }
+  // }
 
   Future<bool> deleteBannerData(String id, BuildContext context) async {
     try {
