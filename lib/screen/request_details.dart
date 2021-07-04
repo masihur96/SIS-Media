@@ -186,6 +186,10 @@ class _RequestPageState extends State<RequestPage> {
                         height: size.height * .4,
                       ),
                       fadingCircle,
+                      Text(
+                        'Please Wait ..........',
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
                     ],
                   ))
                 : Expanded(

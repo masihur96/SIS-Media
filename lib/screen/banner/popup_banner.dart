@@ -28,8 +28,6 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
   List categorys = ['Top', 'Bottom'];
   String categoryValue = 'Top';
 
-  String? uuid;
-
   final _ktabs = <Tab>[
     const Tab(
       text: 'All Banner',
@@ -196,6 +194,10 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                       height: size.height * .4,
                     ),
                     fadingCircle,
+                    Text(
+                      'Please Wait ..........',
+                      style: TextStyle(fontSize: 15, color: Colors.black),
+                    ),
                   ],
                 ))
               : Expanded(
@@ -501,8 +503,8 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                         : ElevatedButton(
                             onPressed: () {
                               _isLoading = true;
-                              uuid = Uuid().v1();
-                              uploadData(firebaseProvider);
+                              final String uuid = Uuid().v1();
+                              uploadData(firebaseProvider, uuid);
                               setState(() {
                                 data = null;
                               });
@@ -529,14 +531,15 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
     );
   }
 
-  Future<void> uploadData(FirebaseProvider firebaseProvider) async {
+  Future<void> uploadData(
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
       _isLoading = true;
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
           .child('Banner')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -547,22 +550,21 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(
-            firebaseProvider,
-          );
+          _submitData(firebaseProvider, uuid);
         });
       });
     }
   }
 
-  Future<void> _submitData(FirebaseProvider firebaseProvider) async {
+  Future<void> _submitData(
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
       setState(() => _isLoading = true);
       Map<String, String> map = {
         'image': imageUrl,
-        'id': uuid!,
+        'id': uuid,
         'date': dateData,
         'category': 'popup',
         'status': statusValue.toLowerCase(),

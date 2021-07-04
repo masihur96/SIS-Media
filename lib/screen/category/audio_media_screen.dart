@@ -224,7 +224,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                           // mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Please Select Your Sub-Category : ",
+                              "Sub-Category : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -327,6 +327,11 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                                 height: size.height * .4,
                               ),
                               fadingCircle,
+                              Text(
+                                'Please Wait ..........',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
                             ],
                           ))
                         : Expanded(
@@ -865,8 +870,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                         ))
                       : ElevatedButton(
                           onPressed: () {
-                            uuid = Uuid().v1();
-                            uploadData(dataProvider, firebaseProvider);
+                            final String uuid = Uuid().v1();
+                            uploadData(dataProvider, firebaseProvider, uuid);
                             setState(() {
                               data = null;
                             });
@@ -896,19 +901,16 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         ),
       );
 
-  Future<void> uploadData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> uploadData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data == null) {
-      _submitData(
-        dataProvider,
-        firebaseProvider,
-      );
+      _submitData(dataProvider, firebaseProvider, uuid);
     } else {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
           .child('AudioData')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -919,17 +921,14 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(
-            dataProvider,
-            firebaseProvider,
-          );
+          _submitData(dataProvider, firebaseProvider, uuid);
         });
       });
     }
   }
 
-  Future<void> _submitData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> _submitData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -954,7 +953,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         'hotlineNumber': _hotline_number.text,
         'businessType': _business_type.text,
         'channelName': _channelName.text,
-        'id': uuid!,
+        'id': uuid,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'status': statusValue.toLowerCase(),

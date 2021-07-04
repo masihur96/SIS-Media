@@ -27,8 +27,6 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
   List categorys = ['ContentTop', 'ContentBottom'];
   String categoryValue = 'ContentTop';
 
-  String? uuid;
-
   final _ktabs = <Tab>[
     const Tab(
       text: 'All Banner',
@@ -247,6 +245,10 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       height: size.height * .4,
                     ),
                     fadingCircle,
+                    Text(
+                      'Please Wait ..........',
+                      style: TextStyle(fontSize: 15, color: Colors.black),
+                    ),
                   ],
                 ))
               : Expanded(
@@ -607,8 +609,8 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                         : ElevatedButton(
                             onPressed: () {
                               _isLoading = true;
-                              uuid = Uuid().v1();
-                              uploadData(firebaseProvider);
+                              final String uuid = Uuid().v1();
+                              uploadData(firebaseProvider, uuid);
                               setState(() {
                                 data = null;
                               });
@@ -634,14 +636,15 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
     );
   }
 
-  Future<void> uploadData(FirebaseProvider firebaseProvider) async {
+  Future<void> uploadData(
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
       setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
           .child('Banner')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -652,9 +655,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(
-            firebaseProvider,
-          );
+          _submitData(firebaseProvider, uuid);
         });
       });
     } else {
@@ -662,13 +663,14 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
     }
   }
 
-  Future<void> _submitData(FirebaseProvider firebaseProvider) async {
+  Future<void> _submitData(
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
       Map<String, String> map = {
         'image': imageUrl,
-        'id': uuid!,
+        'id': uuid,
         'date': dateData,
         'category':
             categoryValue == 'ContentTop' ? 'contenttop' : 'contentbottom',

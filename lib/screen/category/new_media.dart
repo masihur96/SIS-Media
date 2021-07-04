@@ -49,7 +49,7 @@ class _NewMediaState extends State<NewMedia> {
   ];
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
-  String? uuid;
+
   String name = '';
   String? error;
   Uint8List? data;
@@ -207,7 +207,7 @@ class _NewMediaState extends State<NewMedia> {
                           // mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Please Select Your Sub-Category : ",
+                              "Sub-Category : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -301,6 +301,10 @@ class _NewMediaState extends State<NewMedia> {
                             height: size.height * .4,
                           ),
                           fadingCircle,
+                          Text(
+                            'Please Wait ..........',
+                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          ),
                         ],
                       ))
                     : Expanded(
@@ -767,8 +771,8 @@ class _NewMediaState extends State<NewMedia> {
                     ? Container(child: fadingCircle)
                     : ElevatedButton(
                         onPressed: () {
-                          uuid = Uuid().v1();
-                          uploadData(dataProvider, firebaseProvider);
+                          final String uuid = Uuid().v1();
+                          uploadData(dataProvider, firebaseProvider, uuid);
                           setState(() {
                             data = null;
                           });
@@ -796,8 +800,8 @@ class _NewMediaState extends State<NewMedia> {
           ),
         ),
       );
-  Future<void> _submitData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> _submitData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -820,7 +824,7 @@ class _NewMediaState extends State<NewMedia> {
         'designation': _designation.text,
         'deathList': _deathList.text,
         'youtuveChannel': _youtubeChannel.text,
-        'id': uuid!,
+        'id': uuid,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'date': dateData,
@@ -993,12 +997,13 @@ class _NewMediaState extends State<NewMedia> {
     });
   }
 
-  Future<void> uploadData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> uploadData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data == null) {
       _submitData(
         dataProvider,
         firebaseProvider,
+        uuid,
       );
     } else {
       setState(() => _isLoading = true);
@@ -1006,7 +1011,7 @@ class _NewMediaState extends State<NewMedia> {
           .FirebaseStorage.instance
           .ref()
           .child('NewMediaData')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -1020,6 +1025,7 @@ class _NewMediaState extends State<NewMedia> {
           _submitData(
             dataProvider,
             firebaseProvider,
+            uuid,
           );
         });
       });

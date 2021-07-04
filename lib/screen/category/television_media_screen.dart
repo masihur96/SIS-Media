@@ -72,8 +72,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   String channelValue = 'Bangladesh Television';
 
   List televisions = Variables().getTelevisionList();
-
-  String? uuid;
   String name = '';
   String? error;
   Uint8List? data;
@@ -231,7 +229,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              "Please Select Your Sub-Category : ",
+                              "Sub-Category : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -337,6 +335,11 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                                 height: size.height * .4,
                               ),
                               fadingCircle,
+                              Text(
+                                'Please Wait ..........',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
                             ],
                           ))
                         : Expanded(
@@ -971,8 +974,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                         ))
                       : ElevatedButton(
                           onPressed: () {
-                            uuid = Uuid().v1();
-                            uploadData(dataProvider, firebaseProvider);
+                           final String  uuid = Uuid().v1();
+                            uploadData(dataProvider, firebaseProvider,uuid);
                             setState(() {
                               data = null;
                             });
@@ -1003,7 +1006,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       );
 
   Future<void> _submitData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+      DataProvider dataProvider, FirebaseProvider firebaseProvider,String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -1039,7 +1042,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         'regionalOffice': _regionalSalesOffice.text,
         'channelName': _channelName.text,
         'houseName': _houseName.text,
-        'id': uuid!,
+        'id': uuid,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'status': statusValue.toLowerCase(),
@@ -1116,11 +1119,13 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   }
 
   Future<void> uploadData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+      DataProvider dataProvider, FirebaseProvider firebaseProvider,String uuid) async {
     if (data == null) {
       _submitData(
         dataProvider,
         firebaseProvider,
+        uuid
+
       );
     } else {
       setState(() => _isLoading = true);
@@ -1128,7 +1133,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
           .FirebaseStorage.instance
           .ref()
           .child('TelevisionMediaData')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -1142,6 +1147,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
           _submitData(
             dataProvider,
             firebaseProvider,
+            uuid
           );
         });
       });

@@ -41,7 +41,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
 
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
-  String? uuid;
   String name = '';
   String? error;
   Uint8List? data;
@@ -213,7 +212,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           // mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Please Select Your Sub-Category : ",
+                              "Sub-Category : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -307,6 +306,10 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                             height: size.height * .4,
                           ),
                           fadingCircle,
+                          Text(
+                            'Please Wait ..........',
+                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          ),
                         ],
                       ))
                     : Expanded(
@@ -758,8 +761,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       ))
                     : ElevatedButton(
                         onPressed: () {
-                          uuid = Uuid().v1();
-                          uploadData(dataProvider, firebaseProvider);
+                          final String uuid = Uuid().v1();
+                          uploadData(dataProvider, firebaseProvider, uuid);
                           setState(() {
                             data = null;
                           });
@@ -787,8 +790,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
           ),
         ),
       );
-  Future<void> _submitData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> _submitData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -809,7 +812,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         'headOffice': _headOffice.text,
         'position': _position.text,
         'businessType': _businessType.text,
-        'id': uuid!,
+        'id': uuid,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
         'date': dateData,
@@ -970,19 +973,20 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     });
   }
 
-  Future<void> uploadData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> uploadData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data == null) {
       _submitData(
         dataProvider,
         firebaseProvider,
+        uuid,
       );
     } else {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
           .child('ImportentEmergency')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -996,6 +1000,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
           _submitData(
             dataProvider,
             firebaseProvider,
+            uuid,
           );
         });
       });

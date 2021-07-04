@@ -119,8 +119,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   }
 
   List films = Variables().getFilmMediaList();
-  String? uuid;
-  final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +207,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                           // mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "Please Select Your Sub-Category : ",
+                              "Sub-Category : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -245,7 +243,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       ),
                       width: size.width * .3,
                       child: TextField(
-                        controller: myController,
                         decoration: InputDecoration(
                             hintText: "Please Search your Query",
                             prefixIcon: Icon(Icons.search_outlined),
@@ -263,8 +260,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       child: Container(
                         // width: size.width * .1,
                         decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                             border: Border.all(color: Colors.blueGrey)),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -304,11 +300,11 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                           SizedBox(
                             height: size.height * .4,
                           ),
+                          fadingCircle,
                           Text(
                             'Please Wait ..........',
                             style: TextStyle(fontSize: 15, color: Colors.black),
                           ),
-                          fadingCircle,
                         ],
                       ))
                     : Expanded(
@@ -662,7 +658,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                "Please Select Your Sub-Category :",
+                                "Sub-Category :",
                                 style: TextStyle(fontSize: size.height * .025),
                               ),
                               SizedBox(
@@ -745,8 +741,8 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       ))
                     : ElevatedButton(
                         onPressed: () {
-                          uuid = Uuid().v1();
-                          uploadData(dataProvider, firebaseProvider);
+                          final String uuid = Uuid().v1();
+                          uploadData(dataProvider, firebaseProvider, uuid);
                           setState(() {
                             data = null;
                           });
@@ -799,20 +795,17 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     });
   }
 
-  Future<void> uploadData(
-      DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
+  Future<void> uploadData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     if (data == null) {
-      _submitData(
-        dataProvider,
-        firebaseProvider,
-      );
+      _submitData(dataProvider, firebaseProvider, uuid);
     } else {
       setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
           .child('FilmMediaData')
-          .child(uuid!);
+          .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -823,19 +816,14 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
           setState(() {
             imageUrl = downloadUrl;
           });
-          _submitData(
-            dataProvider,
-            firebaseProvider,
-          );
+          _submitData(dataProvider, firebaseProvider, uuid);
         });
       });
     }
   }
 
-  Future<void> _submitData(
-    DataProvider dataProvider,
-    FirebaseProvider firebaseProvider,
-  ) async {
+  Future<void> _submitData(DataProvider dataProvider,
+      FirebaseProvider firebaseProvider, String uuid) async {
     DateTime date = DateTime.now();
     String dateData = '${date.month}-${date.day}-${date.year}';
     if (statusValue.isNotEmpty) {
@@ -854,7 +842,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
         'designation': _designation.text,
         'hallname': _hallname.text,
         'date': dateData,
-        'id': uuid!,
+        'id': uuid,
         'image': imageUrl,
         'status': statusValue.toLowerCase(),
         'category': dataProvider.subCategory,
