@@ -21,13 +21,15 @@ class Variables {
         Entry('Content Banner'),
         Entry('Pop Up Banner'),
       ]),
-      Entry('Settings', Icons.settings_applications_outlined, <Entry>[
-        Entry('Change Password'),
+      Entry('Page NavBar', Icons.branding_watermark, <Entry>[
+        Entry('Editors View'),
         Entry('Set Cover Photo'),
         Entry('Set Rate Chart Banner'),
       ]),
+      Entry('Settings', Icons.settings_applications_outlined, <Entry>[
+        Entry('Change Password'),
+      ]),
       Entry('About Us', Icons.info_outlined, <Entry>[
-        Entry('Editors View'),
         Entry('Contact Information'),
       ]),
     ];

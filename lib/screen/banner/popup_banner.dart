@@ -496,7 +496,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "category : ",
+                            "Category : ",
                             style: TextStyle(fontSize: size.height * .025),
                           ),
                           DropdownButtonHideUnderline(

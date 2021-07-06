@@ -25,8 +25,8 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List categorys = ['Index Top', 'Index Bottom'];
-  String categoryValue = 'Index Top';
+  List categorys = ['Top Banner', 'Bottom Banner'];
+  String categoryValue = 'Top Banner';
 
   final _ktabs = <Tab>[
     const Tab(
@@ -50,7 +50,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
     setState(() {
       _filteredList = _subList
           .where((element) => (element.place!.toLowerCase().contains(
-              searchItem == 'Index Top' ? 'indextop' : 'indexbottom')))
+              searchItem == 'Top Banner' ? 'indextop' : 'indexbottom')))
           .toList();
     });
   }
@@ -78,7 +78,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
       });
     }
 
-    _filterSubCategoryList('Index Top');
+    _filterSubCategoryList('Top Banner');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -162,7 +162,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
-                width: size.width * .2,
+                width: size.width * .25,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blueGrey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -174,7 +174,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Category : ",
+                        "Placement : ",
                         style: TextStyle(fontSize: size.height * .025),
                       ),
                       DropdownButtonHideUnderline(
@@ -221,7 +221,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text('Refresh To All'),
+                          Text('Refresh'),
                           SizedBox(
                             width: size.width * .02,
                           ),
@@ -432,7 +432,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(categoryValue == 'IndexTop'
+                child: Text(categoryValue == 'Top Banner'
                     ? 'Top Banner Must Be Of : 150*360'
                     : 'Bottom Banner Size: 80*360'),
               ),
@@ -511,7 +511,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                     width: size.width * .04,
                   ),
                   Container(
-                    width: size.width * .15,
+                    width: size.width * .2,
                     decoration: BoxDecoration(
                       border: Border.all(width: 1, color: Colors.blueGrey),
                     ),
@@ -523,7 +523,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Places : ",
+                            "Placement : ",
                             style: TextStyle(fontSize: size.height * .025),
                           ),
                           DropdownButtonHideUnderline(
@@ -666,7 +666,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
         'image': imageUrl,
         'id': uuid,
         'date': dateData,
-        'place': categoryValue == 'Index Top' ? 'indextop' : 'indexbottom',
+        'place': categoryValue == 'Top Banner' ? 'indextop' : 'indexbottom',
         'category': 'index',
         'status': statusValue.toLowerCase()
       };

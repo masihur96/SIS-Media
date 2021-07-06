@@ -35,8 +35,8 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
   ];
   String categoryValue = 'Film Media';
 
-  List places = ['Content Top', 'Content Bottom'];
-  String placesValue = 'Content Top';
+  List places = ['Top Banner', 'Bottom Banner'];
+  String placesValue = 'Top Banner';
 
   final _ktabs = <Tab>[
     const Tab(
@@ -83,7 +83,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
     setState(() {
       _filteredCategoryList = _filteredPlaceList
           .where((element) => (element.place!.toLowerCase().contains(
-              searchItem == 'Content Top' ? 'contenttop' : 'contentbottom')))
+              searchItem == 'Top Banner' ? 'contenttop' : 'contentbottom')))
           .toList();
     });
   }
@@ -112,7 +112,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       });
     }
 
-    _filterPlaceList('Content Top');
+    _filterPlaceList('Top Banner');
     _filterCategoryList('Film Media');
   }
 
@@ -197,7 +197,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
-                width: size.width * .3,
+                width: size.width * .22,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blueGrey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -253,7 +253,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Place : ",
+                        "Placement : ",
                         style: TextStyle(fontSize: size.height * .025),
                       ),
                       DropdownButtonHideUnderline(
@@ -646,7 +646,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Places : ",
+                            "Placement : ",
                             style: TextStyle(fontSize: size.height * .025),
                           ),
                           DropdownButtonHideUnderline(
@@ -792,7 +792,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
         'image': imageUrl,
         'id': uuid,
         'date': dateData,
-        'place': placesValue == 'Content Top' ? 'contenttop' : 'contentbottom',
+        'place': placesValue == 'Top Banner' ? 'contenttop' : 'contentbottom',
         'category': categoryValue == 'Film Media'
             ? 'contentfilm'
             : categoryValue == 'Television Media'

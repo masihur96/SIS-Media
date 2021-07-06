@@ -143,7 +143,7 @@ class _EditorsViewState extends State<EditorsView> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            Text('Refresh To All'),
+                            Text('Refresh'),
                             SizedBox(
                               width: size.width * .02,
                             ),
@@ -158,8 +158,8 @@ class _EditorsViewState extends State<EditorsView> {
             ],
           ),
           Container(
-              height: size.height * .5,
-              width: size.width * .6,
+              height: size.height * .64,
+              width: size.height * .45,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 border: Border.all(width: 1, color: Colors.blueGrey),
@@ -168,7 +168,7 @@ class _EditorsViewState extends State<EditorsView> {
                   ? Center(child: Text('You have no Editors Banner'))
                   : Image.network(
                       editorsUrl,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.fitHeight,
                     )),
           _isLoading
               ? Container(
@@ -240,7 +240,7 @@ class _EditorsViewState extends State<EditorsView> {
                         textStyle: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   ),
-                )
+                ),
         ],
       ),
     );
