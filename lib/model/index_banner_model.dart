@@ -3,6 +3,7 @@ class IndexBannerModel {
   String? image;
   String? status;
   String? date;
+  String? place;
   String? category;
 
   IndexBannerModel({
@@ -10,6 +11,7 @@ class IndexBannerModel {
     this.image,
     this.status,
     this.date,
+    this.place,
     this.category,
   });
 }

@@ -47,7 +47,18 @@ class _DashBoardPageState extends State<DashBoardPage> {
       _isLoading = true;
     });
 
-    await fatchDataHelper.fetchFilmMediaData().then((value) {
+    if (fatchDataHelper.filmMediadataList.isEmpty) {
+      await fatchDataHelper.fetchFilmMediaData().then((value) {
+        setState(() {
+          _filmTotalDataList = fatchDataHelper.filmMediadataList;
+          for (int i = 0; i < _filmTotalDataList.length; i++) {
+            if (_filmTotalDataList[i].status == 'private') {
+              _filmPrivateDataList.add(_filmTotalDataList[i]);
+            }
+          }
+        });
+      });
+    } else {
       setState(() {
         _filmTotalDataList = fatchDataHelper.filmMediadataList;
         for (int i = 0; i < _filmTotalDataList.length; i++) {
@@ -56,9 +67,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
           }
         }
       });
-    });
+    }
 
-    await fatchDataHelper.fetchTelevisionData().then((value) {
+    if (fatchDataHelper.televisionMediadataList.isEmpty) {
+      await fatchDataHelper.fetchTelevisionData().then((value) {
+        setState(() {
+          _televisionTotalDataList = fatchDataHelper.televisionMediadataList;
+          for (int i = 0; i < _televisionTotalDataList.length; i++) {
+            if (_televisionTotalDataList[i].status == 'private') {
+              _televisionPrivateDataList.add(_televisionTotalDataList[i]);
+            }
+          }
+        });
+      });
+    } else {
       setState(() {
         _televisionTotalDataList = fatchDataHelper.televisionMediadataList;
         for (int i = 0; i < _televisionTotalDataList.length; i++) {
@@ -67,9 +89,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
           }
         }
       });
-    });
+    }
 
-    await fatchDataHelper.fetchAudioData().then((value) {
+    if (fatchDataHelper.audioMediadataList.isEmpty) {
+      await fatchDataHelper.fetchAudioData().then((value) {
+        setState(() {
+          _audioTotalDataList = fatchDataHelper.audioMediadataList;
+          for (int i = 0; i < _audioTotalDataList.length; i++) {
+            if (_audioTotalDataList[i].status == 'private') {
+              _audioPrivateDataList.add(_audioTotalDataList[i]);
+            }
+          }
+        });
+      });
+    } else {
       setState(() {
         _audioTotalDataList = fatchDataHelper.audioMediadataList;
         for (int i = 0; i < _audioTotalDataList.length; i++) {
@@ -78,9 +111,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
           }
         }
       });
-    });
+    }
 
-    await fatchDataHelper.fetchPrintData().then((value) {
+    if (fatchDataHelper.printMediaDataList.isEmpty) {
+      await fatchDataHelper.fetchPrintData().then((value) {
+        setState(() {
+          _printingTotalDataList = fatchDataHelper.printMediaDataList;
+          for (int i = 0; i < _printingTotalDataList.length; i++) {
+            if (_printingTotalDataList[i].status == 'private') {
+              _printingPrivateDataList.add(_printingTotalDataList[i]);
+            }
+          }
+        });
+      });
+    } else {
       setState(() {
         _printingTotalDataList = fatchDataHelper.printMediaDataList;
         for (int i = 0; i < _printingTotalDataList.length; i++) {
@@ -89,9 +133,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
           }
         }
       });
-    });
+    }
 
-    await fatchDataHelper.fetchNewData().then((value) {
+    if (fatchDataHelper.newMediadataList.isEmpty) {
+      await fatchDataHelper.fetchNewData().then((value) {
+        setState(() {
+          _newTotalDataList = fatchDataHelper.newMediadataList;
+          for (int i = 0; i < _newTotalDataList.length; i++) {
+            if (_newTotalDataList[i].status == 'private') {
+              _newPrivateDataList.add(_newTotalDataList[i]);
+            }
+          }
+        });
+      });
+    } else {
       setState(() {
         _newTotalDataList = fatchDataHelper.newMediadataList;
         for (int i = 0; i < _newTotalDataList.length; i++) {
@@ -100,9 +155,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
           }
         }
       });
-    });
+    }
 
-    await fatchDataHelper.fetchImportentEmergencyData().then((value) {
+    if (fatchDataHelper.importentMediadataList.isEmpty) {
+      await fatchDataHelper.fetchImportentEmergencyData().then((value) {
+        setState(() {
+          _importentTotalDataList = fatchDataHelper.importentMediadataList;
+          for (int i = 0; i < _importentTotalDataList.length; i++) {
+            if (_importentTotalDataList[i].status == 'private') {
+              _importentPrivateDataList.add(_importentTotalDataList[i]);
+            }
+          }
+        });
+      });
+    } else {
       setState(() {
         _importentTotalDataList = fatchDataHelper.importentMediadataList;
         for (int i = 0; i < _importentTotalDataList.length; i++) {
@@ -111,12 +177,25 @@ class _DashBoardPageState extends State<DashBoardPage> {
           }
         }
       });
-    });
+    }
 
     DateTime date = DateTime.now();
     String dateData = '${date.day}-${date.month}-${date.year}';
 
-    await fatchDataHelper.fetchRequestData().then((value) {
+    if (fatchDataHelper.userRequestdataList.isEmpty) {
+      await fatchDataHelper.fetchRequestData().then((value) {
+        setState(() {
+          _requestTotalDataList = fatchDataHelper.userRequestdataList;
+          for (int i = 0; i < _requestTotalDataList.length; i++) {
+            if (_requestTotalDataList[i].request_date == dateData) {
+              _requestTodayRequestList.add(_requestTotalDataList[i]);
+            }
+          }
+
+          _isLoading = false;
+        });
+      });
+    } else {
       setState(() {
         _requestTotalDataList = fatchDataHelper.userRequestdataList;
         for (int i = 0; i < _requestTotalDataList.length; i++) {
@@ -127,7 +206,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
         _isLoading = false;
       });
-    });
+    }
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
 import 'package:media_directory_admin/model/audio_rate_chart_model.dart';
+import 'package:media_directory_admin/model/celebrity_request_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
@@ -43,6 +44,9 @@ class FatchDataHelper extends ChangeNotifier {
   List<UserRequestModel> _userRequestdataList = [];
   get userRequestdataList => _userRequestdataList;
 
+  List<CelebrityRequestModel> _celebrityRequestdataList = [];
+  get celebrityRequestdataList => _celebrityRequestdataList;
+
   Future<List<IndexBannerModel>> fetchBannerData() async {
     try {
       await FirebaseFirestore.instance
@@ -56,6 +60,32 @@ class FatchDataHelper extends ChangeNotifier {
             id: element.doc['id'],
             status: element.doc['status'],
             date: element.doc['date'],
+            place: element.doc['place'],
+            category: element.doc['category'],
+          );
+          _indexdataList.add(indexBannerModel);
+        });
+      });
+      return indexdataList;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<IndexBannerModel>> fetchEditorsData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('EditorsView')
+          .get()
+          .then((snapshot) {
+        _indexdataList.clear();
+        snapshot.docChanges.forEach((element) {
+          IndexBannerModel indexBannerModel = IndexBannerModel(
+            image: element.doc['image'],
+            id: element.doc['id'],
+            status: element.doc['status'],
+            date: element.doc['date'],
+            place: element.doc['place'],
             category: element.doc['category'],
           );
           _indexdataList.add(indexBannerModel);
@@ -526,7 +556,7 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  Future<List<ImportentEmergencyModel>> fetchRequestData() async {
+  Future<List<UserRequestModel>> fetchRequestData() async {
     try {
       await FirebaseFirestore.instance
           .collection('UserRequest')
@@ -550,6 +580,32 @@ class FatchDataHelper extends ChangeNotifier {
         });
       });
       return userRequestdataList;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<CelebrityRequestModel>> fetchCelebrityRequestData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('SubmittedInformation')
+          .orderBy('request_date')
+          .get()
+          .then((snapshot) {
+        _celebrityRequestdataList.clear();
+        snapshot.docChanges.forEach((element) {
+          CelebrityRequestModel celebrityRequestModel = CelebrityRequestModel(
+            id: element.doc['id'],
+            category: element.doc['category'],
+            request_date: element.doc['request_date'],
+            sub_category: element.doc['sub_category'],
+            details: element.doc['details'],
+          );
+
+          _celebrityRequestdataList.add(celebrityRequestModel);
+        });
+      });
+      return celebrityRequestdataList;
     } catch (error) {
       return [];
     }

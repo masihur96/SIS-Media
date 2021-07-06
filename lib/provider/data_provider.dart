@@ -25,8 +25,13 @@ import 'package:media_directory_admin/screen/category/update_screen/update_impor
 import 'package:media_directory_admin/screen/category/update_screen/update_new_media.dart';
 import 'package:media_directory_admin/screen/category/update_screen/update_print_media_data.dart';
 import 'package:media_directory_admin/screen/category/update_screen/update_television_media_data.dart';
+import 'package:media_directory_admin/screen/celebrity_request.dart';
+import 'package:media_directory_admin/screen/contact_info.dart';
 import 'package:media_directory_admin/screen/dash_board.dart';
+import 'package:media_directory_admin/screen/editors_view.dart';
 import 'package:media_directory_admin/screen/request_details.dart';
+import 'package:media_directory_admin/screen/set_cover_photo.dart';
+import 'package:media_directory_admin/screen/set_ratechart_banner.dart';
 import '../screen/category/audio_media_screen.dart';
 import '../screen/category/importent_emergency.dart';
 import '../screen/category/new_media.dart';
@@ -187,10 +192,20 @@ class DataProvider extends ChangeNotifier {
       return PopUpBannerScreen();
     else if (subCategory == 'Update PopUp Data')
       return UpdatePopUpData();
-    else if (subCategory == 'Request Details')
+    else if (subCategory == 'User Request')
       return RequestPage();
+    else if (subCategory == 'Celebrity Request')
+      return CelebrityRequest();
     else if (subCategory == 'Change Password')
       return ChangePassword();
+    else if (subCategory == 'Editors View')
+      return EditorsView();
+    else if (subCategory == 'Contact Information')
+      return ContactInfo();
+    else if (subCategory == 'Set Cover Photo')
+      return CoverBanner();
+    else if (subCategory == 'Set Rate Chart Banner')
+      return RateChartBanner();
     else if (subCategory == 'DashBoard')
       return DashBoardPage();
     else

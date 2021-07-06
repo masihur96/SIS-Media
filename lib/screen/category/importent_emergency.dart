@@ -270,7 +270,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              Text('Refresh '),
+                              Text('Refresh To All'),
                               SizedBox(
                                 width: size.width * .02,
                               ),
@@ -572,9 +572,11 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                                       .child(_filteredList[index].id!)
                                       .delete();
 
-                                  // _filteredList.removeWhere((item) =>
-                                  //     item.id == _filteredList[index].id!);
-                                  // setState(() => _isLoading = false);
+                                  _subList.removeWhere((item) =>
+                                      item.id == _filteredList[index].id!);
+                                  _filteredList.removeWhere((item) =>
+                                      item.id == _filteredList[index].id!);
+                                  setState(() => _isLoading = false);
 
                                   showToast('Data deleted successful');
                                 } else {

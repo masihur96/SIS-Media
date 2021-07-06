@@ -21,11 +21,22 @@ class ContentBannerScreen extends StatefulWidget {
 
 class _ContentBannerScreenState extends State<ContentBannerScreen> {
   bool _isLoading = false;
+
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List categorys = ['ContentTop', 'ContentBottom'];
-  String categoryValue = 'ContentTop';
+  List categorys = [
+    'Film Media',
+    'Television Media',
+    'Audio Media',
+    'Print Media',
+    'New Media',
+    'Importent & Emergency'
+  ];
+  String categoryValue = 'Film Media';
+
+  List places = ['Content Top', 'Content Bottom'];
+  String placesValue = 'Content Top';
 
   final _ktabs = <Tab>[
     const Tab(
@@ -43,14 +54,36 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
   String name = '';
 
   List<IndexBannerModel> _subList = [];
-  List<IndexBannerModel> _filteredList = [];
+  List<IndexBannerModel> _filteredCategoryList = [];
+  List<IndexBannerModel> _filteredPlaceList = [];
 
-  _filterSubCategoryList(String searchItem) {
+  _filterCategoryList(String searchItem) {
     setState(() {
-      _filteredList = _subList
+      _filteredCategoryList = _subList
           .where((element) => (element.category!
               .toLowerCase()
-              .contains(searchItem.toLowerCase())))
+              .contains(searchItem == 'Film Media'
+                  ? 'contentfilm'
+                  : searchItem == 'Television Media'
+                      ? 'contenttelevision'
+                      : searchItem == 'Audio Media'
+                          ? 'contentaudio'
+                          : searchItem == 'Print Media'
+                              ? 'contentprint'
+                              : searchItem == 'New Media'
+                                  ? 'contentnew'
+                                  : 'contentimportent')))
+          .toList();
+
+      _filteredPlaceList = _filteredCategoryList;
+    });
+  }
+
+  _filterPlaceList(String searchItem) {
+    setState(() {
+      _filteredCategoryList = _filteredPlaceList
+          .where((element) => (element.place!.toLowerCase().contains(
+              searchItem == 'Content Top' ? 'contenttop' : 'contentbottom')))
           .toList();
     });
   }
@@ -68,18 +101,19 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       await fatchDataHelper.fetchBannerData().then((value) {
         setState(() {
           _subList = fatchDataHelper.indexdataList;
-          _filteredList = _subList;
+          _filteredCategoryList = _subList;
           _isLoading = false;
         });
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.indexdataList;
-        _filteredList = _subList;
+        _filteredCategoryList = _subList;
       });
     }
 
-    _filterSubCategoryList('ContentTop');
+    _filterPlaceList('Content Top');
+    _filterCategoryList('Film Media');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -89,10 +123,10 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
     await fatchDataHelper.fetchBannerData().then((value) {
       setState(() {
         _subList = fatchDataHelper.indexdataList;
-        _filteredList = _subList
+        _filteredCategoryList = _subList
             .where((element) =>
-                (element.category!.toLowerCase().contains('contenttop') ||
-                    element.category!.toLowerCase().contains('contentbottom')))
+                (element.place!.toLowerCase().contains('contenttop') ||
+                    element.place!.toLowerCase().contains('contentbottom')))
             .toList();
         _isLoading = false;
       });
@@ -163,7 +197,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
-                width: size.width * .2,
+                width: size.width * .3,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blueGrey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -195,7 +229,51 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                               categoryValue = newValue!;
                             });
 
-                            _filterSubCategoryList(categoryValue);
+                            _filterCategoryList(categoryValue);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                width: size.width * .2,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.blueGrey),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                // width: size.width * .2,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Place : ",
+                        style: TextStyle(fontSize: size.height * .025),
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: placesValue,
+                          elevation: 0,
+                          dropdownColor: Colors.white,
+                          style: TextStyle(color: Colors.black),
+                          items: places.map((itemValue) {
+                            return DropdownMenuItem<String>(
+                              value: itemValue,
+                              child: Text(itemValue),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              placesValue = newValue!;
+                            });
+
+                            _filterPlaceList(placesValue);
                           },
                         ),
                       ),
@@ -256,7 +334,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     height: 500.0,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: _filteredList.length,
+                      itemCount: _filteredCategoryList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 5.0,
@@ -289,13 +367,13 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             Container(
                 height: size.height * .35,
                 width: size.width * .7,
-                child: _filteredList[index].image!.isEmpty
+                child: _filteredCategoryList[index].image!.isEmpty
                     ? Icon(
                         Icons.photo,
                         size: size.height * .16,
                         color: Colors.grey,
                       )
-                    : Image.network(_filteredList[index].image!,
+                    : Image.network(_filteredCategoryList[index].image!,
                         fit: BoxFit.fill)),
             Container(
               width: size.width * .5,
@@ -308,16 +386,16 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     child: Container(
                         height: 2, width: size.width, color: Colors.grey),
                   ),
-                  _filteredList[index].status!.isEmpty
+                  _filteredCategoryList[index].status!.isEmpty
                       ? Container()
                       : Text(
-                          'Status: ${_filteredList[index].status}',
+                          'Status: ${_filteredCategoryList[index].status}',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _filteredList[index].date!.isEmpty
+                  _filteredCategoryList[index].date!.isEmpty
                       ? Container()
-                      : Text('Date: ${_filteredList[index].date}',
+                      : Text('Date: ${_filteredCategoryList[index].date}',
                           style: TextStyle(
                             fontSize: 12,
                           )),
@@ -335,15 +413,15 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Update Content Data";
                       dataProvider.indexBannerModel.image =
-                          _filteredList[index].image;
+                          _filteredCategoryList[index].image;
                       dataProvider.indexBannerModel.id =
-                          _filteredList[index].id;
+                          _filteredCategoryList[index].id;
                       dataProvider.indexBannerModel.status =
-                          _filteredList[index].status;
+                          _filteredCategoryList[index].status;
                       dataProvider.indexBannerModel.date =
-                          _filteredList[index].date;
+                          _filteredCategoryList[index].date;
                       dataProvider.indexBannerModel.category =
-                          _filteredList[index].category;
+                          _filteredCategoryList[index].category;
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
@@ -386,13 +464,13 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteBannerData(
-                                      _filteredList[index].id!, context)
+                                      _filteredCategoryList[index].id!, context)
                                   .then((value) {
                                 if (value == true) {
                                   firebase_storage.FirebaseStorage.instance
                                       .ref()
                                       .child('Banner')
-                                      .child(_filteredList[index].id!)
+                                      .child(_filteredCategoryList[index].id!)
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
@@ -435,7 +513,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(categoryValue == 'ContentTop'
+                child: Text(placesValue == 'ContentTop'
                     ? 'Please Upload Top Banner Size: 85*360'
                     : 'Please Upload Bottom Banner Size: 55*360'),
               ),
@@ -472,7 +550,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
-                    width: size.width * .15,
+                    width: size.height * .3,
                     decoration: BoxDecoration(
                       border: Border.all(width: 1, color: Colors.blueGrey),
                     ),
@@ -514,7 +592,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     width: size.width * .04,
                   ),
                   Container(
-                    width: size.width * .15,
+                    width: size.height * .5,
                     decoration: BoxDecoration(
                       border: Border.all(width: 1, color: Colors.blueGrey),
                     ),
@@ -526,7 +604,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Places : ",
+                            "Category : ",
                             style: TextStyle(fontSize: size.height * .025),
                           ),
                           DropdownButtonHideUnderline(
@@ -544,6 +622,48 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                               onChanged: (newValue) {
                                 setState(() {
                                   categoryValue = newValue!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: size.width * .04,
+                  ),
+                  Container(
+                    width: size.width * .15,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.blueGrey),
+                    ),
+                    // width: size.width * .2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Places : ",
+                            style: TextStyle(fontSize: size.height * .025),
+                          ),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: placesValue,
+                              elevation: 0,
+                              dropdownColor: Colors.white,
+                              style: TextStyle(color: Colors.black),
+                              items: places.map((itemValue) {
+                                return DropdownMenuItem<String>(
+                                  value: itemValue,
+                                  child: Text(itemValue),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  placesValue = newValue!;
                                 });
                               },
                             ),
@@ -672,8 +792,18 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
         'image': imageUrl,
         'id': uuid,
         'date': dateData,
-        'category':
-            categoryValue == 'ContentTop' ? 'contenttop' : 'contentbottom',
+        'place': placesValue == 'Content Top' ? 'contenttop' : 'contentbottom',
+        'category': categoryValue == 'Film Media'
+            ? 'contentfilm'
+            : categoryValue == 'Television Media'
+                ? 'contenttelevision'
+                : categoryValue == 'Audio Media'
+                    ? 'contentaudio'
+                    : categoryValue == 'Print Media'
+                        ? 'contentprint'
+                        : categoryValue == 'New Media'
+                            ? 'contentnew'
+                            : 'contentimportent',
         'status': statusValue.toLowerCase(),
       };
       await firebaseProvider.addBannerData(map).then((value) {

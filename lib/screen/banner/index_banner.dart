@@ -25,8 +25,8 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List categorys = ['IndexTop', 'IndexBottom'];
-  String categoryValue = 'IndexTop';
+  List categorys = ['Index Top', 'Index Bottom'];
+  String categoryValue = 'Index Top';
 
   final _ktabs = <Tab>[
     const Tab(
@@ -49,9 +49,8 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
   _filterSubCategoryList(String searchItem) {
     setState(() {
       _filteredList = _subList
-          .where((element) => (element.category!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
+          .where((element) => (element.place!.toLowerCase().contains(
+              searchItem == 'Index Top' ? 'indextop' : 'indexbottom')))
           .toList();
     });
   }
@@ -79,7 +78,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
       });
     }
 
-    _filterSubCategoryList('IndexTop');
+    _filterSubCategoryList('Index Top');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -91,8 +90,8 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
         _subList = fatchDataHelper.indexdataList;
         _filteredList = _subList
             .where((element) =>
-                (element.category!.toLowerCase().contains('indextop') ||
-                    element.category!.toLowerCase().contains('indexbottom')))
+                (element.place!.toLowerCase().contains('indextop') ||
+                    element.place!.toLowerCase().contains('indexbottom')))
             .toList();
         _isLoading = false;
       });
@@ -434,8 +433,8 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(categoryValue == 'IndexTop'
-                    ? 'Please Upload Top Banner Size: 150*360'
-                    : 'Please Upload Bottom Banner Size: 80*360'),
+                    ? 'Top Banner Must Be Of : 150*360'
+                    : 'Bottom Banner Size: 80*360'),
               ),
               data != null
                   ? Container(
@@ -667,8 +666,9 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
         'image': imageUrl,
         'id': uuid,
         'date': dateData,
-        'category': categoryValue == 'IndexTop' ? 'indextop' : 'indexbottom',
-        'status': statusValue,
+        'place': categoryValue == 'Index Top' ? 'indextop' : 'indexbottom',
+        'category': 'index',
+        'status': statusValue.toLowerCase()
       };
       await firebaseProvider.addBannerData(map).then((value) {
         if (value) {

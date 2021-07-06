@@ -5,7 +5,8 @@ class Variables {
     final List<Entry> data = <Entry>[
       Entry('DashBoard', Icons.dashboard, <Entry>[
         Entry('DashBoard'),
-        Entry('Request Details'),
+        Entry('Celebrity Request'),
+        Entry('User Request'),
       ]),
       Entry('All Category', Icons.category_outlined, <Entry>[
         Entry('Film Media'),
@@ -22,6 +23,12 @@ class Variables {
       ]),
       Entry('Settings', Icons.settings_applications_outlined, <Entry>[
         Entry('Change Password'),
+        Entry('Set Cover Photo'),
+        Entry('Set Rate Chart Banner'),
+      ]),
+      Entry('About Us', Icons.info_outlined, <Entry>[
+        Entry('Editors View'),
+        Entry('Contact Information'),
       ]),
     ];
 

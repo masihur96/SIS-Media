@@ -296,7 +296,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text('Refresh '),
+                                Text('Refresh To All'),
                                 SizedBox(
                                   width: size.width * .02,
                                 ),
@@ -313,32 +313,32 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             ),
             dropdownValue == 'Rate Chart'
                 ? AllDataTelevisionRate()
-                :     _isLoading
-                ? Container(
-                    child: Column(
-                    children: [
-                      SizedBox(
-                        height: size.height * .4,
-                      ),
-                      fadingCircle,
-                      Text(
-                        'Please Wait ..........',
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
-                    ],
-                  ))
-                : _filteredList.isEmpty
+                : _isLoading
                     ? Container(
                         child: Column(
                         children: [
-                          SizedBox(height: 200),
-                          Text("Item is Not Found",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  letterSpacing: 2,
-                                  color: Colors.grey)),
+                          SizedBox(
+                            height: size.height * .4,
+                          ),
+                          fadingCircle,
+                          Text(
+                            'Please Wait ..........',
+                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          ),
                         ],
                       ))
+                    : _filteredList.isEmpty
+                        ? Container(
+                            child: Column(
+                            children: [
+                              SizedBox(height: 200),
+                              Text("Item is Not Found",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      letterSpacing: 2,
+                                      color: Colors.grey)),
+                            ],
+                          ))
                         : Expanded(
                             child: SizedBox(
                               height: 500.0,
@@ -758,6 +758,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                                       .child(_filteredList[index].id!)
                                       .delete();
 
+                                  _subList.removeWhere((item) =>
+                                      item.id == _filteredList[index].id!);
                                   _filteredList.removeWhere((item) =>
                                       item.id == _filteredList[index].id!);
                                   setState(() => _isLoading = false);

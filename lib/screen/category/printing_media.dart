@@ -266,7 +266,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              Text('Refresh '),
+                              Text('Refresh To All'),
                               SizedBox(
                                 width: size.width * .02,
                               ),
@@ -564,6 +564,8 @@ class _PrintingMediaState extends State<PrintingMedia> {
                                       .child(dataProvider.subCategory)
                                       .child(_filteredList[index].id!)
                                       .delete();
+                                  _subList.removeWhere((item) =>
+                                      item.id == _filteredList[index].id!);
                                   _filteredList.removeWhere((item) =>
                                       item.id == _filteredList[index].id!);
                                   setState(() => _isLoading = false);

@@ -15,7 +15,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController _newPassword = TextEditingController(text: '');
   TextEditingController _reNewPassword = TextEditingController(text: '');
 
-  String error = '';
+  String error = 'Put a Strong Password';
 
   @override
   Widget build(BuildContext context) {
@@ -26,94 +26,104 @@ class _ChangePasswordState extends State<ChangePassword> {
         width: dataProvider.pageWidth(size),
         height: size.height,
         child: Center(
-          child: Container(
-            height: size.height * .55,
-            width: size.width * .35,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueGrey),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-                color: Colors.white),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(children: <Widget>[
-                Text(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
                   error,
-                  style: TextStyle(color: Colors.redAccent),
+                  style: TextStyle(
+                      color: Colors.redAccent, fontSize: size.height * .04),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _oldPassword,
-                    decoration: InputDecoration(
-                      labelText: 'Old Password',
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                        borderSide: new BorderSide(width: 1),
-                      ),
+              ),
+              Container(
+                height: size.height * .55,
+                width: size.width * .35,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blueGrey),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
-                    maxLines: 2,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _newPassword,
-                    decoration: InputDecoration(
-                      labelText: 'New Password',
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                        borderSide: new BorderSide(width: 1),
-                      ),
-                    ),
-                    maxLines: 2,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _reNewPassword,
-                    decoration: InputDecoration(
-                      labelText: 'Re-Enter New Password',
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                        borderSide: new BorderSide(width: 1),
-                      ),
-                    ),
-                    maxLines: 2,
-                  ),
-                ),
-                SizedBox(height: 10),
-                _isLoading
-                    ? Container(
-                        child: Column(
-                        children: [
-                          fadingCircle,
-                        ],
-                      ))
-                    : ElevatedButton(
-                        onPressed: () {
-                          _isLoading = true;
-                          fatchAdminData();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 0.0),
-                          child: Text(
-                            'UPDATE',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: size.height * .03,
-                            ),
+                    color: Colors.white),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(children: <Widget>[
+                    SizedBox(height: size.height * .04),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _oldPassword,
+                        decoration: InputDecoration(
+                          labelText: 'Old Password',
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(width: 1),
                           ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
+                        maxLines: 2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _newPassword,
+                        decoration: InputDecoration(
+                          labelText: 'New Password',
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(width: 1),
+                          ),
                         ),
-                      )
-              ]),
-            ),
+                        maxLines: 2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _reNewPassword,
+                        decoration: InputDecoration(
+                          labelText: 'Re-Enter New Password',
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(width: 1),
+                          ),
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    _isLoading
+                        ? Container(
+                            child: Column(
+                            children: [
+                              fadingCircle,
+                            ],
+                          ))
+                        : ElevatedButton(
+                            onPressed: () {
+                              _isLoading = true;
+                              fatchAdminData();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 0.0),
+                              child: Text(
+                                'UPDATE',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .03,
+                                ),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey,
+                            ),
+                          )
+                  ]),
+                ),
+              ),
+            ],
           ),
         ));
   }
@@ -152,7 +162,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         }
       } else {
         setState(() {
-          error = 'No Mached !';
+          error = 'Password Does Not Match';
           _isLoading = true;
         });
       }

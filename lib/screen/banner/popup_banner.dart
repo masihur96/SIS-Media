@@ -25,8 +25,15 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List categorys = ['Top', 'Bottom'];
-  String categoryValue = 'Top';
+  List categorys = [
+    'Film Media',
+    'Television Media',
+    'Audio Media',
+    'Print Media',
+    'New Media',
+    'Importent & Emergency'
+  ];
+  String categoryValue = 'Film Media';
 
   final _ktabs = <Tab>[
     const Tab(
@@ -44,14 +51,24 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
   String name = '';
 
   List<IndexBannerModel> _subList = [];
-  List<IndexBannerModel> _filteredList = [];
+  List<IndexBannerModel> _filteredCategoryList = [];
 
-  _filterSubCategoryList(String searchItem) {
+  _filterCategoryList(String searchItem) {
     setState(() {
-      _filteredList = _subList
+      _filteredCategoryList = _subList
           .where((element) => (element.category!
               .toLowerCase()
-              .contains(searchItem.toLowerCase())))
+              .contains(searchItem == 'Film Media'
+                  ? 'popupfilm'
+                  : searchItem == 'Television Media'
+                      ? 'popuptelevision'
+                      : searchItem == 'Audio Media'
+                          ? 'popupaudio'
+                          : searchItem == 'Print Media'
+                              ? 'popupprint'
+                              : searchItem == 'New Media'
+                                  ? 'popupnew'
+                                  : 'popupimportent')))
           .toList();
     });
   }
@@ -78,7 +95,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
       });
     }
 
-    _filterSubCategoryList('popup');
+    _filterCategoryList('Film Media');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -88,7 +105,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
     await fatchDataHelper.fetchBannerData().then((value) {
       setState(() {
         _subList = fatchDataHelper.indexdataList;
-        _filteredList = _subList
+        _filteredCategoryList = _subList
             .where((element) =>
                 (element.category!.toLowerCase().contains('popup')))
             .toList();
@@ -155,35 +172,84 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
       DataProvider dataProvider, FatchDataHelper fatchDataHelper) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: InkWell(
-              onTap: () {
-                getData(fatchDataHelper);
-              },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
               child: Container(
-                width: size.width * .13,
+                width: size.width * .2,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(color: Colors.blueGrey)),
+                    border: Border.all(width: 1, color: Colors.blueGrey),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                // width: size.width * .2,
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text('Refresh To All'),
-                      SizedBox(
-                        width: size.width * .02,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Category : ",
+                        style: TextStyle(fontSize: size.height * .025),
                       ),
-                      Icon(Icons.refresh_outlined),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: categoryValue,
+                          elevation: 0,
+                          dropdownColor: Colors.white,
+                          style: TextStyle(color: Colors.black),
+                          items: categorys.map((itemValue) {
+                            return DropdownMenuItem<String>(
+                              value: itemValue,
+                              child: Text(itemValue),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              categoryValue = newValue!;
+                            });
+
+                            _filterCategoryList(categoryValue);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: InkWell(
+                  onTap: () {
+                    getData(fatchDataHelper);
+                  },
+                  child: Container(
+                    width: size.width * .13,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        border: Border.all(color: Colors.blueGrey)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text('Refresh To All'),
+                          SizedBox(
+                            width: size.width * .02,
+                          ),
+                          Icon(Icons.refresh_outlined),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         Container(
           child: _isLoading
@@ -205,7 +271,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                     height: 500.0,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: _filteredList.length,
+                      itemCount: _filteredCategoryList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 5.0,
@@ -238,13 +304,14 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
             Container(
                 height: size.height * .35,
                 width: size.width * .7,
-                child: _subList[index].image!.isEmpty
+                child: _filteredCategoryList[index].image!.isEmpty
                     ? Icon(
                         Icons.photo,
                         size: size.height * .16,
                         color: Colors.grey,
                       )
-                    : Image.network(_subList[index].image!, fit: BoxFit.fill)),
+                    : Image.network(_filteredCategoryList[index].image!,
+                        fit: BoxFit.fill)),
             Container(
               width: size.width * .5,
               child: Column(
@@ -256,16 +323,16 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                     child: Container(
                         height: 2, width: size.width, color: Colors.grey),
                   ),
-                  _subList[index].status!.isEmpty
+                  _filteredCategoryList[index].status!.isEmpty
                       ? Container()
                       : Text(
-                          _subList[index].status!,
+                          _filteredCategoryList[index].status!,
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _subList[index].date!.isEmpty
+                  _filteredCategoryList[index].date!.isEmpty
                       ? Container()
-                      : Text('Date: ${_subList[index].date}',
+                      : Text('Date: ${_filteredCategoryList[index].date}',
                           style: TextStyle(
                             fontSize: 12,
                           )),
@@ -283,11 +350,13 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                       dataProvider.category = dataProvider.subCategory;
                       dataProvider.subCategory = "Update PopUp Data";
                       dataProvider.indexBannerModel.image =
-                          _subList[index].image;
-                      dataProvider.indexBannerModel.id = _subList[index].id;
+                          _filteredCategoryList[index].image;
+                      dataProvider.indexBannerModel.id =
+                          _filteredCategoryList[index].id;
                       dataProvider.indexBannerModel.status =
-                          _subList[index].status;
-                      dataProvider.indexBannerModel.date = _subList[index].date;
+                          _filteredCategoryList[index].status;
+                      dataProvider.indexBannerModel.date =
+                          _filteredCategoryList[index].date;
                       // addImageUI(size, firebaseProvider);
                     },
                     style: ElevatedButton.styleFrom(
@@ -331,13 +400,13 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                               setState(() => _isLoading = true);
                               firebaseProvider
                                   .deleteBannerData(
-                                      _subList[index].id!, context)
+                                      _filteredCategoryList[index].id!, context)
                                   .then((value) {
                                 if (value == true) {
                                   firebase_storage.FirebaseStorage.instance
                                       .ref()
                                       .child('Banner')
-                                      .child(_subList[index].id!)
+                                      .child(_filteredCategoryList[index].id!)
                                       .delete();
                                   setState(() => _isLoading = false);
                                   getData(fatchDataHelper);
@@ -378,6 +447,10 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text('Banner Must Be Of : 600*400'),
+              ),
               data != null
                   ? Container(
                       height: size.height * .35,
@@ -410,6 +483,48 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                    width: size.width * .2,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.blueGrey),
+                    ),
+                    // width: size.width * .2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "category : ",
+                            style: TextStyle(fontSize: size.height * .025),
+                          ),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: categoryValue,
+                              elevation: 0,
+                              dropdownColor: Colors.white,
+                              style: TextStyle(color: Colors.black),
+                              items: categorys.map((itemValue) {
+                                return DropdownMenuItem<String>(
+                                  value: itemValue,
+                                  child: Text(itemValue),
+                                );
+                              }).toList(),
+                              onChanged: (newValue) {
+                                setState(() {
+                                  categoryValue = newValue!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: size.width * .04,
+                  ),
                   Container(
                     width: size.width * .15,
                     decoration: BoxDecoration(
@@ -525,7 +640,6 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                   ],
                 ),
               ),
-              Center(child: Text("Add Index Image")),
             ],
           )),
     );
@@ -566,7 +680,18 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
         'image': imageUrl,
         'id': uuid,
         'date': dateData,
-        'category': 'popup',
+        'place': 'popup',
+        'category': categoryValue == 'Film Media'
+            ? 'popupfilm'
+            : categoryValue == 'Television Media'
+                ? 'popuptelevision'
+                : categoryValue == 'Audio Media'
+                    ? 'popupaudio'
+                    : categoryValue == 'Print Media'
+                        ? 'popupprint'
+                        : categoryValue == 'New Media'
+                            ? 'popupnew'
+                            : 'popupimportent',
         'status': statusValue.toLowerCase(),
       };
       await firebaseProvider.addBannerData(map).then((value) {
