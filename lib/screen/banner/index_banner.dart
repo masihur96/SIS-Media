@@ -266,7 +266,11 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                       scrollDirection: Axis.vertical,
                       itemCount: _filteredList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                        crossAxisCount: size.width < 800
+                            ? 1
+                            : size.width < 1200
+                                ? 2
+                                : 3,
                         crossAxisSpacing: 5.0,
                         mainAxisSpacing: 5.0,
                       ),
@@ -310,7 +314,6 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                           fit: BoxFit.fill)),
             ),
             Container(
-              width: size.width * .2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -320,9 +323,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                       size.height * .01,
                     ),
                     child: Container(
-                        height: size.height * .001,
-                        width: size.width,
-                        color: Colors.grey),
+                        height: 1, width: size.width, color: Colors.grey),
                   ),
                   _filteredList[index].status!.isEmpty
                       ? Container()

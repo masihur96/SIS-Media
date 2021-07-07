@@ -195,16 +195,16 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(size.height * .01),
               child: Container(
-                width: size.width * .22,
+                width: size.height * .5,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blueGrey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 // width: size.width * .2,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: size.height * .01, vertical: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -217,7 +217,9 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                           value: categoryValue,
                           elevation: 0,
                           dropdownColor: Colors.white,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: size.height * .025),
                           items: categorys.map((itemValue) {
                             return DropdownMenuItem<String>(
                               value: itemValue,
@@ -238,65 +240,67 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Container(
-                width: size.width * .2,
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.blueGrey),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                // width: size.width * .2,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Placement : ",
-                        style: TextStyle(fontSize: size.height * .025),
-                      ),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: placesValue,
-                          elevation: 0,
-                          dropdownColor: Colors.white,
-                          style: TextStyle(color: Colors.black),
-                          items: places.map((itemValue) {
-                            return DropdownMenuItem<String>(
-                              value: itemValue,
-                              child: Text(itemValue),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              placesValue = newValue!;
-                            });
+            Container(
+              width: size.width * .3,
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Colors.blueGrey),
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              // width: size.width * .2,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.height * .01, vertical: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Placement : ",
+                      style: TextStyle(fontSize: size.height * .025),
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: placesValue,
+                        elevation: 0,
+                        dropdownColor: Colors.white,
+                        style: TextStyle(
+                            color: Colors.black, fontSize: size.height * .025),
+                        items: places.map((itemValue) {
+                          return DropdownMenuItem<String>(
+                            value: itemValue,
+                            child: Text(itemValue),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            placesValue = newValue!;
+                          });
 
-                            _filterPlaceList(placesValue);
-                          },
-                        ),
+                          _filterPlaceList(placesValue);
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
             Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(
+                  size.height * .01,
+                ),
                 child: InkWell(
                   onTap: () {
                     getData(fatchDataHelper);
                   },
                   child: Container(
-                    width: size.width * .13,
+                    width: size.height * .3,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         border: Border.all(color: Colors.blueGrey)),
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(
+                        size.height * .01,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -325,18 +329,22 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                     fadingCircle,
                     Text(
                       'Please Wait ..........',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: size.height * .03, color: Colors.black),
                     ),
                   ],
                 ))
               : Expanded(
                   child: SizedBox(
-                    height: 500.0,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
                       itemCount: _filteredCategoryList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                        crossAxisCount: size.width < 800
+                            ? 1
+                            : size.width < 1200
+                                ? 2
+                                : 3,
                         crossAxisSpacing: 5.0,
                         mainAxisSpacing: 5.0,
                       ),

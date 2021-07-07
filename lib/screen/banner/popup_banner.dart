@@ -176,16 +176,16 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(size.height * .01),
               child: Container(
-                width: size.width * .2,
+                width: size.width * .4,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blueGrey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 // width: size.width * .2,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: size.height * .01, vertical: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -198,7 +198,9 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                           value: categoryValue,
                           elevation: 0,
                           dropdownColor: Colors.white,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: size.height * .025),
                           items: categorys.map((itemValue) {
                             return DropdownMenuItem<String>(
                               value: itemValue,
@@ -222,13 +224,13 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
             Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(size.height * .01),
                 child: InkWell(
                   onTap: () {
                     getData(fatchDataHelper);
                   },
                   child: Container(
-                    width: size.width * .13,
+                    width: size.width * .2,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         border: Border.all(color: Colors.blueGrey)),
@@ -237,9 +239,9 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text('Refresh To All'),
+                          Text('Refresh'),
                           SizedBox(
-                            width: size.width * .02,
+                            width: size.width * .03,
                           ),
                           Icon(Icons.refresh_outlined),
                         ],
@@ -262,18 +264,22 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                     fadingCircle,
                     Text(
                       'Please Wait ..........',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: size.height * .03, color: Colors.black),
                     ),
                   ],
                 ))
               : Expanded(
                   child: SizedBox(
-                    height: 500.0,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
                       itemCount: _filteredCategoryList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                        crossAxisCount: size.width < 800
+                            ? 1
+                            : size.width < 1200
+                                ? 2
+                                : 3,
                         crossAxisSpacing: 5.0,
                         mainAxisSpacing: 5.0,
                       ),
