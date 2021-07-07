@@ -120,128 +120,143 @@ class _RateChartBannerState extends State<RateChartBanner> {
 
   showImageUI(Size size, FirebaseProvider firebaseProvider) {
     return Container(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: InkWell(
-                    onTap: () {
-                      fatchEditorsData();
-                    },
-                    child: Container(
-                      width: size.width * .13,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(color: Colors.blueGrey)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('Refresh'),
-                            SizedBox(
-                              width: size.width * .02,
-                            ),
-                            Icon(Icons.refresh_outlined),
-                          ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(
+                      size.height * .01,
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        fatchEditorsData();
+                      },
+                      child: Container(
+                        width: size.height * .2,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.blueGrey)),
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                            size.height * .01,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text('Refresh'),
+                              SizedBox(
+                                width: size.width * .02,
+                              ),
+                              Icon(Icons.refresh_outlined),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-              height: size.height * .64,
-              width: size.height * .45,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(width: 1, color: Colors.blueGrey),
-              ),
-              child: editorsUrl == ''
-                  ? Center(child: Text('You have no Editors Banner'))
-                  : Image.network(
-                      editorsUrl,
-                      fit: BoxFit.fitHeight,
-                    )),
-          _isLoading
-              ? Container(
-                  child: Column(
-                  children: [
-                    fadingCircle,
-                  ],
-                ))
-              : Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Alert(
-                        context: context,
-                        type: AlertType.warning,
-                        title: "Confirmation Alert",
-                        desc: "Are you confirm to delete this item ?",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "Cancel",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          DialogButton(
-                            child: Text(
-                              "OK",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              setState(() => _isLoading = true);
-                              firebaseProvider
-                                  .deleteRateChartBannerData()
-                                  .then((value) async {
-                                if (value == true) {
-                                  firebase_storage.FirebaseStorage.instance
-                                      .ref()
-                                      .child('SingleBanner')
-                                      .child('12345678')
-                                      .delete();
-                                  setState(() {
-                                    _isLoading = false;
-                                    editorsUrl = '';
-                                  });
-
-                                  showToast('Data deleted successful');
-                                } else {
-                                  setState(() => _isLoading = false);
-
-                                  showToast('Data delete unsuccessful');
-                                }
-                              });
-                            },
-                          )
-                        ],
-                      ).show();
-                    },
-                    child: Text("Delete"),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.redAccent,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 23, vertical: 15),
-                        textStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  ),
+              ],
+            ),
+            Container(
+                height: size.height * .64,
+                width: size.height * .45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(width: 1, color: Colors.blueGrey),
                 ),
-        ],
+                child: editorsUrl == ''
+                    ? Center(child: Text('You have no Editors Banner'))
+                    : Image.network(
+                        editorsUrl,
+                        fit: BoxFit.fitHeight,
+                      )),
+            _isLoading
+                ? Container(
+                    child: Column(
+                    children: [
+                      fadingCircle,
+                    ],
+                  ))
+                : Padding(
+                    padding: EdgeInsets.all(
+                      size.height * .03,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Alert(
+                          context: context,
+                          type: AlertType.warning,
+                          title: "Confirmation Alert",
+                          desc: "Are you confirm to delete this item ?",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .03,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            DialogButton(
+                              child: Text(
+                                "OK",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * .03,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                setState(() => _isLoading = true);
+                                firebaseProvider
+                                    .deleteRateChartBannerData()
+                                    .then((value) async {
+                                  if (value == true) {
+                                    firebase_storage.FirebaseStorage.instance
+                                        .ref()
+                                        .child('SingleBanner')
+                                        .child('12345678')
+                                        .delete();
+                                    setState(() {
+                                      _isLoading = false;
+                                      editorsUrl = '';
+                                    });
+
+                                    showToast('Data deleted successful');
+                                  } else {
+                                    setState(() => _isLoading = false);
+
+                                    showToast('Data delete unsuccessful');
+                                  }
+                                });
+                              },
+                            )
+                          ],
+                        ).show();
+                      },
+                      child: Text("Delete"),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.height * .04,
+                            vertical: size.height * .02,
+                          ),
+                          textStyle: TextStyle(
+                              fontSize: size.height * .03,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

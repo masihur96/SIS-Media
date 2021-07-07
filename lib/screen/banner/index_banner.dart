@@ -160,16 +160,18 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(
+                size.height * .01,
+              ),
               child: Container(
-                width: size.width * .25,
+                width: size.height * .4,
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.blueGrey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 // width: size.width * .2,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: size.height * .01, vertical: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -182,7 +184,9 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                           value: categoryValue,
                           elevation: 0,
                           dropdownColor: Colors.white,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: size.height * .025),
                           items: categorys.map((itemValue) {
                             return DropdownMenuItem<String>(
                               value: itemValue,
@@ -206,18 +210,22 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
             Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(
+                  size.height * .01,
+                ),
                 child: InkWell(
                   onTap: () {
                     getData(fatchDataHelper);
                   },
                   child: Container(
-                    width: size.width * .13,
+                    width: size.height * .2,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         border: Border.all(color: Colors.blueGrey)),
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(
+                        size.height * .01,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -246,13 +254,14 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                     fadingCircle,
                     Text(
                       'Please Wait ..........',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: size.height * .03, color: Colors.black),
                     ),
                   ],
                 ))
               : Expanded(
                   child: SizedBox(
-                    height: 500.0,
+                    // height: size.height * .7,
                     child: new GridView.builder(
                       scrollDirection: Axis.vertical,
                       itemCount: _filteredList.length,
@@ -276,144 +285,166 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
   _listItem(index, Size size, FirebaseProvider firebaseProvider,
       DataProvider dataProvider, FatchDataHelper fatchDataHelper) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(size.height * .008),
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        // height: size.height * .7,
+        // width: size.height * .9,
         decoration: BoxDecoration(
             border: Border.all(width: 1, color: Colors.grey),
             borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: EdgeInsets.all(size.height * .008),
+              child: Container(
+                  height: size.height * .4,
+                  // width: size.height * .8,
+                  child: _filteredList[index].image!.isEmpty
+                      ? Icon(
+                          Icons.photo,
+                          size: size.height * .16,
+                          color: Colors.grey,
+                        )
+                      : Image.network(_filteredList[index].image!,
+                          fit: BoxFit.fill)),
+            ),
             Container(
-                height: size.height * .35,
-                width: size.width * .7,
-                child: _filteredList[index].image!.isEmpty
-                    ? Icon(
-                        Icons.photo,
-                        size: size.height * .16,
-                        color: Colors.grey,
-                      )
-                    : Image.network(_filteredList[index].image!,
-                        fit: BoxFit.fill)),
-            Container(
-              width: size.width * .5,
+              width: size.width * .2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(
+                      size.height * .01,
+                    ),
                     child: Container(
-                        height: 2, width: size.width, color: Colors.grey),
+                        height: size.height * .001,
+                        width: size.width,
+                        color: Colors.grey),
                   ),
                   _filteredList[index].status!.isEmpty
                       ? Container()
                       : Text(
                           _filteredList[index].status!,
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w700),
+                              fontSize: size.height * .02,
+                              fontWeight: FontWeight.w700),
                         ),
                   _filteredList[index].date!.isEmpty
                       ? Container()
                       : Text('Date: ${_filteredList[index].date}',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: size.height * .02,
                           )),
                 ],
               ),
             ),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    child: Text('Update'),
-                    onPressed: () {
-                      dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Update Index Media";
-                      dataProvider.indexBannerModel.image =
-                          _filteredList[index].image;
-                      dataProvider.indexBannerModel.id =
-                          _filteredList[index].id;
-                      dataProvider.indexBannerModel.status =
-                          _filteredList[index].status;
-                      dataProvider.indexBannerModel.date =
-                          _filteredList[index].date;
-                      // addImageUI(size, firebaseProvider);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.grey,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        textStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  ElevatedButton(
-                    child: Text('Delete'),
-                    onPressed: () {
-                      Alert(
-                        context: context,
-                        type: AlertType.warning,
-                        title: "Confirmation Alert",
-                        desc: "Are you confirm to delete this item ?",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "Cancel",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+            Padding(
+              padding: EdgeInsets.all(size.height * .008),
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      child: Text(
+                        'Update',
+                      ),
+                      onPressed: () {
+                        dataProvider.category = dataProvider.subCategory;
+                        dataProvider.subCategory = "Update Index Media";
+                        dataProvider.indexBannerModel.image =
+                            _filteredList[index].image;
+                        dataProvider.indexBannerModel.id =
+                            _filteredList[index].id;
+                        dataProvider.indexBannerModel.status =
+                            _filteredList[index].status;
+                        dataProvider.indexBannerModel.date =
+                            _filteredList[index].date;
+                        // addImageUI(size, firebaseProvider);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.grey,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.height * .04,
+                              vertical: size.height * .02),
+                          textStyle: TextStyle(
+                              fontSize: size.height * .02,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                    SizedBox(
+                      height: size.height * .01,
+                    ),
+                    ElevatedButton(
+                      child: Text(
+                        'Delete',
+                      ),
+                      onPressed: () {
+                        Alert(
+                          context: context,
+                          type: AlertType.warning,
+                          title: "Confirmation Alert",
+                          desc: "Are you confirm to delete this item ?",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: size.height * .04),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              color: Color.fromRGBO(0, 179, 134, 1.0),
                             ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Color.fromRGBO(0, 179, 134, 1.0),
-                          ),
-                          DialogButton(
-                            child: Text(
-                              "OK",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              setState(() => _isLoading = true);
-                              firebaseProvider
-                                  .deleteBannerData(
-                                      _filteredList[index].id!, context)
-                                  .then((value) {
-                                if (value == true) {
-                                  firebase_storage.FirebaseStorage.instance
-                                      .ref()
-                                      .child('Banner')
-                                      .child(_filteredList[index].id!)
-                                      .delete();
-                                  setState(() => _isLoading = false);
-                                  getData(fatchDataHelper);
-                                  showToast('Data deleted successful');
-                                } else {
-                                  Navigator.pop(context);
-                                  setState(() => _isLoading = false);
-                                  showToast('Data delete unsuccessful');
-                                }
-                              });
-                            },
-                          )
-                        ],
-                      ).show();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.redAccent,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 23, vertical: 15),
-                        textStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold)),
-                  ),
-                ],
+                            DialogButton(
+                              child: Text(
+                                "OK",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: size.height * .04),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                setState(() => _isLoading = true);
+                                firebaseProvider
+                                    .deleteBannerData(
+                                        _filteredList[index].id!, context)
+                                    .then((value) {
+                                  if (value == true) {
+                                    firebase_storage.FirebaseStorage.instance
+                                        .ref()
+                                        .child('Banner')
+                                        .child(_filteredList[index].id!)
+                                        .delete();
+                                    setState(() => _isLoading = false);
+                                    getData(fatchDataHelper);
+                                    showToast('Data deleted successful');
+                                  } else {
+                                    Navigator.pop(context);
+                                    setState(() => _isLoading = false);
+                                    showToast('Data delete unsuccessful');
+                                  }
+                                });
+                              },
+                            )
+                          ],
+                        ).show();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.redAccent,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.height * .04,
+                              vertical: size.height * .02),
+                          textStyle: TextStyle(
+                              fontSize: size.height * .02,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
