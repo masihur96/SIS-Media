@@ -1095,10 +1095,17 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
               ),
             ],
           ),
-          // SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _textFormBuilderForAudio('Status'),
+          Container(
+            width: size.width > 1200 ? size.width * .415 : size.width * .5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  _textFormBuilderForAudio('Status'),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
           ),
         ],
       ),

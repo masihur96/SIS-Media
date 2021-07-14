@@ -1026,11 +1026,19 @@ class _NewMediaState extends State<NewMedia> {
               ),
             ],
           ),
-          // SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _textFormBuilderForNewMedia('SalesSupport'),
+          Container(
+            width: size.width > 1200 ? size.width * .415 : size.width * .5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  _textFormBuilderForNewMedia('SalesSupport'),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
           ),
+          // SizedBox(height: 20),
         ],
       ),
     );
