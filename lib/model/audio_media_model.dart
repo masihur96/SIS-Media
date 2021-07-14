@@ -25,6 +25,7 @@ class AudioMediaModel {
   String? ddgprogram;
   String? subCategory;
   String? category;
+  String? statusData;
 
   AudioMediaModel({
     this.id,
@@ -53,5 +54,6 @@ class AudioMediaModel {
     this.ddgprogram,
     this.subCategory,
     this.category,
+    this.statusData,
   });
 }

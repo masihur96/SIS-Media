@@ -1,5 +1,4 @@
-
-class NewMediaModel{
+class NewMediaModel {
   String? name;
   String? address;
   String? pabx;
@@ -17,35 +16,46 @@ class NewMediaModel{
   String? designation;
   String? deathList;
   String? youtubeChannel;
+  String? member;
+  String? companyName;
+  String? corporateOffice;
+  String? whatsApp;
+  String? skype;
+  String? hotline;
+  String? salesSupport;
   String? id;
   String? status;
   String? date;
   String? subCategory;
 
-
-  NewMediaModel(
-  {
-     this.name,
-     this.address,
-     this.pabx,
-     this.email,
-     this.web,
-     this.fax,
-     this.phone,
-     this.mobile,
-     this.contact,
-     this.facebook,
-     this.image,
-     this.editor,
-     this.birthDate,
-     this.deathDate,
-     this.designation,
-     this.deathList,
-     this.youtubeChannel,
-     this.id,
-     this.status,
-     this.date,
-     this.subCategory,
-}
-    );
+  NewMediaModel({
+    this.name,
+    this.address,
+    this.pabx,
+    this.email,
+    this.web,
+    this.fax,
+    this.phone,
+    this.mobile,
+    this.contact,
+    this.facebook,
+    this.image,
+    this.editor,
+    this.birthDate,
+    this.deathDate,
+    this.designation,
+    this.deathList,
+    this.youtubeChannel,
+    this.member,
+    this.companyName,
+    this.corporateOffice,
+    this.whatsApp,
+    this.skype,
+    this.hotline,
+    this.salesSupport,
+    this.id,
+    this.status,
+    this.date,
+    this.subCategory,
+  });
 }

@@ -86,6 +86,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
   TextEditingController _channelName = TextEditingController();
   TextEditingController _ddgProgram = TextEditingController();
   TextEditingController _ddgNews = TextEditingController();
+  TextEditingController _statusData = TextEditingController();
 
   List staatus = ['public', 'private'];
   String statusValue = '';
@@ -116,6 +117,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
     _channelName.text = dataProvider.audioMediaModel.channelName!;
     _ddgNews.text = dataProvider.audioMediaModel.ddgNews!;
     _ddgProgram.text = dataProvider.audioMediaModel.ddgprogram!;
+    _statusData.text = dataProvider.audioMediaModel.statusData!;
     statusValue = dataProvider.audioMediaModel.status.toString();
   }
 
@@ -343,6 +345,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
         'hotlineNumber': _hotline_number.text,
         'businessType': _business_type.text,
         'channelName': _channelName.text,
+        'statusData': _statusData.text,
         'id': dataProvider.audioMediaModel.id!,
         'status': statusValue.toLowerCase(),
         'date': dateData,
@@ -436,6 +439,8 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
               ),
             ],
           ),
+              SizedBox(height: 20),
+          _textFormBuilderForAudio('Status'),
         ],
       ),
     );
@@ -484,6 +489,8 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                                                                           ? _business_type
                                                                           : hint == 'Channel Name'
                                                                               ? _channelName
+                                                                               : hint == 'Status'
+                                                                              ? _statusData
                                                                               : hint == 'DDG (Program)'
                                                                                   ? _ddgProgram
                                                                                   : _ddgNews,

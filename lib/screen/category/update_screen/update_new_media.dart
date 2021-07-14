@@ -76,6 +76,13 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
   TextEditingController _designation = TextEditingController();
   TextEditingController _deathList = TextEditingController();
   TextEditingController _youtubeChannel = TextEditingController();
+  TextEditingController _member = TextEditingController();
+  TextEditingController _companyName = TextEditingController();
+  TextEditingController _corporateOffice = TextEditingController();
+  TextEditingController _whatsApp = TextEditingController();
+  TextEditingController _skype = TextEditingController();
+  TextEditingController _hotline = TextEditingController();
+  TextEditingController _salesSupport = TextEditingController();
 
   List staatus = ['public', 'private'];
   String statusValue = '';
@@ -102,6 +109,14 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
     _designation.text = dataProvider.newMediaModel.designation!;
     _deathList.text = dataProvider.newMediaModel.deathList!;
     _youtubeChannel.text = dataProvider.newMediaModel.youtubeChannel!;
+    _member.text = dataProvider.newMediaModel.member!;
+    _companyName.text = dataProvider.newMediaModel.companyName!;
+    _corporateOffice.text = dataProvider.newMediaModel.corporateOffice!;
+    _whatsApp.text = dataProvider.newMediaModel.whatsApp!;
+    _skype.text = dataProvider.newMediaModel.skype!;
+    _hotline.text = dataProvider.newMediaModel.hotline!;
+    _salesSupport.text = dataProvider.newMediaModel.salesSupport!;
+
     _designation.text = dataProvider.filmMediaModel.designation!;
   }
 
@@ -304,6 +319,12 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                       _textFormBuilderForNewMedia('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Member'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Company'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('CorporateOffice'),
                     ],
                   ),
                 ),
@@ -329,12 +350,20 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                       _textFormBuilderForNewMedia('Death List'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Youtube Channel'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('WhatsApp'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Skype'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Hotline'),
                     ],
                   ),
                 ),
               ),
             ],
           ),
+          SizedBox(height: 20),
+          _textFormBuilderForNewMedia('SalesSupport'),
         ],
       ),
     );
@@ -371,10 +400,25 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
                                                           : hint ==
                                                                   'Designation'
                                                               ? _designation
-                                                              : hint ==
-                                                                      'Death List'
-                                                                  ? _deathList
-                                                                  : _youtubeChannel,
+                                                              : hint == 'Member'
+                                                                  ? _member
+                                                                  : hint ==
+                                                                          'Company'
+                                                                      ? _companyName
+                                                                      : hint ==
+                                                                              'CorporateOffice'
+                                                                          ? _corporateOffice
+                                                                          : hint == 'WhatsApp'
+                                                                              ? _whatsApp
+                                                                              : hint == 'Skype'
+                                                                                  ? _skype
+                                                                                  : hint == 'Hotline'
+                                                                                      ? _hotline
+                                                                                      : hint == 'SalesSupport'
+                                                                                          ? _salesSupport
+                                                                                          : hint == 'Death List'
+                                                                                              ? _deathList
+                                                                                              : _youtubeChannel,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(
@@ -436,6 +480,13 @@ class _UpdateNewMediaState extends State<UpdateNewMedia> {
         'designation': _designation.text,
         'deathList': _deathList.text,
         'youtuveChannel': _youtubeChannel.text,
+        'member': _member.text,
+        'companyName': _companyName.text,
+        'corporateOffice': _corporateOffice.text,
+        'whatsApp': _whatsApp.text,
+        'skype': _skype.text,
+        'hotline': _hotline.text,
+        'salesSupport': _salesSupport.text,
         'id': dataProvider.newMediaModel.id!,
         'date': dateData,
         'status': statusValue.toLowerCase(),

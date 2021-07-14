@@ -38,6 +38,14 @@ class _NewMediaState extends State<NewMedia> {
   TextEditingController _designation = TextEditingController();
   TextEditingController _deathList = TextEditingController();
   TextEditingController _youtubeChannel = TextEditingController();
+  TextEditingController _member = TextEditingController();
+  TextEditingController _companyName = TextEditingController();
+  TextEditingController _corporateOffice = TextEditingController();
+  TextEditingController _whatsApp = TextEditingController();
+  TextEditingController _skype = TextEditingController();
+  TextEditingController _hotline = TextEditingController();
+  TextEditingController _salesSupport = TextEditingController();
+
   String dropdownValue = "Digital Audio - Video Content Provider";
   final _ktabs = <Tab>[
     const Tab(
@@ -466,6 +474,62 @@ class _NewMediaState extends State<NewMedia> {
                             fontSize: 12,
                           ),
                         ),
+                  _filteredList[index].member!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Member: ${_filteredList[index].member}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].companyName!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Company Name: ${_filteredList[index].companyName}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].corporateOffice!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Corporate Office: ${_filteredList[index].corporateOffice}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].whatsApp!.isEmpty
+                      ? Container()
+                      : Text(
+                          'WhatsApp: ${_filteredList[index].whatsApp}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].skype!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Skypel: ${_filteredList[index].skype}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].hotline!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Hotline: ${_filteredList[index].hotline}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].salesSupport!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Sales & Support: ${_filteredList[index].salesSupport}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                   _filteredList[index].status!.isEmpty
                       ? Container()
                       : Text(
@@ -474,8 +538,6 @@ class _NewMediaState extends State<NewMedia> {
                             fontSize: 12,
                           ),
                         ),
-                  // _dataList[index].id.isEmpty?Container():
-                  // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
                   _filteredList[index].date!.isEmpty
                       ? Container()
                       : Text(
@@ -531,6 +593,20 @@ class _NewMediaState extends State<NewMedia> {
                           _filteredList[index].deathList;
                       dataProvider.newMediaModel.youtubeChannel =
                           _filteredList[index].youtubeChannel;
+                      dataProvider.newMediaModel.member =
+                          _filteredList[index].member;
+                      dataProvider.newMediaModel.companyName =
+                          _filteredList[index].companyName;
+                      dataProvider.newMediaModel.corporateOffice =
+                          _filteredList[index].corporateOffice;
+                      dataProvider.newMediaModel.whatsApp =
+                          _filteredList[index].whatsApp;
+                      dataProvider.newMediaModel.skype =
+                          _filteredList[index].skype;
+                      dataProvider.newMediaModel.hotline =
+                          _filteredList[index].hotline;
+                      dataProvider.newMediaModel.salesSupport =
+                          _filteredList[index].salesSupport;
                       dataProvider.newMediaModel.status =
                           _filteredList[index].status;
                       dataProvider.newMediaModel.deathList =
@@ -826,6 +902,13 @@ class _NewMediaState extends State<NewMedia> {
         'designation': _designation.text,
         'deathList': _deathList.text,
         'youtuveChannel': _youtubeChannel.text,
+        'member': _member.text,
+        'companyName': _companyName.text,
+        'corporateOffice': _corporateOffice.text,
+        'whatsApp': _whatsApp.text,
+        'skype': _skype.text,
+        'hotline': _hotline.text,
+        'salesSupport': _salesSupport.text,
         'id': uuid,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
@@ -863,6 +946,13 @@ class _NewMediaState extends State<NewMedia> {
     _deathDate.clear();
     _designation.clear();
     _youtubeChannel.clear();
+    _member.clear();
+    _companyName.clear();
+    _corporateOffice.clear();
+    _whatsApp.clear();
+    _skype.clear();
+    _hotline.clear();
+    _salesSupport.clear();
   }
 
   Widget NewMediaWidget(Size size) {
@@ -893,6 +983,12 @@ class _NewMediaState extends State<NewMedia> {
                       _textFormBuilderForNewMedia('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Mobile'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Member'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Company'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('CorporateOffice'),
                     ],
                   ),
                 ),
@@ -918,11 +1014,22 @@ class _NewMediaState extends State<NewMedia> {
                       _textFormBuilderForNewMedia('Death List'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Youtube Channel'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('WhatsApp'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Skype'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Hotline'),
                     ],
                   ),
                 ),
               ),
             ],
+          ),
+          // SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _textFormBuilderForNewMedia('SalesSupport'),
           ),
         ],
       ),
@@ -960,10 +1067,25 @@ class _NewMediaState extends State<NewMedia> {
                                                           : hint ==
                                                                   'Designation'
                                                               ? _designation
-                                                              : hint ==
-                                                                      'Death List'
-                                                                  ? _deathList
-                                                                  : _youtubeChannel,
+                                                              : hint == 'Member'
+                                                                  ? _member
+                                                                  : hint ==
+                                                                          'Company'
+                                                                      ? _companyName
+                                                                      : hint ==
+                                                                              'CorporateOffice'
+                                                                          ? _corporateOffice
+                                                                          : hint == 'WhatsApp'
+                                                                              ? _whatsApp
+                                                                              : hint == 'Skype'
+                                                                                  ? _skype
+                                                                                  : hint == 'Hotline'
+                                                                                      ? _hotline
+                                                                                      : hint == 'SalesSupport'
+                                                                                          ? _salesSupport
+                                                                                          : hint == 'Death List'
+                                                                                              ? _deathList
+                                                                                              : _youtubeChannel,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(

@@ -40,6 +40,15 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   TextEditingController _headOffice = TextEditingController(text: '');
   TextEditingController _position = TextEditingController(text: '');
   TextEditingController _businessType = TextEditingController(text: '');
+  TextEditingController _companyName = TextEditingController(text: '');
+  TextEditingController _branch = TextEditingController(text: '');
+  TextEditingController _reservationExt = TextEditingController(text: '');
+  TextEditingController _marketingSales = TextEditingController(text: '');
+  TextEditingController _serviceName = TextEditingController(text: '');
+  TextEditingController _mainCampus = TextEditingController(text: '');
+  TextEditingController _showroomShop = TextEditingController(text: '');
+  TextEditingController _hotline = TextEditingController(text: '');
+  TextEditingController _customerCare = TextEditingController(text: '');
 
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
@@ -471,6 +480,78 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                             fontSize: 12,
                           ),
                         ),
+                  _filteredList[index].companyName!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Company: ${_filteredList[index].companyName}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].branch!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Branch: ${_filteredList[index].branch}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].reservation!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Reservation: ${_filteredList[index].reservation}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].marketingSales!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Marketing & Sales: ${_filteredList[index].marketingSales}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].serviceName!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Service: ${_filteredList[index].serviceName}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].mainCampus!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Main Campus: ${_filteredList[index].mainCampus}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].showroom!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Show Room: ${_filteredList[index].showroom}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].hotline!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Hotline: ${_filteredList[index].hotline}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].customerCare!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Customer Care: ${_filteredList[index].customerCare}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                   _filteredList[index].status!.isEmpty
                       ? Container()
                       : Text(
@@ -479,8 +560,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                             fontSize: 12,
                           ),
                         ),
-                  // _dataList[index].id.isEmpty?Container():
-                  // Text(_dataList[index].id,style: TextStyle(fontSize: 12,),),
                   _filteredList[index].date!.isEmpty
                       ? Container()
                       : Text(
@@ -536,6 +615,25 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           _filteredList[index].position;
                       dataProvider.importentEmergencyModel.businessType =
                           _filteredList[index].businessType;
+                      dataProvider.importentEmergencyModel.companyName =
+                          _filteredList[index].companyName;
+                      dataProvider.importentEmergencyModel.branch =
+                          _filteredList[index].branch;
+                      dataProvider.importentEmergencyModel.reservation =
+                          _filteredList[index].reservation;
+                      dataProvider.importentEmergencyModel.marketingSales =
+                          _filteredList[index].marketingSales;
+                      dataProvider.importentEmergencyModel.serviceName =
+                          _filteredList[index].serviceName;
+                      dataProvider.importentEmergencyModel.mainCampus =
+                          _filteredList[index].mainCampus;
+                      dataProvider.importentEmergencyModel.showroom =
+                          _filteredList[index].showroom;
+                      dataProvider.importentEmergencyModel.hotline =
+                          _filteredList[index].hotline;
+                      dataProvider.importentEmergencyModel.customerCare =
+                          _filteredList[index].customerCare;
+
                       dataProvider.importentEmergencyModel.status =
                           _filteredList[index].status;
                     },
@@ -854,6 +952,15 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         'headOffice': _headOffice.text,
         'position': _position.text,
         'businessType': _businessType.text,
+        'companyName': _companyName.text,
+        'branch': _branch.text,
+        'reservation': _reservationExt.text,
+        'marketingSales': _marketingSales.text,
+        'serviceName': _serviceName.text,
+        'mainCampus': _mainCampus.text,
+        'showroom': _showroomShop.text,
+        'hotline': _hotline.text,
+        'customerCare': _customerCare.text,
         'id': uuid,
         'category': dataProvider.subCategory,
         'sub-category': dropdownValue,
@@ -889,6 +996,15 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     _headOffice.clear();
     _position.clear();
     _businessType.clear();
+    _companyName.clear();
+    _branch.clear();
+    _reservationExt.clear();
+    _marketingSales.clear();
+    _serviceName.clear();
+    _mainCampus.clear();
+    _showroomShop.clear();
+    _hotline.clear();
+    _customerCare.clear();
   }
 
   Widget ImportMediaWidget(Size size) {
@@ -917,6 +1033,14 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       _textFormBuilderForImport('FAX'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('Phone(T&T)'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Company Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Branch'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Reservation'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Marketing & Sales'),
                     ],
                   ),
                 ),
@@ -940,11 +1064,24 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       _textFormBuilderForImport('Position'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('Business Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Service Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Main Campus'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Showroom or Shop'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Hotline'),
                     ],
                   ),
                 ),
               ),
             ],
+          ),
+          // SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _textFormBuilderForImport('Customer Care'),
           ),
         ],
       ),
@@ -977,9 +1114,30 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                                                   ? _corporateOffice
                                                   : hint == 'Head Office'
                                                       ? _headOffice
-                                                      : hint == 'Position'
-                                                          ? _position
-                                                          : _businessType,
+                                                      : hint == 'Company Name'
+                                                          ? _companyName
+                                                          : hint == 'Branch'
+                                                              ? _branch
+                                                              : hint ==
+                                                                      'Reservation'
+                                                                  ? _reservationExt
+                                                                  : hint ==
+                                                                          'Marketing & Sales'
+                                                                      ? _marketingSales
+                                                                      : hint ==
+                                                                              'Service Name'
+                                                                          ? _serviceName
+                                                                          : hint == 'Main Campus'
+                                                                              ? _mainCampus
+                                                                              : hint == 'Showroom or Shop'
+                                                                                  ? _showroomShop
+                                                                                  : hint == 'Hotline'
+                                                                                      ? _hotline
+                                                                                      : hint == 'Customer Care'
+                                                                                          ? _customerCare
+                                                                                          : hint == 'Position'
+                                                                                              ? _position
+                                                                                              : _businessType,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(

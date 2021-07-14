@@ -71,6 +71,15 @@ class _UpdateImportentEmergencyDataState
   TextEditingController _headOffice = TextEditingController(text: '');
   TextEditingController _position = TextEditingController(text: '');
   TextEditingController _businessType = TextEditingController(text: '');
+  TextEditingController _companyName = TextEditingController(text: '');
+  TextEditingController _branch = TextEditingController(text: '');
+  TextEditingController _reservationExt = TextEditingController(text: '');
+  TextEditingController _marketingSales = TextEditingController(text: '');
+  TextEditingController _serviceName = TextEditingController(text: '');
+  TextEditingController _mainCampus = TextEditingController(text: '');
+  TextEditingController _showroomShop = TextEditingController(text: '');
+  TextEditingController _hotline = TextEditingController(text: '');
+  TextEditingController _customerCare = TextEditingController(text: '');
 
   List staatus = ['public', 'private'];
   String statusValue = '';
@@ -96,6 +105,15 @@ class _UpdateImportentEmergencyDataState
     _headOffice.text = dataProvider.importentEmergencyModel.headOffice!;
     _position.text = dataProvider.importentEmergencyModel.position!;
     _businessType.text = dataProvider.importentEmergencyModel.businessType!;
+    _companyName.text = dataProvider.importentEmergencyModel.companyName!;
+    _branch.text = dataProvider.importentEmergencyModel.branch!;
+    _reservationExt.text = dataProvider.importentEmergencyModel.reservation!;
+    _marketingSales.text = dataProvider.importentEmergencyModel.marketingSales!;
+    _serviceName.text = dataProvider.importentEmergencyModel.serviceName!;
+    _mainCampus.text = dataProvider.importentEmergencyModel.mainCampus!;
+    _showroomShop.text = dataProvider.importentEmergencyModel.showroom!;
+    _hotline.text = dataProvider.importentEmergencyModel.hotline!;
+    _customerCare.text = dataProvider.importentEmergencyModel.customerCare!;
 
     statusValue = dataProvider.importentEmergencyModel.status.toString();
   }
@@ -321,6 +339,15 @@ class _UpdateImportentEmergencyDataState
         'headOffice': _headOffice.text,
         'position': _position.text,
         'businessType': _businessType.text,
+        'companyName': _companyName.text,
+        'branch': _branch.text,
+        'reservation': _reservationExt.text,
+        'marketingSales': _marketingSales.text,
+        'serviceName': _serviceName.text,
+        'mainCampus': _mainCampus.text,
+        'showroom': _showroomShop.text,
+        'hotline': _hotline.text,
+        'customerCare': _customerCare.text,
         'id': dataProvider.importentEmergencyModel.id!,
         'date': dateData,
         'status': statusValue.toLowerCase(),
@@ -371,6 +398,14 @@ class _UpdateImportentEmergencyDataState
                       _textFormBuilderForImport('FAX'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('Phone(T&T)'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Company Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Branch'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Reservation'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Marketing & Sales'),
                     ],
                   ),
                 ),
@@ -394,12 +429,22 @@ class _UpdateImportentEmergencyDataState
                       _textFormBuilderForImport('Position'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('Business Type'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Service Name'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Main Campus'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Showroom or Shop'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForImport('Hotline'),
                     ],
                   ),
                 ),
               ),
             ],
           ),
+          SizedBox(height: 20),
+          _textFormBuilderForImport('Customer Care'),
         ],
       ),
     );
@@ -431,9 +476,30 @@ class _UpdateImportentEmergencyDataState
                                                   ? _corporateOffice
                                                   : hint == 'Head Office'
                                                       ? _headOffice
-                                                      : hint == 'Position'
-                                                          ? _position
-                                                          : _businessType,
+                                                      : hint == 'Company Name'
+                                                          ? _companyName
+                                                          : hint == 'Branch'
+                                                              ? _branch
+                                                              : hint ==
+                                                                      'Reservation'
+                                                                  ? _reservationExt
+                                                                  : hint ==
+                                                                          'Marketing & Sales'
+                                                                      ? _marketingSales
+                                                                      : hint ==
+                                                                              'Service Name'
+                                                                          ? _serviceName
+                                                                          : hint == 'Main Campus'
+                                                                              ? _mainCampus
+                                                                              : hint == 'Showroom or Shop'
+                                                                                  ? _showroomShop
+                                                                                  : hint == 'Hotline'
+                                                                                      ? _hotline
+                                                                                      : hint == 'Customer Care'
+                                                                                          ? _customerCare
+                                                                                          : hint == 'Position'
+                                                                                              ? _position
+                                                                                              : _businessType,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(

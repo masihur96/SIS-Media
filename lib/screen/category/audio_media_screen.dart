@@ -45,6 +45,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   TextEditingController _channelName = TextEditingController();
   TextEditingController _ddgProgram = TextEditingController();
   TextEditingController _ddgNews = TextEditingController();
+  TextEditingController _statusData = TextEditingController();
 
   String dropdownValue = "FM Radio Channel";
   String channelValue = 'Bangladesh Betar';
@@ -550,6 +551,14 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                             fontSize: 12,
                           ),
                         ),
+                  _filteredList[index].statusData!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Musician Status: ${_filteredList[index].statusData}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -610,6 +619,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                           _filteredList[index].ddgNews;
                       dataProvider.audioMediaModel.ddgprogram =
                           _filteredList[index].ddgprogram;
+                      dataProvider.audioMediaModel.statusData =
+                          _filteredList[index].statusData;
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
@@ -977,6 +988,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         'date': dateData,
         'ddgProgram': _ddgProgram.text,
         'ddgNews': _ddgNews.text,
+        'statusData': _statusData.text,
       };
       await firebaseProvider.addAudioMediaData(map).then((value) {
         if (value) {
@@ -1013,6 +1025,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
     _channelName.clear();
     _ddgProgram.clear();
     _ddgNews.clear();
+    _statusData.clear();
   }
 
   Widget AudioMediaFild(Size size) {
@@ -1082,6 +1095,11 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
               ),
             ],
           ),
+          // SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _textFormBuilderForAudio('Status'),
+          ),
         ],
       ),
     );
@@ -1130,9 +1148,11 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                                                                           ? _business_type
                                                                           : hint == 'Channel Name'
                                                                               ? _channelName
-                                                                              : hint == 'DDG (Program)'
-                                                                                  ? _ddgProgram
-                                                                                  : _ddgNews,
+                                                                              : hint == 'Status'
+                                                                                  ? _statusData
+                                                                                  : hint == 'DDG (Program)'
+                                                                                      ? _ddgProgram
+                                                                                      : _ddgNews,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(

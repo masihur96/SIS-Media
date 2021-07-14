@@ -24,8 +24,8 @@ class FatchDataHelper extends ChangeNotifier {
   List<RateChartModel> _rateChartList = [];
   get rateChartList => _rateChartList;
 
-    List<ManagementDataModel> _managementDataList = [];
-     get managementDataList => _managementDataList;
+  List<ManagementDataModel> _managementDataList = [];
+  get managementDataList => _managementDataList;
 
   List<AudioMediaModel> _audioMediadataList = [];
   get audioMediadataList => _audioMediadataList;
@@ -383,7 +383,8 @@ class FatchDataHelper extends ChangeNotifier {
               ddgNews: element.doc['ddgNews'],
               ddgprogram: element.doc['ddgProgram'],
               category: element.doc['category'],
-              subCategory: element.doc['sub-category']);
+              subCategory: element.doc['sub-category'],
+              statusData: element.doc['statusData']);
 
           _audioMediadataList.add(audioMediaModel);
         });
@@ -485,6 +486,13 @@ class FatchDataHelper extends ChangeNotifier {
               designation: element.doc['designation'],
               deathList: element.doc['deathList'],
               youtubeChannel: element.doc['youtuveChannel'],
+              member: element.doc['member'],
+              companyName: element.doc['companyName'],
+              corporateOffice: element.doc['corporateOffice'],
+              whatsApp: element.doc['whatsApp'],
+              skype: element.doc['skype'],
+              hotline: element.doc['hotline'],
+              salesSupport: element.doc['salesSupport'],
               id: element.doc['id'],
               status: element.doc['status'],
               date: element.doc['date'],
@@ -524,6 +532,15 @@ class FatchDataHelper extends ChangeNotifier {
                   headOffice: element.doc['headOffice'],
                   position: element.doc['position'],
                   businessType: element.doc['businessType'],
+                  companyName: element.doc['companyName'],
+                  branch: element.doc['branch'],
+                  reservation: element.doc['reservation'],
+                  marketingSales: element.doc['marketingSales'],
+                  serviceName: element.doc['serviceName'],
+                  mainCampus: element.doc['mainCampus'],
+                  showroom: element.doc['showroom'],
+                  hotline: element.doc['hotline'],
+                  customerCare: element.doc['customerCare'],
                   id: element.doc['id'],
                   status: element.doc['status'],
                   date: element.doc['date'],
