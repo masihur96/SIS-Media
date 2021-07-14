@@ -7,6 +7,8 @@ import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/screen/category/managment/important_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/importent_management_insertData.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -238,44 +240,53 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.blueGrey),
-                      ),
-                      width: size.width * .2,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: "Please Search your Query",
-                            prefixIcon: Icon(Icons.search_outlined),
-                            enabledBorder: InputBorder.none),
-                        onChanged: _filterList,
+                  Visibility(
+                    visible: dropdownValue !=
+                        "Managment Information (Education Service Company)",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.blueGrey),
+                        ),
+                        width: size.width * .2,
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintText: "Please Search your Query",
+                              prefixIcon: Icon(Icons.search_outlined),
+                              enabledBorder: InputBorder.none),
+                          onChanged: _filterList,
+                        ),
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      onTap: () {
-                        getData(fatchDataHelper);
-                      },
-                      child: Container(
-                        // width: size.width * .1,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            border: Border.all(color: Colors.blueGrey)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Text('Refresh To All'),
-                              SizedBox(
-                                width: size.width * .02,
-                              ),
-                              Icon(Icons.refresh_outlined),
-                            ],
+                  Visibility(
+                    visible: dropdownValue !=
+                        "Managment Information (Education Service Company)",
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          getData(fatchDataHelper);
+                        },
+                        child: Container(
+                          // width: size.width * .1,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(color: Colors.blueGrey)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text('Refresh To All'),
+                                SizedBox(
+                                  width: size.width * .02,
+                                ),
+                                Icon(Icons.refresh_outlined),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -284,45 +295,51 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                 ],
               ),
             ),
-            _isLoading
-                ? Container(
-                    child: Column(
-                    children: [
-                      SizedBox(
-                        height: size.height * .4,
-                      ),
-                      fadingCircle,
-                      Text(
-                        'Please Wait ..........',
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
-                    ],
-                  ))
-                : _filteredList.isEmpty
+            dropdownValue == 'Managment Information (Education Service Company)'
+                ? ImportantManagementAllData()
+                : _isLoading
                     ? Container(
                         child: Column(
                         children: [
-                          SizedBox(height: 200),
-                          Text("Item is Not Found",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  letterSpacing: 2,
-                                  color: Colors.grey)),
+                          SizedBox(
+                            height: size.height * .4,
+                          ),
+                          fadingCircle,
+                          Text(
+                            'Please Wait ..........',
+                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          ),
                         ],
                       ))
-                    : Expanded(
-                        child: SizedBox(
-                          height: 500.0,
-                          child: new ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: _filteredList.length,
-                            itemBuilder: (context, index) {
-                              return _listItem(index, size, firebaseProvider,
-                                  dataProvider, fatchDataHelper);
-                            },
+                    : _filteredList.isEmpty
+                        ? Container(
+                            child: Column(
+                            children: [
+                              SizedBox(height: 200),
+                              Text("Item is Not Found",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      letterSpacing: 2,
+                                      color: Colors.grey)),
+                            ],
+                          ))
+                        : Expanded(
+                            child: SizedBox(
+                              height: 500.0,
+                              child: new ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: _filteredList.length,
+                                itemBuilder: (context, index) {
+                                  return _listItem(
+                                      index,
+                                      size,
+                                      firebaseProvider,
+                                      dataProvider,
+                                      fatchDataHelper);
+                                },
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
           ],
         ),
       );
@@ -636,40 +653,44 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          data == null
-                              ? CircleAvatar(
-                                  radius: size.height * .09,
-                                  backgroundColor: Colors.blueGrey,
-                                  child: CircleAvatar(
-                                    radius: size.height * .087,
-                                    backgroundColor: Colors.white,
-                                    child: Icon(
-                                      Icons.account_box,
-                                      size: size.height * .08,
+                      Visibility(
+                        visible: dropdownValue !=
+                            "Managment Information (Education Service Company)",
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            data == null
+                                ? CircleAvatar(
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.blueGrey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .087,
+                                      backgroundColor: Colors.white,
+                                      child: Icon(
+                                        Icons.account_box,
+                                        size: size.height * .08,
+                                      ),
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: size.height * .09,
+                                    backgroundColor: Colors.blueGrey,
+                                    child: CircleAvatar(
+                                      radius: size.height * .087,
+                                      backgroundColor: Colors.white,
+                                      backgroundImage: MemoryImage(
+                                        data!,
+                                      ),
                                     ),
                                   ),
-                                )
-                              : CircleAvatar(
-                                  radius: size.height * .09,
-                                  backgroundColor: Colors.blueGrey,
-                                  child: CircleAvatar(
-                                    radius: size.height * .087,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: MemoryImage(
-                                      data!,
-                                    ),
-                                  ),
-                                ),
-                          IconButton(
-                              onPressed: () {
-                                pickedImage(dataProvider);
-                              },
-                              icon: Icon(Icons.add_photo_alternate_rounded,
-                                  color: Colors.grey))
-                        ],
+                            IconButton(
+                                onPressed: () {
+                                  pickedImage(dataProvider);
+                                },
+                                icon: Icon(Icons.add_photo_alternate_rounded,
+                                    color: Colors.grey))
+                          ],
+                        ),
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -712,78 +733,97 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.blueGrey),
-                        ),
-                        // width: size.width * .2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Status : ",
-                                style: TextStyle(fontSize: size.height * .025),
-                              ),
-                              DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: statusValue,
-                                  elevation: 0,
-                                  dropdownColor: Colors.white,
-                                  style: TextStyle(color: Colors.black),
-                                  items: staatus.map((itemValue) {
-                                    return DropdownMenuItem<String>(
-                                      value: itemValue,
-                                      child: Text(itemValue),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      statusValue = newValue!;
-                                    });
-                                  },
+                      Visibility(
+                        visible: dropdownValue !=
+                            "Managment Information (Education Service Company)",
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 1, color: Colors.blueGrey),
+                          ),
+                          // width: size.width * .2,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Status : ",
+                                  style:
+                                      TextStyle(fontSize: size.height * .025),
                                 ),
-                              ),
-                            ],
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: statusValue,
+                                    elevation: 0,
+                                    dropdownColor: Colors.white,
+                                    style: TextStyle(color: Colors.black),
+                                    items: staatus.map((itemValue) {
+                                      return DropdownMenuItem<String>(
+                                        value: itemValue,
+                                        child: Text(itemValue),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        statusValue = newValue!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       )
                     ],
                   ),
                 ),
-                ImportMediaWidget(size),
-                _isLoading
-                    ? Container(
-                        child: Column(
-                        children: [
-                          fadingCircle,
-                        ],
-                      ))
-                    : ElevatedButton(
-                        onPressed: () {
-                          final String uuid = Uuid().v1();
-                          uploadData(dataProvider, firebaseProvider, uuid);
-                          setState(() {
-                            data = null;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 7),
-                          child: Text(
-                            'SUBMIT',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: size.height * .03,
+                Visibility(
+                  visible: dropdownValue ==
+                      "Managment Information (Education Service Company)",
+                  child: ImportantManagementInsertData(),
+                ),
+                Visibility(
+                  visible: dropdownValue !=
+                      "Managment Information (Education Service Company)",
+                  child: ImportMediaWidget(size),
+                ),
+                Visibility(
+                  visible: dropdownValue !=
+                      "Managment Information (Education Service Company)",
+                  child: _isLoading
+                      ? Container(
+                          child: Column(
+                          children: [
+                            fadingCircle,
+                          ],
+                        ))
+                      : ElevatedButton(
+                          onPressed: () {
+                            final String uuid = Uuid().v1();
+                            uploadData(dataProvider, firebaseProvider, uuid);
+                            setState(() {
+                              data = null;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 7),
+                            child: Text(
+                              'SUBMIT',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: size.height * .03,
+                              ),
                             ),
                           ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey,
+                          ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                        ),
-                      ),
+                ),
                 SizedBox(
                   height: size.height * .04,
                 ),

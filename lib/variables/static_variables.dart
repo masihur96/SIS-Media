@@ -5,7 +5,7 @@ class Variables {
     final List<Entry> data = <Entry>[
       Entry('DashBoard', Icons.dashboard, <Entry>[
         Entry('DashBoard'),
-        Entry('Celebrity Request'),
+        Entry('Client Request'),
         Entry('User Request'),
       ]),
       Entry('All Category', Icons.category_outlined, <Entry>[
@@ -14,7 +14,7 @@ class Variables {
         Entry('Audio Media'),
         Entry('Print Media'),
         Entry('New Media'),
-        Entry('Importent & Emergency'),
+        Entry('Important & Emergency'),
       ]),
       Entry('Banner', Icons.branding_watermark, <Entry>[
         Entry('Index Banner'),
@@ -129,6 +129,81 @@ class Variables {
     return televidionChennelList;
   }
 
+  List televidionManagmentList = [
+    'All Television Channel',
+    'Open University',
+    'AVTOA',
+    'Tele Producer Association',
+    'Tele Diector Association',
+    'Tele Artist  Association',
+    'Tele Nattokar Songo',
+    'Presenters Association',
+    'Cameraman Association',
+    'Shommiloto Sangskritik Zoot',
+    'Banladesh group theater',
+    'EMMA',
+    'Makeup Artist & Shooting House Association',
+    'Assistant Director Association'
+  ];
+
+  List getTVManagmentList() {
+    return televidionManagmentList;
+  }
+
+  List audioManagmentList = [
+    'MUSIC INDUSTRIES OWNERS ASSOCIATION OF BANGLADESH',
+    'RADIO TODAY 89.6 FM',
+    'RADIO AAMAR 88.4 FM',
+    'SPICE FM 96.4',
+    'PEOPLES RADIO 91.6 FM',
+    'DHAKA FM 90.4',
+    'RADIO SHADHIN92.4 FM',
+    'ABC RADIO 89.2 FM',
+    'RADIO BHUMI 92.8 FM',
+    'RADIO DHONI 91.2 FM',
+    'JAGO FM 94.4',
+    'ASIAN RADIO90.8 FM',
+    'RADIO CAPITAL FM 94.8',
+    'RADIO DHOL 94.0 FM',
+    'COLOURSFM101.6'
+  ];
+
+  List getAudioManagmentList() {
+    return audioManagmentList;
+  }
+
+  List printManagmentList = [
+    'MANAGING BOARD OF BANGLADESH PRESS INSTITUTE',
+    'DAILY PROTHOM ALO',
+    'DAILY JUGANTOR',
+    'DAILY JAI JAI DIN',
+    'DAILY KALER KANTHO',
+    'DAILY SAMAKAL',
+    'DAILY JANAKANTHA',
+    'DAILY AMADER SOMOY',
+    'DAILY MANABZAMIN',
+    'DAILY SHOKALER KHABOR',
+    'DAILY SANGRAM',
+    'DAILY AMAR BARTA',
+    'BACHSAS (BANGLADESH CHOLOCHITRA SANGBADIK SAMITY)',
+    'BANGLADESH CULTURAL REPORTERS ASSOCIATION (BCRA)',
+    'BANGLADESH BINODON SANGBADIK SOMITY (BABISAS)',
+    'MEDIA JOURNALIST ASSOCIATION OF BANGLADESH (MEJAB)',
+  ];
+
+  List getPrintManagmentList() {
+    return printManagmentList;
+  }
+
+  List importantManagmentList = [
+    'BSB-CAMBRIAN EDUCATION GROUP',
+    'PLEDGE HARBOR INTERNATIONAL SCHOOL',
+  ];
+
+  List getImportantManagmentList() {
+    return importantManagmentList;
+  }
+
   List audioChannelList = [
     'Bangladesh Betar',
     'Radio Today',
@@ -159,7 +234,7 @@ class Variables {
     'Music Director',
     'Lyricist',
     'Voice Artist',
-    'Recitor (Abritteekar)',
+    'Reciter (Abritteekar)',
     'Musician',
     'Rate Chart',
     'Managment Information',

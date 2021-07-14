@@ -46,14 +46,14 @@ class _MainPageState extends State<MainPage> {
                     Row(
                       children: [
                         Text(
-                          "SIS-",
+                          "WIZARD Media",
                           style: TextStyle(
                               fontSize: size.height * .025,
                               fontWeight: FontWeight.w700,
                               color: Colors.white),
                         ),
                         Text(
-                          "MEDIA",
+                          "Directory",
                           style: TextStyle(
                               fontSize: size.height * .025,
                               fontWeight: FontWeight.w700,

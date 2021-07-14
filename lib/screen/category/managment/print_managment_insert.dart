@@ -1,28 +1,29 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:html' as html;
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
+import 'dart:html' as html;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:uuid/uuid.dart';
 
-class TelevisionRateChart extends StatefulWidget {
-  const TelevisionRateChart({Key? key}) : super(key: key);
+class PrintManagmentInsert extends StatefulWidget {
+  const PrintManagmentInsert({Key? key}) : super(key: key);
 
   @override
-  _TelevisionRateChartState createState() => _TelevisionRateChartState();
+  _PrintManagmentInsertState createState() => _PrintManagmentInsertState();
 }
 
-class _TelevisionRateChartState extends State<TelevisionRateChart> {
+class _PrintManagmentInsertState extends State<PrintManagmentInsert> {
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List channels = Variables().getTVChannelList();
-  String channelValue = 'Bangladesh Television';
+  List channels = Variables().getPrintManagmentList();
+  String channelValue = 'MANAGING BOARD OF BANGLADESH PRESS INSTITUTE';
 
   bool _isLoading = false;
   String? uuid;
@@ -106,7 +107,7 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Channel Name : ",
+                              "Section Name : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -260,7 +261,7 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('RateChartData')
+          .child('ManagmentData')
           .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -285,14 +286,14 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
     setState(() => _isLoading = true);
     Map<String, String> map = {
       'image': imageUrl,
-      'category': 'Television Media',
-      'subCategory': 'Rate Chart',
-      'channelName': channelValue,
+      'category': 'Print Media',
+      'subCategory': 'Managment Information',
+      'sectionName': channelValue,
       'status': statusValue.toLowerCase(),
       'date': dateData,
       'id': uuid,
     };
-    await firebaseProvider.addRateChartData(map).then((value) {
+    await firebaseProvider.addManagmentData(map).then((value) {
       if (value) {
         setState(() => _isLoading = false);
         showToast('Success');

@@ -151,7 +151,7 @@ class _RequestPageState extends State<RequestPage> {
                         getData(fatchDataHelper);
                       },
                       child: Container(
-                        width: size.height * .1,
+                        width: size.height * .2,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             border: Border.all(color: Colors.blueGrey)),

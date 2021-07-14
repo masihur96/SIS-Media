@@ -409,10 +409,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
                     } else if (title ==
                         'Importent ' + "\n" '& ' + "\n" 'Imergecy') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Importent & Emergency";
+                      dataProvider.subCategory = "Important & Emergency";
                     } else if (title == 'Request' + "\n" 'Data') {
                       dataProvider.category = dataProvider.subCategory;
-                      dataProvider.subCategory = "Request Details";
+                      dataProvider.subCategory = "User Request";
                     }
                   },
                   child: Text('View All',

@@ -1,81 +1,25 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
-import 'package:media_directory_admin/variables/static_variables.dart';
+import 'dart:html' as html;
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 
 class UpdateTelevisionRateChart extends StatefulWidget {
   String? channelName;
-  String? companyName;
-  String? address;
-  String? phone;
-  String? fax;
-  String? email;
-  String? web;
-  String? regionalSalesOffice;
-  String? effectiveForm;
-  String? rateFor;
-  String? programType;
-  String? programDuration;
-  String? addDuration;
-  String? generalRate;
-  String? fixedPosition;
-  String? beforeNews;
-  String? midBreakInProgram;
-  String? offPeakTime;
-  String? peakTime;
-  String? day;
-  String? specialNote;
-  String? newsTime;
-  String? popUp;
-  String? CMTime;
-  String? extraCommercialTime;
-  String? ordinery;
-  String? banglaFilm;
-  String? namingBranding;
-  String? tarifBrand;
-  String? topDown;
   String? id;
   String? status;
   String? date;
-  String? LShap;
 
-  UpdateTelevisionRateChart(
-      {this.channelName,
-      this.companyName,
-      this.address,
-      this.phone,
-      this.fax,
-      this.email,
-      this.web,
-      this.regionalSalesOffice,
-      this.effectiveForm,
-      this.rateFor,
-      this.programType,
-      this.programDuration,
-      this.addDuration,
-      this.generalRate,
-      this.fixedPosition,
-      this.beforeNews,
-      this.midBreakInProgram,
-      this.offPeakTime,
-      this.peakTime,
-      this.day,
-      this.specialNote,
-      this.newsTime,
-      this.popUp,
-      this.CMTime,
-      this.extraCommercialTime,
-      this.ordinery,
-      this.banglaFilm,
-      this.namingBranding,
-      this.tarifBrand,
-      this.topDown,
-      this.id,
-      this.status,
-      this.date,
-      this.LShap});
+  UpdateTelevisionRateChart({
+    this.channelName,
+    this.id,
+    this.status,
+    this.date,
+  });
 
   @override
   _UpdateTelevisionRateChartState createState() {
@@ -84,88 +28,23 @@ class UpdateTelevisionRateChart extends StatefulWidget {
 }
 
 class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
-  TextEditingController _companyName = TextEditingController();
-  TextEditingController _address = TextEditingController();
-  TextEditingController _phone = TextEditingController();
-  TextEditingController _fax = TextEditingController();
-  TextEditingController _email = TextEditingController();
-  TextEditingController _web = TextEditingController();
-  TextEditingController _regionalSalesOffice = TextEditingController();
-  TextEditingController _effectiveForm = TextEditingController();
-  TextEditingController _rateFor = TextEditingController();
-  TextEditingController _programType = TextEditingController();
-  TextEditingController __programDuration = TextEditingController();
-  TextEditingController _addDuration = TextEditingController();
-  TextEditingController _generalRate = TextEditingController();
-  TextEditingController _fixedPosition = TextEditingController();
-  TextEditingController _popUp = TextEditingController();
-  TextEditingController _topDown = TextEditingController();
-  TextEditingController _LShape = TextEditingController();
-  TextEditingController _beforeNews = TextEditingController();
-  TextEditingController _midBreakProgram = TextEditingController();
-  TextEditingController _peakTime = TextEditingController();
-  TextEditingController _offPeack = TextEditingController();
-  TextEditingController _day = TextEditingController();
-  TextEditingController _spacialNote = TextEditingController();
-  TextEditingController _newsTime = TextEditingController();
-  TextEditingController _cmTime = TextEditingController();
-  TextEditingController _ordinery = TextEditingController();
-  TextEditingController _banglaFilm = TextEditingController();
-  TextEditingController _namingBranding = TextEditingController();
-  TextEditingController _tarifBrand = TextEditingController();
-  TextEditingController _extraCommercialTime = TextEditingController();
+  bool _isLoading = false;
+  Uint8List? data;
+  var file;
+  String imageUrl = '';
+  String? error;
+  String name = '';
 
   List staatus = ['public', 'private'];
   String statusValue = '';
 
-  List channels = Variables().getTVChannelList();
-  String channelValue = 'Bangladesh Television';
-
-  bool _isLoading = false;
-
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
-      statusValue = dataProvider.televisionRateChartModel.status.toString();
       counter++;
     });
 
-    _companyName.text = dataProvider.televisionRateChartModel.companyName!;
-    _address.text = dataProvider.televisionRateChartModel.address!;
-    _phone.text = dataProvider.televisionRateChartModel.phone!;
-    _fax.text = dataProvider.televisionRateChartModel.fax!;
-    _email.text = dataProvider.televisionRateChartModel.email!;
-    _web.text = dataProvider.televisionRateChartModel.web!;
-    _regionalSalesOffice.text =
-        dataProvider.televisionRateChartModel.regionalSalesOffice!;
-    _effectiveForm.text = dataProvider.televisionRateChartModel.effectiveForm!;
-
-    _rateFor.text = dataProvider.televisionRateChartModel.rateFor!;
-    _programType.text = dataProvider.televisionRateChartModel.programType!;
-    __programDuration.text =
-        dataProvider.televisionRateChartModel.programDuration!;
-    _addDuration.text = dataProvider.televisionRateChartModel.addDuration!;
-    _generalRate.text = dataProvider.televisionRateChartModel.generalRate!;
-    _fixedPosition.text = dataProvider.televisionRateChartModel.fixedPosition!;
-    _beforeNews.text = dataProvider.televisionRateChartModel.beforeNews!;
-    _midBreakProgram.text =
-        dataProvider.televisionRateChartModel.midBreakInProgram!;
-    _offPeack.text = dataProvider.televisionRateChartModel.offPeakTime!;
-    _peakTime.text = dataProvider.televisionRateChartModel.peakTime!;
-    _day.text = dataProvider.televisionRateChartModel.day!;
-    _spacialNote.text = dataProvider.televisionRateChartModel.specialNote!;
-    _newsTime.text = dataProvider.televisionRateChartModel.newsTime!;
-    _popUp.text = dataProvider.televisionRateChartModel.popUp!;
-    _cmTime.text = dataProvider.televisionRateChartModel.CMTime!;
-    _extraCommercialTime.text =
-        dataProvider.televisionRateChartModel.extraCommercialTime!;
-    _ordinery.text = dataProvider.televisionRateChartModel.ordinery!;
-    _banglaFilm.text = dataProvider.televisionRateChartModel.banglaFilm!;
-    _namingBranding.text =
-        dataProvider.televisionRateChartModel.namingBranding!;
-    _tarifBrand.text = dataProvider.televisionRateChartModel.tarifBrand!;
-    _topDown.text = dataProvider.televisionRateChartModel.topDown!;
-    _LShape.text = dataProvider.televisionRateChartModel.LShap!;
+    statusValue = dataProvider.rateChartModel.status.toString();
   }
 
   @override
@@ -178,233 +57,177 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
     if (counter == 0) {
       customInit(dataProvider);
     }
-    return Container(
-      width: dataProvider.pageWidth(size),
-      height: size.height,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+    return Expanded(
+      child: Container(
         child: Column(
           children: [
-            SizedBox(height: size.height * .02),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.blueGrey),
-                    ),
-                    // width: size.width * .2,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Channel Name : ",
-                            style: TextStyle(fontSize: size.height * .025),
-                          ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: channelValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: channels.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  channelValue = newValue!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.blueGrey),
-                    ),
-                    // width: size.width * .2,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Status : ",
-                            style: TextStyle(fontSize: size.height * .025),
-                          ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: statusValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: staatus.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  statusValue = newValue!;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    width:
-                        size.width > 1200 ? size.width * .415 : size.width * .5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          _textFormBuilderForTelevisionChart('Company Name'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Address'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Phone'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Fax'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Email'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Web'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart(
-                              'Regional Salse Office'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Effective From'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Rate For'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Program Type'),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    width:
-                        size.width > 1200 ? size.width * .415 : size.width * .5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          _textFormBuilderForTelevisionChart('General Rate'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Fixed Position'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Before News'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart(
-                              'Mid Break in program / Drama'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Off Peak Time'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart(
-                              'Peak Time / Spot Time'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Day'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Spacial Note'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('PopUp'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart(
-                              'Program Duration'),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    width:
-                        size.width > 1200 ? size.width * .4 : size.width * .5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          _textFormBuilderForTelevisionChart('CM Time'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Ordinery'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Film'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart(
-                              'Naming & Branding'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Tarif-Brand'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Top Down'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('L Shap'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart(
-                              'Extra Comercial Time'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('Add Duration'),
-                          SizedBox(height: 20),
-                          _textFormBuilderForTelevisionChart('News Time'),
-                          SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Container(
+              height: 2,
+              width: size.width,
+              color: Colors.grey,
             ),
-            _isLoading
-                ? Container(
-                    child: Column(
-                    children: [
-                      fadingCircle,
-                    ],
-                  ))
-                : ElevatedButton(
-                    onPressed: () {
-                      updateData(dataProvider, firebaseProvider);
-                      setState(() {});
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 7),
-                      child: Text(
-                        'UPDATE',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: size.height * .03,
+            Center(
+              child: Container(
+                  height: size.height * .9,
+                  width: size.width * .8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      data == null
+                          ? Container(
+                              height: size.height * .35,
+                              width: size.width * .35,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      dataProvider.rateChartModel.image!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: size.height * .35,
+                              width: size.width * .35,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                                image: DecorationImage(
+                                  image: MemoryImage(data!),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: size.width * .15,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: Colors.blueGrey),
+                                ),
+                                // width: size.width * .2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Status : ",
+                                        style: TextStyle(
+                                            fontSize: size.height * .025),
+                                      ),
+                                      DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: statusValue,
+                                          elevation: 0,
+                                          dropdownColor: Colors.white,
+                                          style: TextStyle(color: Colors.black),
+                                          items: staatus.map((itemValue) {
+                                            return DropdownMenuItem<String>(
+                                              value: itemValue,
+                                              child: Text(itemValue),
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              statusValue = newValue!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                html.FileUploadInputElement input =
+                                    html.FileUploadInputElement()
+                                      ..accept = 'image/*';
+                                input.click();
+                                input.onChange.listen((event) {
+                                  file = input.files!.first;
+                                  final reader1 = html.FileReader();
+                                  reader1.readAsDataUrl(input.files![0]);
+                                  reader1.onError.listen((err) => setState(() {
+                                        error = err.toString();
+                                      }));
+                                  reader1.onLoad.first.then((res) {
+                                    final encoded = reader1.result as String;
+                                    final stripped = encoded.replaceFirst(
+                                        RegExp(r'data:image/[^;]+;base64,'),
+                                        '');
+                                    setState(() {
+                                      name = input.files![0].name;
+                                      data = base64.decode(stripped);
+                                      error = null;
+                                    });
+                                  });
+                                });
+                              },
+                              child: Text('PIKED BANNER'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 15),
+                                  textStyle: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black)),
+                            ),
+                            SizedBox(
+                              width: size.width * .05,
+                            ),
+                            _isLoading
+                                ? Container(
+                                    child: Column(
+                                    children: [
+                                      fadingCircle,
+                                    ],
+                                  ))
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      updateData(
+                                          dataProvider, firebaseProvider);
+                                      setState(() {
+                                        data = null;
+                                      });
+                                    },
+                                    child: Text(
+                                      'UPDATE BANNER',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.grey,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 15),
+                                        textStyle: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                  ),
+                          ],
                         ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.grey,
-                    ),
-                  ),
-            SizedBox(
-              height: size.height * .04,
+                    ],
+                  )),
             ),
           ],
         ),
@@ -414,10 +237,38 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
 
   Future<void> updateData(
       DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
-    _submitData(
-      dataProvider,
-      firebaseProvider,
-    );
+    if (data == null) {
+      setState(() {
+        imageUrl = dataProvider.rateChartModel.image!;
+      });
+      _submitData(
+        dataProvider,
+        firebaseProvider,
+      );
+    } else {
+      firebase_storage.Reference storageReference = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child('RateChartData')
+          .child(dataProvider.rateChartModel.id!);
+      firebase_storage.UploadTask storageUploadTask =
+          storageReference.putBlob(file);
+      firebase_storage.TaskSnapshot taskSnapshot;
+      storageUploadTask.then((value) {
+        taskSnapshot = value;
+        taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
+          final downloadUrl = newImageDownloadUrl;
+          showToast(downloadUrl);
+          setState(() {
+            imageUrl = downloadUrl;
+          });
+          _submitData(
+            dataProvider,
+            firebaseProvider,
+          );
+        });
+      });
+    }
   }
 
   Future<void> _submitData(
@@ -429,44 +280,14 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
     if (statusValue.isNotEmpty) {
       setState(() => _isLoading = true);
       Map<String, String> mapData = {
-        'channelName': channelValue,
-        'companyName': _companyName.text,
-        'address': _address.text,
-        'phone': _phone.text,
-        'fax': _fax.text,
-        'email': _email.text,
-        'web': _web.text,
-        'regionalSalesOffice': _regionalSalesOffice.text,
-        'effectiveForm': _effectiveForm.text,
-        'rateFor': _rateFor.text,
-        'ProgramType': _programType.text,
-        'programDuration': __programDuration.text,
-        'addDuration': _addDuration.text,
-        'generalRate': _generalRate.text,
-        'fixedPosition': _fixedPosition.text,
-        'beforeNews': _beforeNews.text,
-        'midBreakInProgram': _midBreakProgram.text,
-        'offPeakTime': _offPeack.text,
-        'peakTime': _peakTime.text,
-        'day': _day.text,
-        'spacialNote': _spacialNote.text,
-        'newsTime': _newsTime.text,
-        'popUp': _popUp.text,
-        'CMTime': _cmTime.text,
-        'extraCommercialTime': _extraCommercialTime.text,
-        'ordinery': _ordinery.text,
-        'banglaFilm': _banglaFilm.text,
-        'tarifBrand': _tarifBrand.text,
-        'namingBranding': _namingBranding.text,
-        'topDown': _topDown.text,
-        'LShap': _LShape.text,
-        'status': statusValue.toLowerCase(),
+        'image': imageUrl,
+        'id': dataProvider.rateChartModel.id!,
         'date': dateData,
-        'id': dataProvider.televisionRateChartModel.id!,
+        'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);
       await firebaseProvider
-          .updateTelevisionMediaRateChartData(mapData, context)
+          .updateRateChartData(mapData, context)
           .then((value) {
         if (value) {
           setState(() => _isLoading = false);
@@ -482,81 +303,5 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
       });
     } else
       showToast("Select Status");
-  }
-
-  Widget _textFormBuilderForTelevisionChart(String hint) {
-    return TextFormField(
-      controller: hint == 'Company Name'
-          ? _companyName
-          : hint == 'Address'
-              ? _address
-              : hint == 'Phone'
-                  ? _phone
-                  : hint == 'Fax'
-                      ? _fax
-                      : hint == 'Email'
-                          ? _email
-                          : hint == 'Web'
-                              ? _web
-                              : hint == 'Regional Salse Office'
-                                  ? _regionalSalesOffice
-                                  : hint == 'Effective From'
-                                      ? _effectiveForm
-                                      : hint == 'Rate For'
-                                          ? _rateFor
-                                          : hint == 'Program Type'
-                                              ? _programType
-                                              : hint == 'Program Duration'
-                                                  ? __programDuration
-                                                  : hint == 'Add Duration'
-                                                      ? _addDuration
-                                                      : hint == 'General Rate'
-                                                          ? _generalRate
-                                                          : hint ==
-                                                                  'Fixed Position'
-                                                              ? _fixedPosition
-                                                              : hint ==
-                                                                      'Before News'
-                                                                  ? _beforeNews
-                                                                  : hint ==
-                                                                          'Mid Break in program / Drama'
-                                                                      ? _midBreakProgram
-                                                                      : hint ==
-                                                                              'Off Peak Time'
-                                                                          ? _offPeack
-                                                                          : hint == 'Peak Time / Spot Time'
-                                                                              ? _peakTime
-                                                                              : hint == 'Day'
-                                                                                  ? _day
-                                                                                  : hint == 'Spacial Note'
-                                                                                      ? _spacialNote
-                                                                                      : hint == 'News Time'
-                                                                                          ? _newsTime
-                                                                                          : hint == 'PopUp'
-                                                                                              ? _popUp
-                                                                                              : hint == 'CM Time'
-                                                                                                  ? _cmTime
-                                                                                                  : hint == 'Ordinery'
-                                                                                                      ? _ordinery
-                                                                                                      : hint == 'Film'
-                                                                                                          ? _banglaFilm
-                                                                                                          : hint == 'Naming & Branding'
-                                                                                                              ? _namingBranding
-                                                                                                              : hint == 'Tarif-Brand'
-                                                                                                                  ? _tarifBrand
-                                                                                                                  : hint == 'Extra Comercial Time'
-                                                                                                                      ? _extraCommercialTime
-                                                                                                                      : hint == 'Top Down'
-                                                                                                                          ? _topDown
-                                                                                                                          : _LShape,
-      decoration: InputDecoration(
-        hintText: hint,
-        border: new OutlineInputBorder(
-          borderRadius: new BorderRadius.circular(5.0),
-          borderSide: new BorderSide(width: 1),
-        ),
-      ),
-      maxLines: 2,
-    );
   }
 }

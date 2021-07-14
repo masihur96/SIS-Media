@@ -1,20 +1,23 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'dart:html' as html;
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class UpdateAudioRateChart extends StatefulWidget {
+class UpdateTelevisionManagement extends StatefulWidget {
+  const UpdateTelevisionManagement({Key? key}) : super(key: key);
+
   @override
-  _UpdateAudioRateChartState createState() => _UpdateAudioRateChartState();
+  _UpdateTelevisionManagementState createState() =>
+      _UpdateTelevisionManagementState();
 }
 
-class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
+class _UpdateTelevisionManagementState
+    extends State<UpdateTelevisionManagement> {
   bool _isLoading = false;
   Uint8List? data;
   var file;
@@ -25,13 +28,16 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
   List staatus = ['public', 'private'];
   String statusValue = '';
 
+  String Pages = '';
+
   int counter = 0;
   customInit(DataProvider dataProvider) async {
     setState(() {
       counter++;
+      Pages = dataProvider.managementDataModel.category!;
     });
 
-    statusValue = dataProvider.rateChartModel.status.toString();
+    statusValue = dataProvider.managementDataModel.status.toString();
   }
 
   @override
@@ -71,7 +77,7 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                                     Border.all(color: Colors.grey, width: 1),
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      dataProvider.rateChartModel.image!),
+                                      dataProvider.managementDataModel.image!),
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -226,7 +232,7 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
       DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
     if (data == null) {
       setState(() {
-        imageUrl = dataProvider.rateChartModel.image!;
+        imageUrl = dataProvider.managementDataModel.image!;
       });
       _submitData(
         dataProvider,
@@ -236,8 +242,8 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('AudioRateChart')
-          .child(dataProvider.rateChartModel.id!);
+          .child('ManagementData')
+          .child(dataProvider.managementDataModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -268,23 +274,32 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
       setState(() => _isLoading = true);
       Map<String, String> mapData = {
         'image': imageUrl,
-        'id': dataProvider.rateChartModel.id!,
+        'id': dataProvider.managementDataModel.id!,
         'date': dateData,
         'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);
       await firebaseProvider
-          .updateRateChartData(mapData, context)
+          .updateManagementData(mapData, context)
           .then((value) {
         if (value) {
           setState(() => _isLoading = false);
-          dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Audio Media Chart Screen";
+
+          if (Pages == 'Television Media') {
+            dataProvider.category = dataProvider.subCategory;
+            dataProvider.subCategory = "Television Management Screen";
+          } else if (Pages == 'Audio Media') {
+            dataProvider.category = dataProvider.subCategory;
+            dataProvider.subCategory = "Audio Management Screen";
+          } else {
+            dataProvider.category = dataProvider.subCategory;
+            dataProvider.subCategory = "Print Management Screen";
+          }
           showToast('Data updated successful');
-        } else {
+        } else if (Pages == 'Important & Emergency') {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Audio Media Chart Screen";
+          dataProvider.subCategory = "Important Management Screen";
           showToast('Data update failed!');
         }
       });

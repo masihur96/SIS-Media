@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
-import 'package:media_directory_admin/model/audio_rate_chart_model.dart';
+import 'package:media_directory_admin/model/management_data_model.dart';
+import 'package:media_directory_admin/model/rate_chart_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/model/index_banner_model.dart';
 import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
-import 'package:media_directory_admin/model/television_rate_chart_model.dart';
 import 'package:media_directory_admin/screen/banner/content_banner.dart';
 import 'package:media_directory_admin/screen/banner/index_banner.dart';
 import 'package:media_directory_admin/screen/banner/popup_banner.dart';
@@ -15,6 +15,11 @@ import 'package:media_directory_admin/screen/banner/update_banner_data.dart';
 import 'package:media_directory_admin/screen/banner/update_content_data.dart';
 import 'package:media_directory_admin/screen/banner/update_popup_data.dart';
 import 'package:media_directory_admin/screen/category/change_password_screen.dart';
+import 'package:media_directory_admin/screen/category/managment/audio_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/important_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/print_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/television_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/update_television_management.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/update_audio_rate_chart.dart';
@@ -61,15 +66,15 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  TelevisionRateChartModel _televisionRateChartModel =
-      new TelevisionRateChartModel();
-  TelevisionRateChartModel get televisionRateChartModel =>
-      _televisionRateChartModel;
-  set televisionRateChartModel(TelevisionRateChartModel model) {
-    model = TelevisionRateChartModel();
-    _televisionRateChartModel = model;
-    notifyListeners();
-  }
+  // RateChartModel _televisionRateChartModel =
+  //     new RateChartModel();
+  // RateChartModel get televisionRateChartModel =>
+  //     _televisionRateChartModel;
+  // set televisionRateChartModel(RateChartModel model) {
+  //   model = RateChartModel();
+  //   _televisionRateChartModel = model;
+  //   notifyListeners();
+  // }
 
   AudioMediaModel _audioMediaModel = new AudioMediaModel();
   AudioMediaModel get audioMediaModel => _audioMediaModel;
@@ -79,11 +84,19 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  AudioRateChartModel _audioRateChartModel = new AudioRateChartModel();
-  AudioRateChartModel get audioRateChartModel => _audioRateChartModel;
-  set audioRateChartModel(AudioRateChartModel model) {
-    model = AudioRateChartModel();
-    _audioRateChartModel = model;
+  RateChartModel _rateChartModel = new RateChartModel();
+  RateChartModel get rateChartModel => _rateChartModel;
+  set rateChartModel(RateChartModel model) {
+    model = RateChartModel();
+    _rateChartModel = model;
+    notifyListeners();
+  }
+
+  ManagementDataModel _managementDataModel = new ManagementDataModel();
+  ManagementDataModel get managementDataModel => _managementDataModel;
+  set managementDataModel(ManagementDataModel model) {
+    model = ManagementDataModel();
+    _managementDataModel = model;
     notifyListeners();
   }
 
@@ -158,7 +171,7 @@ class DataProvider extends ChangeNotifier {
       return PrintingMedia();
     else if (subCategory == 'New Media')
       return NewMedia();
-    else if (subCategory == 'Importent & Emergency')
+    else if (subCategory == 'Important & Emergency')
       return ImportentEmergency();
     else if (subCategory == 'Update Film Media')
       return UpdateFilmMediaDataPage();
@@ -192,9 +205,19 @@ class DataProvider extends ChangeNotifier {
       return PopUpBannerScreen();
     else if (subCategory == 'Update PopUp Data')
       return UpdatePopUpData();
+    else if (subCategory == 'Update Television Management')
+      return UpdateTelevisionManagement();
+    else if (subCategory == 'Television Management Screen')
+      return TelevisionManagmentAllData();
+    else if (subCategory == 'Audio Management Screen')
+      return AudioManagmentAllData();
+    else if (subCategory == 'Print Management Screen')
+      return PrintManagmentAllData();
+    else if (subCategory == 'Important Management Screen')
+      return ImportantManagementAllData();
     else if (subCategory == 'User Request')
       return RequestPage();
-    else if (subCategory == 'Celebrity Request')
+    else if (subCategory == 'Client Request')
       return CelebrityRequest();
     else if (subCategory == 'Change Password')
       return ChangePassword();

@@ -8,6 +8,8 @@ import 'package:media_directory_admin/model/television_media_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/screen/category/managment/television_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/television_managment_insert.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_insert.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_alldata.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
@@ -259,7 +261,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                     width: 10,
                   ),
                   Visibility(
-                      visible: dropdownValue != 'Rate Chart',
+                      visible: dropdownValue != 'Rate Chart' &&
+                          dropdownValue != 'Management Information',
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Container(
@@ -278,7 +281,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                         ),
                       )),
                   Visibility(
-                    visible: dropdownValue != 'Rate Chart',
+                    visible: dropdownValue != 'Rate Chart' &&
+                        dropdownValue != 'Management Information',
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
@@ -313,49 +317,52 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             ),
             dropdownValue == 'Rate Chart'
                 ? AllDataTelevisionRate()
-                : _isLoading
-                    ? Container(
-                        child: Column(
-                        children: [
-                          SizedBox(
-                            height: size.height * .4,
-                          ),
-                          fadingCircle,
-                          Text(
-                            'Please Wait ..........',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
-                        ],
-                      ))
-                    : _filteredList.isEmpty
+                : dropdownValue == 'Management Information'
+                    ? TelevisionManagmentAllData()
+                    : _isLoading
                         ? Container(
                             child: Column(
                             children: [
-                              SizedBox(height: 200),
-                              Text("Item is Not Found",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      letterSpacing: 2,
-                                      color: Colors.grey)),
+                              SizedBox(
+                                height: size.height * .4,
+                              ),
+                              fadingCircle,
+                              Text(
+                                'Please Wait ..........',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
                             ],
                           ))
-                        : Expanded(
-                            child: SizedBox(
-                              height: 500.0,
-                              child: new ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: _filteredList.length,
-                                itemBuilder: (context, index) {
-                                  return _listItem(
-                                      index,
-                                      size,
-                                      firebaseProvider,
-                                      fatchDataHelper,
-                                      dataProvider);
-                                },
+                        : _filteredList.isEmpty
+                            ? Container(
+                                child: Column(
+                                children: [
+                                  SizedBox(height: 200),
+                                  Text("Item is Not Found",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          letterSpacing: 2,
+                                          color: Colors.grey)),
+                                ],
+                              ))
+                            : Expanded(
+                                child: SizedBox(
+                                  height: 500.0,
+                                  child: new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: _filteredList.length,
+                                    itemBuilder: (context, index) {
+                                      return _listItem(
+                                          index,
+                                          size,
+                                          firebaseProvider,
+                                          fatchDataHelper,
+                                          dataProvider);
+                                    },
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
           ],
         ),
       );
@@ -826,7 +833,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Visibility(
-                        visible: dropdownValue != 'Rate Chart',
+                        visible: dropdownValue != 'Rate Chart' &&
+                            dropdownValue != 'Management Information',
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -905,7 +913,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                         ),
                       ),
                       Visibility(
-                          visible: dropdownValue != 'Rate Chart',
+                          visible: dropdownValue != 'Rate Chart' &&
+                              dropdownValue != 'Management Information',
                           child: Container(
                             decoration: BoxDecoration(
                               border:
@@ -954,7 +963,12 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                   child: TelevisionRateChart(),
                 ),
                 Visibility(
-                  visible: dropdownValue != "Rate Chart",
+                  visible: dropdownValue == "Management Information",
+                  child: TelevisionManagmentInsert(),
+                ),
+                Visibility(
+                  visible: dropdownValue != "Rate Chart" &&
+                      dropdownValue != 'Management Information',
                   child: Container(
                     child: Column(
                       children: <Widget>[TelevisionMediaFild(size)],
@@ -965,7 +979,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                   height: size.height * .04,
                 ),
                 Visibility(
-                  visible: dropdownValue != 'Rate Chart',
+                  visible: dropdownValue != 'Rate Chart' &&
+                      dropdownValue != 'Management Information',
                   child: _isLoading
                       ? Container(
                           child: Column(

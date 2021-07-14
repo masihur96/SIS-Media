@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
-import 'package:media_directory_admin/model/audio_rate_chart_model.dart';
+
 import 'package:media_directory_admin/model/celebrity_request_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/model/index_banner_model.dart';
+import 'package:media_directory_admin/model/management_data_model.dart';
 import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
+import 'package:media_directory_admin/model/rate_chart_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
-import 'package:media_directory_admin/model/television_rate_chart_model.dart';
 import 'package:media_directory_admin/model/user_request_model.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 
@@ -20,14 +21,17 @@ class FatchDataHelper extends ChangeNotifier {
   List<TelevisionMediaModel> _televisionMediadataList = [];
   get televisionMediadataList => _televisionMediadataList;
 
-  List<TelevisionRateChartModel> _televisionRateChartList = [];
-  get televisionRateChartList => _televisionRateChartList;
+  List<RateChartModel> _rateChartList = [];
+  get rateChartList => _rateChartList;
+
+    List<ManagementDataModel> _managementDataList = [];
+     get managementDataList => _managementDataList;
 
   List<AudioMediaModel> _audioMediadataList = [];
   get audioMediadataList => _audioMediadataList;
 
-  List<AudioRateChartModel> _audioRateChartList = [];
-  get audioRateChartList => _audioRateChartList;
+  // List<RateChartModel> _audioRateChartList = [];
+  // get audioRateChartList => _audioRateChartList;
 
   List<PrintMediaModel> _printMediaDataList = [];
   get printMediaDataList => _printMediaDataList;
@@ -291,55 +295,54 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  Future<List<TelevisionRateChartModel>> fetchTelevisionRateChartData() async {
+  Future<List<RateChartModel>> fetchRateChartData() async {
     try {
       await FirebaseFirestore.instance
-          .collection('TelevisionMediaChart')
+          .collection('RateChartData')
           .orderBy('channelName')
           .get()
           .then((snapshot) {
-        _televisionRateChartList.clear();
+        _rateChartList.clear();
         snapshot.docChanges.forEach((element) {
-          TelevisionRateChartModel televisionRateChartModel =
-              TelevisionRateChartModel(
-                  channelName: element.doc['channelName'],
-                  companyName: element.doc['companyName'],
-                  address: element.doc['address'],
-                  phone: element.doc['phone'],
-                  fax: element.doc['fax'],
-                  email: element.doc['email'],
-                  web: element.doc['web'],
-                  regionalSalesOffice: element.doc['regionalSalesOffice'],
-                  effectiveForm: element.doc['effectiveForm'],
-                  rateFor: element.doc['rateFor'],
-                  programType: element.doc['ProgramType'],
-                  programDuration: element.doc['programDuration'],
-                  addDuration: element.doc['addDuration'],
-                  generalRate: element.doc['generalRate'],
-                  fixedPosition: element.doc['fixedPosition'],
-                  beforeNews: element.doc['beforeNews'],
-                  midBreakInProgram: element.doc['midBreakInProgram'],
-                  offPeakTime: element.doc['offPeakTime'],
-                  peakTime: element.doc['peakTime'],
-                  day: element.doc['day'],
-                  specialNote: element.doc['spacialNote'],
-                  newsTime: element.doc['newsTime'],
-                  popUp: element.doc['popUp'],
-                  CMTime: element.doc['CMTime'],
-                  extraCommercialTime: element.doc['extraCommercialTime'],
-                  ordinery: element.doc['ordinery'],
-                  banglaFilm: element.doc['banglaFilm'],
-                  namingBranding: element.doc['namingBranding'],
-                  tarifBrand: element.doc['tarifBrand'],
-                  topDown: element.doc['topDown'],
-                  id: element.doc['id'],
-                  status: element.doc['status'],
-                  date: element.doc['date'],
-                  LShap: element.doc['LShap']);
-          _televisionRateChartList.add(televisionRateChartModel);
+          RateChartModel rateChartModel = RateChartModel(
+              channelName: element.doc['channelName'],
+              image: element.doc['image'],
+              category: element.doc['category'],
+              subCategory: element.doc['subCategory'],
+              id: element.doc['id'],
+              status: element.doc['status'],
+              date: element.doc['date']);
+
+          _rateChartList.add(rateChartModel);
         });
       });
-      return televisionRateChartList;
+      return rateChartList;
+    } catch (error) {
+      return [];
+    }
+  }
+
+  Future<List<ManagementDataModel>> fetchManagementData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ManagementData')
+          .orderBy('sectionName')
+          .get()
+          .then((snapshot) {
+        _managementDataList.clear();
+        snapshot.docChanges.forEach((element) {
+          ManagementDataModel managementDataModel = ManagementDataModel(
+              sectionName: element.doc['sectionName'],
+              image: element.doc['image'],
+              category: element.doc['category'],
+              subCategory: element.doc['subCategory'],
+              id: element.doc['id'],
+              status: element.doc['status'],
+              date: element.doc['date']);
+          _managementDataList.add(managementDataModel);
+        });
+      });
+      return rateChartList;
     } catch (error) {
       return [];
     }
@@ -391,53 +394,31 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  Future<List<AudioRateChartModel>> fetchAudioRateChartData() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('AudioMediaChart')
-          .orderBy('channelName')
-          .get()
-          .then((snapshot) {
-        _audioRateChartList.clear();
-        snapshot.docChanges.forEach((element) {
-          AudioRateChartModel audioRateChartModel = AudioRateChartModel(
-              channelName: element.doc['channelName'],
-              companyName: element.doc['companyName'],
-              address: element.doc['address'],
-              phone: element.doc['phone'],
-              fax: element.doc['fax'],
-              email: element.doc['email'],
-              web: element.doc['web'],
-              regionalOffice: element.doc['regionalOffice'],
-              effectiveForm: element.doc['effectiveForm'],
-              rateFore: element.doc['rateFore'],
-              kendroName: element.doc['kendroName'],
-              spotDuration: element.doc['spotDuration'],
-              perSpot: element.doc['perSpot'],
-              sponsorFor: element.doc['sponsorFor'],
-              newsTime: element.doc['newsTime'],
-              midBreak: element.doc['midBreak'],
-              duration: element.doc['duration'],
-              time: element.doc['time'],
-              peakHour: element.doc['peakHour'],
-              offPeakHour: element.doc['offPeakHour'],
-              termsCondition: element.doc['termsCondition'],
-              branding: element.doc['branding'],
-              broadCastTime: element.doc['broadCastTime'],
-              RDC: element.doc['RDC'],
-              endorsement: element.doc['endorsement'],
-              id: element.doc['id'],
-              status: element.doc['status'],
-              date: element.doc['date'],
-              category: element.doc['category']);
-          _audioRateChartList.add(audioRateChartModel);
-        });
-      });
-      return audioRateChartList;
-    } catch (error) {
-      return [];
-    }
-  }
+  // Future<List<RateChartModel>> fetchAudioRateChartData() async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection('AudioRateChart')
+  //         .orderBy('channelName')
+  //         .get()
+  //         .then((snapshot) {
+  //       _audioRateChartList.clear();
+  //       snapshot.docChanges.forEach((element) {
+  //         RateChartModel audioRateChartModel = RateChartModel(
+  //             channelName: element.doc['channelName'],
+  //             image: element.doc['image'],
+  //             category: element.doc['category'],
+  //             subCategory: element.doc['subCategory'],
+  //             id: element.doc['id'],
+  //             status: element.doc['status'],
+  //             date: element.doc['date']);
+  //         _audioRateChartList.add(audioRateChartModel);
+  //       });
+  //     });
+  //     return audioRateChartList;
+  //   } catch (error) {
+  //     return [];
+  //   }
+  // }
 
   Future<List<PrintMediaModel>> fetchPrintData() async {
     try {

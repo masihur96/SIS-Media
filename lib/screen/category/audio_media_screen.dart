@@ -6,6 +6,8 @@ import 'package:media_directory_admin/model/audio_media_model.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
+import 'package:media_directory_admin/screen/category/managment/audio_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/audio_managment_insert.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_insert.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
@@ -104,7 +106,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         setState(() {
           _subList = fatchDataHelper.audioMediadataList;
           _filteredList = _subList;
-
+          _filterSubCategoryList('FM Radio Channel');
           _isLoading = false;
         });
       });
@@ -114,8 +116,6 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         _filteredList = _subList;
         _filterSubCategoryList('FM Radio Channel');
       });
-
-
     }
   }
 
@@ -127,6 +127,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.audioMediadataList;
         _filteredList = _subList;
+        _filterSubCategoryList('FM Radio Channel');
         _isLoading = false;
       });
     });
@@ -253,7 +254,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: dropdownValue != 'Rate Chart',
+                    visible: dropdownValue != 'Rate Chart' &&
+                        dropdownValue != 'Managment Information',
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
@@ -272,7 +274,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: dropdownValue != 'Rate Chart',
+                    visible: dropdownValue != 'Rate Chart' &&
+                        dropdownValue != 'Managment Information',
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
@@ -290,7 +293,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text('Refresh To All'),
+                                Text('Refresh'),
                                 SizedBox(
                                   width: size.width * .02,
                                 ),
@@ -307,49 +310,52 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
             ),
             dropdownValue == 'Rate Chart'
                 ? AllDataAudioRateChart()
-                :     _isLoading
-                ? Container(
-                    child: Column(
-                    children: [
-                      SizedBox(
-                        height: size.height * .4,
-                      ),
-                      fadingCircle,
-                      Text(
-                        'Please Wait ..........',
-                        style: TextStyle(fontSize: 15, color: Colors.black),
-                      ),
-                    ],
-                  ))
-                : _filteredList.isEmpty
-                    ? Container(
-                        child: Column(
-                        children: [
-                          SizedBox(height: 200),
-                          Text("Item is Not Found",
-                              style: TextStyle(
-                                  fontSize: 25,
-                                  letterSpacing: 2,
-                                  color: Colors.grey)),
-                        ],
-                      ))
-                        : Expanded(
-                            child: SizedBox(
-                              height: 500.0,
-                              child: new ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: _filteredList.length,
-                                itemBuilder: (context, index) {
-                                  return _listItem(
-                                      index,
-                                      size,
-                                      firebaseProvider,
-                                      dataProvider,
-                                      fatchDataHelper);
-                                },
+                : dropdownValue == 'Managment Information'
+                    ? AudioManagmentAllData()
+                    : _isLoading
+                        ? Container(
+                            child: Column(
+                            children: [
+                              SizedBox(
+                                height: size.height * .4,
                               ),
-                            ),
-                          ),
+                              fadingCircle,
+                              Text(
+                                'Please Wait ..........',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
+                            ],
+                          ))
+                        : _filteredList.isEmpty
+                            ? Container(
+                                child: Column(
+                                children: [
+                                  SizedBox(height: 200),
+                                  Text("Item is Not Found",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          letterSpacing: 2,
+                                          color: Colors.grey)),
+                                ],
+                              ))
+                            : Expanded(
+                                child: SizedBox(
+                                  height: 500.0,
+                                  child: new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: _filteredList.length,
+                                    itemBuilder: (context, index) {
+                                      return _listItem(
+                                          index,
+                                          size,
+                                          firebaseProvider,
+                                          dataProvider,
+                                          fatchDataHelper);
+                                    },
+                                  ),
+                                ),
+                              ),
           ],
         ),
       );
@@ -655,7 +661,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                                       .child(_filteredList[index].id!)
                                       .delete();
 
-                                         _subList.removeWhere((item) =>
+                                  _subList.removeWhere((item) =>
                                       item.id == _filteredList[index].id!);
                                   _filteredList.removeWhere((item) =>
                                       item.id == _filteredList[index].id!);
@@ -723,7 +729,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Visibility(
-                        visible: dropdownValue != 'Rate Chart',
+                        visible: dropdownValue != 'Rate Chart' &&
+                            dropdownValue != 'Managment Information',
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -802,7 +809,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                         ),
                       ),
                       Visibility(
-                        visible: dropdownValue != 'Rate Chart',
+                        visible: dropdownValue != 'Rate Chart' &&
+                            dropdownValue != 'Managment Information',
                         child: Container(
                           decoration: BoxDecoration(
                             border:
@@ -852,7 +860,12 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   child: AudioRateChartInsert(),
                 ),
                 Visibility(
-                  visible: dropdownValue != "Rate Chart",
+                  visible: dropdownValue == "Managment Information",
+                  child: AudioManagmentInsert(),
+                ),
+                Visibility(
+                  visible: dropdownValue != "Rate Chart" &&
+                      dropdownValue != 'Managment Information',
                   child: Container(
                     child: Column(
                       children: <Widget>[AudioMediaFild(size)],
@@ -863,7 +876,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   height: size.height * .04,
                 ),
                 Visibility(
-                  visible: dropdownValue != "Rate Chart",
+                  visible: dropdownValue != "Rate Chart" &&
+                      dropdownValue != 'Managment Information',
                   child: _isLoading
                       ? Container(
                           child: Column(
