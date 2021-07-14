@@ -1,6 +1,4 @@
-
-class FilmMediaModel{
-
+class FilmMediaModel {
   String? id;
   String? name;
   String? address;
@@ -18,25 +16,25 @@ class FilmMediaModel{
   String? status;
   String? date;
   String? subCategory;
-  FilmMediaModel(
-  {
-     this.id,
-     this.name,
-     this.address,
-     this.pabx,
-     this.email,
-     this.web,
-     this.fax,
-     this.phone,
-     this.mobile,
-     this.contact,
-     this.facebook,
-     this.designation,
-     this.hallname,
-     this.image,
-     this.status,
-     this.date,
-     this.subCategory,
-}
-);
+  String? category;
+  FilmMediaModel({
+    this.id,
+    this.name,
+    this.address,
+    this.pabx,
+    this.email,
+    this.web,
+    this.fax,
+    this.phone,
+    this.mobile,
+    this.contact,
+    this.facebook,
+    this.designation,
+    this.hallname,
+    this.image,
+    this.status,
+    this.date,
+    this.subCategory,
+    this.category,
+  });
 }

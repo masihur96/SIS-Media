@@ -963,7 +963,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         'customerCare': _customerCare.text,
         'id': uuid,
         'category': dataProvider.subCategory,
-        'sub-category': dropdownValue,
+        'subCategory': dropdownValue,
         'date': dateData,
         'status': statusValue.toLowerCase(),
       };
@@ -1079,19 +1079,18 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
             ],
           ),
 
-           Container(
-                width: size.width > 1200 ? size.width * .415 : size.width * .5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      _textFormBuilderForImport('Customer Care'),
-                      SizedBox(height: 20),
-   
-                    ],
-                  ),
-                ),
+          Container(
+            width: size.width > 1200 ? size.width * .415 : size.width * .5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  _textFormBuilderForImport('Customer Care'),
+                  SizedBox(height: 20),
+                ],
               ),
+            ),
+          ),
           // SizedBox(height: 20),
         ],
       ),

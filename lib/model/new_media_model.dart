@@ -26,6 +26,7 @@ class NewMediaModel {
   String? id;
   String? status;
   String? date;
+  String? category;
   String? subCategory;
 
   NewMediaModel({
@@ -56,6 +57,7 @@ class NewMediaModel {
     this.id,
     this.status,
     this.date,
+    this.category,
     this.subCategory,
   });
 }

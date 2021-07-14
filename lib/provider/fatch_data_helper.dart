@@ -395,32 +395,6 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  // Future<List<RateChartModel>> fetchAudioRateChartData() async {
-  //   try {
-  //     await FirebaseFirestore.instance
-  //         .collection('AudioRateChart')
-  //         .orderBy('channelName')
-  //         .get()
-  //         .then((snapshot) {
-  //       _audioRateChartList.clear();
-  //       snapshot.docChanges.forEach((element) {
-  //         RateChartModel audioRateChartModel = RateChartModel(
-  //             channelName: element.doc['channelName'],
-  //             image: element.doc['image'],
-  //             category: element.doc['category'],
-  //             subCategory: element.doc['subCategory'],
-  //             id: element.doc['id'],
-  //             status: element.doc['status'],
-  //             date: element.doc['date']);
-  //         _audioRateChartList.add(audioRateChartModel);
-  //       });
-  //     });
-  //     return audioRateChartList;
-  //   } catch (error) {
-  //     return [];
-  //   }
-  // }
-
   Future<List<PrintMediaModel>> fetchPrintData() async {
     try {
       await FirebaseFirestore.instance
@@ -481,7 +455,7 @@ class FatchDataHelper extends ChangeNotifier {
               facebook: element.doc['facebook'],
               image: element.doc['image'],
               editor: element.doc['editor'],
-              birthDate: element.doc['dirthDate'],
+              birthDate: element.doc['birthDate'],
               deathDate: element.doc['deathDate'],
               designation: element.doc['designation'],
               deathList: element.doc['deathList'],
@@ -496,7 +470,7 @@ class FatchDataHelper extends ChangeNotifier {
               id: element.doc['id'],
               status: element.doc['status'],
               date: element.doc['date'],
-              subCategory: element.doc['sub-category']);
+              subCategory: element.doc['subCategory']);
           _newMediadataList.add(newMediaModel);
         });
       });
@@ -544,7 +518,7 @@ class FatchDataHelper extends ChangeNotifier {
                   id: element.doc['id'],
                   status: element.doc['status'],
                   date: element.doc['date'],
-                  subCategory: element.doc['sub-category']);
+                  subCategory: element.doc['subCategory']);
           _importentMediadataList.add(importentEmergencyModel);
         });
       });

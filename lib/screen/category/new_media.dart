@@ -897,7 +897,7 @@ class _NewMediaState extends State<NewMedia> {
         'facebook': _facebook.text,
         'image': imageUrl,
         'editor': _editor.text,
-        'dirthDate': _birthDate.text,
+        'birthDate': _birthDate.text,
         'deathDate': _deathDate.text,
         'designation': _designation.text,
         'deathList': _deathList.text,
@@ -911,7 +911,7 @@ class _NewMediaState extends State<NewMedia> {
         'salesSupport': _salesSupport.text,
         'id': uuid,
         'category': dataProvider.subCategory,
-        'sub-category': dropdownValue,
+        'subCategory': dropdownValue,
         'date': dateData,
         'status': statusValue.toLowerCase(),
       };
