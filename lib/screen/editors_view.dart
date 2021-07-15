@@ -278,8 +278,8 @@ class _EditorsViewState extends State<EditorsView> {
               ),
               data != null
                   ? Container(
-                      height: size.height * .35,
-                      width: size.width * .35,
+                      height: size.height * .55,
+                      width: size.height * .35,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         border: Border.all(color: Colors.grey, width: 1),
@@ -292,8 +292,8 @@ class _EditorsViewState extends State<EditorsView> {
                       ),
                     )
                   : Container(
-                      height: size.height * .35,
-                      width: size.width * .35,
+                      height: size.height * .55,
+                      width: size.height * .35,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         border: Border.all(color: Colors.grey, width: 1),
