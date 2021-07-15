@@ -237,7 +237,7 @@ class Variables {
     'Reciter (Abritteekar)',
     'Musician',
     'Rate Chart',
-    'Managment Information',
+    'Management Information',
   ];
   List getAudioMediaList() {
     return audioMediaList;
@@ -258,7 +258,7 @@ class Variables {
     'All Printing Works Service Provider',
     'Graphic Design Activities etc',
     'Freelancer Graphic Designer',
-    'Managment Information',
+    'Management Information',
     'BASISAS & MEJAB',
   ];
   List getPrintingMediaList() {
@@ -282,7 +282,7 @@ class Variables {
     'Bangladesh : At A Glance',
     'Corporate Information',
     'Education Service-National & International',
-    'Managment Information (Education Service Company)',
+    'Management Information (Education Service Company)',
     'Fashion House',
     'Parlor',
     'Interior ,Exterior & Architect',

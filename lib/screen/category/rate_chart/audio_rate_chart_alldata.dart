@@ -47,7 +47,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
         setState(() {
           _subList = fatchDataHelper.rateChartList;
           _filteredList = _subList;
-          _filterChannelList('Bangladesh Betar');
+          _filterChannelList(channelValue);
           _isLoading = false;
         });
       });
@@ -55,7 +55,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
       setState(() {
         _subList = fatchDataHelper.rateChartList;
         _filteredList = _subList;
-        _filterChannelList('Bangladesh Betar');
+        _filterChannelList(channelValue);
         _isLoading = false;
       });
     }
@@ -71,7 +71,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
       setState(() {
         _subList = fatchDataHelper.rateChartList;
         _filteredList = _subList;
-        _filterChannelList('Bangladesh Betar');
+        _filterChannelList(channelValue);
         _isLoading = false;
       });
     });
@@ -80,6 +80,8 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final double itemHeight = size.height * .15;
+    final double itemWidth = size.height * .2;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
@@ -200,6 +202,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                               : size.width < 1200
                                   ? 2
                                   : 3,
+                          childAspectRatio: (itemHeight / itemWidth),
                           crossAxisSpacing: 5.0,
                           mainAxisSpacing: 5.0,
                         ),
@@ -229,7 +232,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                height: size.height * .35,
+                height: size.height * .5,
                 width: size.width * .7,
                 child: _filteredList[index].image!.isEmpty
                     ? Icon(
@@ -346,10 +349,10 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                         ],
                       ).show();
                     },
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.redAccent,
+                     style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 23, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         textStyle: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold)),
                   ),

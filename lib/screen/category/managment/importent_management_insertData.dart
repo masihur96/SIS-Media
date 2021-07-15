@@ -65,8 +65,8 @@ class _ImportantManagementInsertDataState
             ),
             data != null
                 ? Container(
-                    height: size.height * .35,
-                    width: size.width * .35,
+                    height: size.height * .55,
+                    width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 1),
@@ -79,8 +79,8 @@ class _ImportantManagementInsertDataState
                     ),
                   )
                 : Container(
-                    height: size.height * .35,
-                    width: size.width * .35,
+                    height: size.height * .55,
+                    width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 1),
@@ -207,7 +207,7 @@ class _ImportantManagementInsertDataState
                         });
                       });
                     },
-                    child: Text('PICK BANNER'),
+                    child: Text('PICK IMAGE'),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
                         padding:
@@ -236,7 +236,7 @@ class _ImportantManagementInsertDataState
                             });
                           },
                           child: Text(
-                            'UPLOAD BANNER',
+                            'UPLOAD IMAGE',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -288,7 +288,7 @@ class _ImportantManagementInsertDataState
     Map<String, String> map = {
       'image': imageUrl,
       'category': 'Important & Emergency',
-      'subCategory': 'Managment Information (Education Service Company)',
+      'subCategory': 'Management Information (Education Service Company)',
       'sectionName': channelValue,
       'status': statusValue.toLowerCase(),
       'date': dateData,

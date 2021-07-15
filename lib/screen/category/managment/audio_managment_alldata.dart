@@ -47,8 +47,7 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
         setState(() {
           _subList = fatchDataHelper.managementDataList;
           _filteredList = _subList;
-          _filterChannelList(
-              'MUSIC INDUSTRIES OWNERS ASSOCIATION OF BANGLADESH');
+          _filterChannelList(channelValue);
           _isLoading = false;
         });
       });
@@ -56,7 +55,7 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
       setState(() {
         _subList = fatchDataHelper.managementDataList;
         _filteredList = _subList;
-        _filterChannelList('MUSIC INDUSTRIES OWNERS ASSOCIATION OF BANGLADESH');
+        _filterChannelList(channelValue);
         _isLoading = false;
       });
     }
@@ -72,7 +71,7 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
       setState(() {
         _subList = fatchDataHelper.managementDataList;
         _filteredList = _subList;
-        _filterChannelList('MUSIC INDUSTRIES OWNERS ASSOCIATION OF BANGLADESH');
+        _filterChannelList(channelValue);
         _isLoading = false;
       });
     });
@@ -81,6 +80,8 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final double itemHeight = size.height * .15;
+    final double itemWidth = size.height * .2;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
@@ -201,6 +202,7 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
                               : size.width < 1200
                                   ? 2
                                   : 3,
+                          childAspectRatio: (itemHeight / itemWidth),
                           crossAxisSpacing: 5.0,
                           mainAxisSpacing: 5.0,
                         ),
@@ -231,8 +233,8 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  height: size.height * .35,
-                  width: size.height * .8,
+                  height: size.height * .5,
+                  width: size.width * .7,
                   child: _filteredList[index].image!.isEmpty
                       ? Icon(
                           Icons.photo,
@@ -352,12 +354,11 @@ class _AudioManagmentAllDataState extends State<AudioManagmentAllData> {
                           ).show();
                         },
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.redAccent,
+                            primary: Colors.red,
                             padding: EdgeInsets.symmetric(
-                                horizontal: 23, vertical: 15),
+                                horizontal: 20, vertical: 15),
                             textStyle: TextStyle(
-                                fontSize: size.height * .03,
-                                fontWeight: FontWeight.bold)),
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),

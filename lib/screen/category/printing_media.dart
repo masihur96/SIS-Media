@@ -95,7 +95,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
         setState(() {
           _subList = fatchDataHelper.printMediaDataList;
           _filteredList = _subList;
-          _filterSubCategoryList('Daily News Paper');
+          _filterSubCategoryList(dropdownValue);
           _isLoading = false;
         });
       });
@@ -103,7 +103,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
       setState(() {
         _subList = fatchDataHelper.printMediaDataList;
         _filteredList = _subList;
-        _filterSubCategoryList('Daily News Paper');
+        _filterSubCategoryList(dropdownValue);
       });
     }
   }
@@ -116,6 +116,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
       setState(() {
         _subList = fatchDataHelper.printMediaDataList;
         _filteredList = _subList;
+        _filterSubCategoryList(dropdownValue);
         _isLoading = false;
       });
     });
@@ -237,7 +238,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     ),
                   ),
                   Visibility(
-                    visible: dropdownValue != "Managment Information",
+                    visible: dropdownValue != "Management Information",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
@@ -256,7 +257,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     ),
                   ),
                   Visibility(
-                    visible: dropdownValue != "Managment Information",
+                    visible: dropdownValue != "Management Information",
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
@@ -274,7 +275,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text('Refresh To All'),
+                                Text('Refresh'),
                                 SizedBox(
                                   width: size.width * .02,
                                 ),
@@ -289,7 +290,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                 ],
               ),
             ),
-            dropdownValue == 'Managment Information'
+            dropdownValue == 'Management Information'
                 ? PrintManagmentAllData()
                 : _isLoading
                     ? Container(
@@ -628,23 +629,12 @@ class _PrintingMediaState extends State<PrintingMedia> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    "PRINT MEDIA",
-                    style: TextStyle(
-                        fontSize: size.height * .04,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey,
-                        letterSpacing: 2.0),
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Visibility(
-                        visible: dropdownValue != 'Managment Information',
+                        visible: dropdownValue != 'Management Information',
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -723,7 +713,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                         ),
                       ),
                       Visibility(
-                        visible: dropdownValue != 'Managment Information',
+                        visible: dropdownValue != 'Management Information',
                         child: Container(
                           decoration: BoxDecoration(
                             border:
@@ -769,18 +759,18 @@ class _PrintingMediaState extends State<PrintingMedia> {
                   ),
                 ),
                 Visibility(
-                  visible: dropdownValue == "Managment Information",
+                  visible: dropdownValue == "Management Information",
                   child: PrintManagmentInsert(),
                 ),
                 Visibility(
-                  visible: dropdownValue != "Managment Information",
+                  visible: dropdownValue != "Management Information",
                   child: PrintMediaWidget(size),
                 ),
                 SizedBox(
                   height: size.height * .04,
                 ),
                 Visibility(
-                  visible: dropdownValue != "Managment Information",
+                  visible: dropdownValue != "Management Information",
                   child: _isLoading
                       ? Container(child: fadingCircle)
                       : ElevatedButton(

@@ -62,8 +62,8 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                     children: <Widget>[
                       data == null
                           ? Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -77,8 +77,8 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                               ),
                             )
                           : Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),

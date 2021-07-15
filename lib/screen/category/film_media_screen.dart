@@ -89,7 +89,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
         setState(() {
           _subList = fatchDataHelper.filmMediadataList;
           _filteredList = _subList;
-          _filterSubCategoryList('Film Institution');
+          _filterSubCategoryList(dropdownValue);
           _isLoading = false;
         });
       });
@@ -97,7 +97,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('Film Institution');
+        _filterSubCategoryList(dropdownValue);
       });
     }
   }
@@ -110,7 +110,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('Film Institution');
+        _filterSubCategoryList(dropdownValue);
         _isLoading = false;
       });
     });
@@ -265,7 +265,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              Text('Refresh To All'),
+                              Text('Refresh'),
                               SizedBox(
                                 width: size.width * .02,
                               ),
@@ -598,17 +598,6 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    "FILM MEDIA",
-                    style: TextStyle(
-                        fontSize: size.height * .04,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey,
-                        letterSpacing: 2.0),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(

@@ -85,17 +85,16 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
       await fatchDataHelper.fetchBannerData().then((value) {
         setState(() {
           _subList = fatchDataHelper.indexdataList;
-
+          _filterCategoryList(categoryValue);
           _isLoading = false;
         });
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.indexdataList;
+        _filterCategoryList(categoryValue);
       });
     }
-
-    _filterCategoryList('Film Media');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -109,6 +108,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
             .where((element) =>
                 (element.category!.toLowerCase().contains('popup')))
             .toList();
+        _filterCategoryList(categoryValue);
         _isLoading = false;
       });
     });

@@ -102,7 +102,7 @@ class _NewMediaState extends State<NewMedia> {
         setState(() {
           _subList = fatchDataHelper.newMediadataList;
           _filteredList = _subList;
-          _filterSubCategoryList('Digital Audio - Video Content Provider');
+          _filterSubCategoryList(dropdownValue);
           _isLoading = false;
         });
       });
@@ -110,7 +110,7 @@ class _NewMediaState extends State<NewMedia> {
       setState(() {
         _subList = fatchDataHelper.newMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('Digital Audio - Video Content Provider');
+
         _isLoading = false;
       });
     }
@@ -124,6 +124,7 @@ class _NewMediaState extends State<NewMedia> {
       setState(() {
         _subList = fatchDataHelper.newMediadataList;
         _filteredList = _subList;
+        _filterSubCategoryList(dropdownValue);
         _isLoading = false;
       });
     });
@@ -275,7 +276,7 @@ class _NewMediaState extends State<NewMedia> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              Text('Refresh To All'),
+                              Text('Refresh'),
                               SizedBox(
                                 width: size.width * .02,
                               ),
@@ -712,13 +713,6 @@ class _NewMediaState extends State<NewMedia> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Text(
-                  "New Media",
-                  style: TextStyle(
-                      fontSize: size.height * .04,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(

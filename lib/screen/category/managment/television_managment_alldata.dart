@@ -49,7 +49,7 @@ class _TelevisionManagmentAllDataState
         setState(() {
           _subList = fatchDataHelper.managementDataList;
           _filteredList = _subList;
-          _filterChannelList('All Television Channel');
+          _filterChannelList(channelValue);
           _isLoading = false;
         });
       });
@@ -57,7 +57,7 @@ class _TelevisionManagmentAllDataState
       setState(() {
         _subList = fatchDataHelper.managementDataList;
         _filteredList = _subList;
-        _filterChannelList('All Television Channel');
+        _filterChannelList(channelValue);
         _isLoading = false;
       });
     }
@@ -73,7 +73,7 @@ class _TelevisionManagmentAllDataState
       setState(() {
         _subList = fatchDataHelper.managementDataList;
         _filteredList = _subList;
-        _filterChannelList('All Television Channel');
+        _filterChannelList(channelValue);
         _isLoading = false;
       });
     });
@@ -82,6 +82,8 @@ class _TelevisionManagmentAllDataState
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final double itemHeight = size.height * .15;
+    final double itemWidth = size.height * .2;
     final DataProvider dataProvider = Provider.of<DataProvider>(context);
     final FirebaseProvider firebaseProvider =
         Provider.of<FirebaseProvider>(context);
@@ -202,6 +204,7 @@ class _TelevisionManagmentAllDataState
                               : size.width < 1200
                                   ? 2
                                   : 3,
+                          childAspectRatio: (itemHeight / itemWidth),
                           crossAxisSpacing: 5.0,
                           mainAxisSpacing: 5.0,
                         ),
@@ -232,8 +235,8 @@ class _TelevisionManagmentAllDataState
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  height: size.height * .35,
-                  width: size.height * .8,
+                  height: size.height * .5,
+                  width: size.width * .7,
                   child: _filteredList[index].image!.isEmpty
                       ? Icon(
                           Icons.photo,
@@ -353,12 +356,11 @@ class _TelevisionManagmentAllDataState
                           ).show();
                         },
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.redAccent,
+                            primary: Colors.grey,
                             padding: EdgeInsets.symmetric(
-                                horizontal: 23, vertical: 15),
+                                horizontal: 20, vertical: 15),
                             textStyle: TextStyle(
-                                fontSize: size.height * .03,
-                                fontWeight: FontWeight.bold)),
+                                fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),

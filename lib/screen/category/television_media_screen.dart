@@ -115,7 +115,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         setState(() {
           _subList = fatchDataHelper.televisionMediadataList;
           _filteredList = _subList;
-          _filterSubCategoryList('Television Channel');
+          _filterSubCategoryList(dropdownValue);
           _isLoading = false;
         });
       });
@@ -123,7 +123,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.televisionMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('Television Channel');
+        _filterSubCategoryList(dropdownValue);
       });
     }
   }
@@ -136,7 +136,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.televisionMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('Television Channel');
+        _filterSubCategoryList(dropdownValue);
         _isLoading = false;
       });
     });
@@ -300,7 +300,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text('Refresh To All'),
+                                Text('Refresh'),
                                 SizedBox(
                                   width: size.width * .02,
                                 ),
@@ -816,17 +816,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    "TELEVISION MEDIA",
-                    style: TextStyle(
-                        fontSize: size.height * .04,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey,
-                        letterSpacing: 2.0),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(

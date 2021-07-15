@@ -63,8 +63,8 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
             ),
             data != null
                 ? Container(
-                    height: size.height * .35,
-                    width: size.width * .35,
+                        height: size.height * .55,
+                    width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 1),
@@ -77,8 +77,8 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
                     ),
                   )
                 : Container(
-                    height: size.height * .35,
-                    width: size.width * .35,
+               height: size.height * .55,
+                    width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 1),
@@ -205,7 +205,7 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
                         });
                       });
                     },
-                    child: Text('PICK BANNER'),
+                    child: Text('PICK IMAGE'),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
                         padding:
@@ -234,7 +234,7 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
                             });
                           },
                           child: Text(
-                            'UPLOAD BANNER',
+                            'UPLOAD IMAGE',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(

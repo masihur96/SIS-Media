@@ -107,7 +107,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         setState(() {
           _subList = fatchDataHelper.audioMediadataList;
           _filteredList = _subList;
-          _filterSubCategoryList('FM Radio Channel');
+          _filterSubCategoryList(dropdownValue);
           _isLoading = false;
         });
       });
@@ -115,7 +115,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.audioMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('FM Radio Channel');
+        _filterSubCategoryList(dropdownValue);
       });
     }
   }
@@ -128,7 +128,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
       setState(() {
         _subList = fatchDataHelper.audioMediadataList;
         _filteredList = _subList;
-        _filterSubCategoryList('FM Radio Channel');
+        _filterSubCategoryList(dropdownValue);
         _isLoading = false;
       });
     });
@@ -256,7 +256,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   ),
                   Visibility(
                     visible: dropdownValue != 'Rate Chart' &&
-                        dropdownValue != 'Managment Information',
+                        dropdownValue != 'Management Information',
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
@@ -276,7 +276,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   ),
                   Visibility(
                     visible: dropdownValue != 'Rate Chart' &&
-                        dropdownValue != 'Managment Information',
+                        dropdownValue != 'Management Information',
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
@@ -311,7 +311,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
             ),
             dropdownValue == 'Rate Chart'
                 ? AllDataAudioRateChart()
-                : dropdownValue == 'Managment Information'
+                : dropdownValue == 'Management Information'
                     ? AudioManagmentAllData()
                     : _isLoading
                         ? Container(
@@ -724,24 +724,13 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(
-                    "AUDIO MEDIA",
-                    style: TextStyle(
-                        fontSize: size.height * .04,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey,
-                        letterSpacing: 2.0),
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Visibility(
                         visible: dropdownValue != 'Rate Chart' &&
-                            dropdownValue != 'Managment Information',
+                            dropdownValue != 'Management Information',
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -821,7 +810,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                       ),
                       Visibility(
                         visible: dropdownValue != 'Rate Chart' &&
-                            dropdownValue != 'Managment Information',
+                            dropdownValue != 'Management Information',
                         child: Container(
                           decoration: BoxDecoration(
                             border:
@@ -871,12 +860,12 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   child: AudioRateChartInsert(),
                 ),
                 Visibility(
-                  visible: dropdownValue == "Managment Information",
+                  visible: dropdownValue == "Management Information",
                   child: AudioManagmentInsert(),
                 ),
                 Visibility(
                   visible: dropdownValue != "Rate Chart" &&
-                      dropdownValue != 'Managment Information',
+                      dropdownValue != 'Management Information',
                   child: Container(
                     child: Column(
                       children: <Widget>[AudioMediaFild(size)],
@@ -888,7 +877,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                 ),
                 Visibility(
                   visible: dropdownValue != "Rate Chart" &&
-                      dropdownValue != 'Managment Information',
+                      dropdownValue != 'Management Information',
                   child: _isLoading
                       ? Container(
                           child: Column(

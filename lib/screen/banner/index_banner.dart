@@ -68,6 +68,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
         setState(() {
           _subList = fatchDataHelper.indexdataList;
           _filteredList = _subList;
+          _filterSubCategoryList(categoryValue);
           _isLoading = false;
         });
       });
@@ -75,10 +76,10 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
       setState(() {
         _subList = fatchDataHelper.indexdataList;
         _filteredList = _subList;
+        _filterSubCategoryList(categoryValue);
+        _isLoading = false;
       });
     }
-
-    _filterSubCategoryList('Top Banner');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -93,6 +94,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                 (element.place!.toLowerCase().contains('indextop') ||
                     element.place!.toLowerCase().contains('indexbottom')))
             .toList();
+        _filterSubCategoryList(categoryValue);
         _isLoading = false;
       });
     });

@@ -64,8 +64,8 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
             ),
             data != null
                 ? Container(
-                    height: size.height * .35,
-                    width: size.width * .35,
+                    height: size.height * .55,
+                    width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 1),
@@ -78,8 +78,8 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
                     ),
                   )
                 : Container(
-                    height: size.height * .35,
-                    width: size.width * .35,
+                    height: size.height * .55,
+                    width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       border: Border.all(color: Colors.grey, width: 1),
@@ -206,7 +206,7 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
                         });
                       });
                     },
-                    child: Text('PICK BANNER'),
+                    child: Text('PICK IMAGE'),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
                         padding:
@@ -235,7 +235,7 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
                             });
                           },
                           child: Text(
-                            'UPLOAD BANNER',
+                            'UPLOAD IMAGE',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(

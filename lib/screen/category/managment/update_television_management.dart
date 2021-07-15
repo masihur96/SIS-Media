@@ -83,7 +83,7 @@ class _UpdateTelevisionManagementState
                               ),
                             )
                           : Container(
-                              height: size.height * .35,
+                              height: size.height * .55,
                               width: size.width * .35,
                               decoration: BoxDecoration(
                                 borderRadius:

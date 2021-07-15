@@ -102,6 +102,8 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
         setState(() {
           _subList = fatchDataHelper.indexdataList;
           _filteredCategoryList = _subList;
+          _filterPlaceList(placesValue);
+          _filterCategoryList(categoryValue);
           _isLoading = false;
         });
       });
@@ -109,11 +111,10 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       setState(() {
         _subList = fatchDataHelper.indexdataList;
         _filteredCategoryList = _subList;
+        _filterPlaceList(placesValue);
+        _filterCategoryList(categoryValue);
       });
     }
-
-    _filterPlaceList('Top Banner');
-    _filterCategoryList('Film Media');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -128,6 +129,9 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                 (element.place!.toLowerCase().contains('contenttop') ||
                     element.place!.toLowerCase().contains('contentbottom')))
             .toList();
+
+        _filterPlaceList(placesValue);
+        _filterCategoryList(categoryValue);
         _isLoading = false;
       });
     });
@@ -304,7 +308,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text('Refresh To All'),
+                          Text('Refresh'),
                           SizedBox(
                             width: size.width * .02,
                           ),

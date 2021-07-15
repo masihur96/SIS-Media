@@ -75,8 +75,8 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                     children: <Widget>[
                       data == null
                           ? Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                                 height: size.height * .55,
+                    width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -90,8 +90,8 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                               ),
                             )
                           : Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                                height: size.height * .55,
+                    width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),

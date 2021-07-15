@@ -108,6 +108,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
         setState(() {
           _subList = fatchDataHelper.importentMediadataList;
           _filteredList = _subList;
+
+          _filterSubCategoryList(dropdownValue);
           _isLoading = false;
         });
       });
@@ -115,10 +117,10 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
       setState(() {
         _subList = fatchDataHelper.importentMediadataList;
         _filteredList = _subList;
+        _filterSubCategoryList(dropdownValue);
+        _isLoading = false;
       });
     }
-
-    _filterSubCategoryList('Bangladesh : At A Glance');
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -129,6 +131,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
       setState(() {
         _subList = fatchDataHelper.importentMediadataList;
         _filteredList = _subList;
+        _filterSubCategoryList(dropdownValue);
         _isLoading = false;
       });
     });
@@ -251,7 +254,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                   ),
                   Visibility(
                     visible: dropdownValue !=
-                        "Managment Information (Education Service Company)",
+                        "Management Information (Education Service Company)",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
@@ -271,7 +274,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                   ),
                   Visibility(
                     visible: dropdownValue !=
-                        "Managment Information (Education Service Company)",
+                        "Management Information (Education Service Company)",
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
@@ -289,7 +292,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text('Refresh To All'),
+                                Text('Refresh'),
                                 SizedBox(
                                   width: size.width * .02,
                                 ),
@@ -304,7 +307,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                 ],
               ),
             ),
-            dropdownValue == 'Managment Information (Education Service Company)'
+            dropdownValue ==
+                    'Management Information (Education Service Company)'
                 ? ImportantManagementAllData()
                 : _isLoading
                     ? Container(
@@ -739,13 +743,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Text(
-                  "Importent & Emergency",
-                  style: TextStyle(
-                      fontSize: size.height * .04,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
@@ -753,7 +750,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                     children: <Widget>[
                       Visibility(
                         visible: dropdownValue !=
-                            "Managment Information (Education Service Company)",
+                            "Management Information (Education Service Company)",
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -833,7 +830,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       ),
                       Visibility(
                         visible: dropdownValue !=
-                            "Managment Information (Education Service Company)",
+                            "Management Information (Education Service Company)",
                         child: Container(
                           decoration: BoxDecoration(
                             border:
@@ -880,17 +877,17 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                 ),
                 Visibility(
                   visible: dropdownValue ==
-                      "Managment Information (Education Service Company)",
+                      "Management Information (Education Service Company)",
                   child: ImportantManagementInsertData(),
                 ),
                 Visibility(
                   visible: dropdownValue !=
-                      "Managment Information (Education Service Company)",
+                      "Management Information (Education Service Company)",
                   child: ImportMediaWidget(size),
                 ),
                 Visibility(
                   visible: dropdownValue !=
-                      "Managment Information (Education Service Company)",
+                      "Management Information (Education Service Company)",
                   child: _isLoading
                       ? Container(
                           child: Column(
