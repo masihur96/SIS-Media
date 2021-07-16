@@ -30,9 +30,6 @@ class FatchDataHelper extends ChangeNotifier {
   List<AudioMediaModel> _audioMediadataList = [];
   get audioMediadataList => _audioMediadataList;
 
-  // List<RateChartModel> _audioRateChartList = [];
-  // get audioRateChartList => _audioRateChartList;
-
   List<PrintMediaModel> _printMediaDataList = [];
   get printMediaDataList => _printMediaDataList;
 

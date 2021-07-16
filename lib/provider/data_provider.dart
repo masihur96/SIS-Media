@@ -66,16 +66,6 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // RateChartModel _televisionRateChartModel =
-  //     new RateChartModel();
-  // RateChartModel get televisionRateChartModel =>
-  //     _televisionRateChartModel;
-  // set televisionRateChartModel(RateChartModel model) {
-  //   model = RateChartModel();
-  //   _televisionRateChartModel = model;
-  //   notifyListeners();
-  // }
-
   AudioMediaModel _audioMediaModel = new AudioMediaModel();
   AudioMediaModel get audioMediaModel => _audioMediaModel;
   set audioMediaModel(AudioMediaModel model) {
@@ -133,8 +123,6 @@ class DataProvider extends ChangeNotifier {
     _indexBannerModel = model;
     notifyListeners();
   }
-
-//  bool get isTapped => _isTapped;
 
   set subCategory(String value) {
     _subCategory = value;
