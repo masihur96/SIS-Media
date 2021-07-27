@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:html' as html;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'dart:html' as html;
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
@@ -10,20 +10,19 @@ import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class TelevisionRateChart extends StatefulWidget {
-  const TelevisionRateChart({Key? key}) : super(key: key);
+class FilmManagmentInsert extends StatefulWidget {
+  const FilmManagmentInsert({Key? key}) : super(key: key);
 
   @override
-  _TelevisionRateChartState createState() => _TelevisionRateChartState();
+  _FilmManagmentInsertState createState() => _FilmManagmentInsertState();
 }
 
-class _TelevisionRateChartState extends State<TelevisionRateChart> {
+class _FilmManagmentInsertState extends State<FilmManagmentInsert> {
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
 
-  List channels = Variables().getTVChannelList();
-  String channelValue = 'Bangladesh Television';
-
+  List channels = Variables().getFilmManagmentList();
+  String channelValue = 'BANGLADESH FILM PRODUCERS DISTRIBUTORS ASSOCIATION';
   bool _isLoading = false;
   String? uuid;
 
@@ -32,7 +31,6 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
   String imageUrl = '';
   var file;
   String name = '';
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -106,7 +104,7 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              "Channel Name : ",
+                              "Section Name : ",
                               style: TextStyle(fontSize: size.height * .025),
                             ),
                             DropdownButtonHideUnderline(
@@ -205,7 +203,7 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
                         });
                       });
                     },
-                    child: Text('PICK CHART'),
+                    child: Text('PICK IMAGE'),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.grey,
                         padding:
@@ -229,9 +227,10 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
                           onPressed: () {
                             final String uuid = Uuid().v1();
                             uploadData(firebaseProvider, uuid);
+               
                           },
                           child: Text(
-                            'UPLOAD CHART',
+                            'UPLOAD IMAGE',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -253,11 +252,11 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-   setState(() => _isLoading = true);
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('RateChartData')
+          .child('ManagementData')
           .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -284,16 +283,16 @@ class _TelevisionRateChartState extends State<TelevisionRateChart> {
     setState(() => _isLoading = true);
     Map<String, String> map = {
       'image': imageUrl,
-      'category': 'Television Media',
-      'subCategory': 'Rate Chart',
-      'channelName': channelValue,
+      'category': 'Film Media',
+      'subCategory': 'Management Information',
+      'sectionName': channelValue,
       'status': statusValue.toLowerCase(),
       'date': dateData,
       'id': uuid,
     };
-    await firebaseProvider.addRateChartData(map).then((value) {
+    await firebaseProvider.addManagmentData(map).then((value) {
       if (value) {
-        setState(() {
+          setState(() {
           data = null;
         });
         setState(() => _isLoading = false);

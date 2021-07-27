@@ -456,7 +456,7 @@ class _NewMediaState extends State<NewMedia> {
                   _filteredList[index].designation!.isEmpty
                       ? Container()
                       : Text(
-                          'Designatin: ${_filteredList[index].designation}',
+                          'Designation: ${_filteredList[index].designation}',
                           style: TextStyle(
                             fontSize: 12,
                           ),
@@ -964,6 +964,8 @@ class _NewMediaState extends State<NewMedia> {
                     children: [
                       _textFormBuilderForNewMedia('Name'),
                       SizedBox(height: 20),
+                      _textFormBuilderForNewMedia('Contact'),
+                      SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Address'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('PABX'),
@@ -975,8 +977,6 @@ class _NewMediaState extends State<NewMedia> {
                       _textFormBuilderForNewMedia('FAX'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Phone(T&T)'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForNewMedia('Mobile'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('Member'),
                       SizedBox(height: 20),
@@ -993,7 +993,7 @@ class _NewMediaState extends State<NewMedia> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      _textFormBuilderForNewMedia('Contact'),
+                      _textFormBuilderForNewMedia('Mobile'),
                       SizedBox(height: 20),
                       _textFormBuilderForNewMedia('FaceBook'),
                       SizedBox(height: 20),

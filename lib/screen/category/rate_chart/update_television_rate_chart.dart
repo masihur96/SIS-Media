@@ -75,8 +75,8 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                     children: <Widget>[
                       data == null
                           ? Container(
-                                 height: size.height * .55,
-                    width: size.height * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -90,8 +90,8 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                               ),
                             )
                           : Container(
-                                height: size.height * .55,
-                    width: size.height * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -206,9 +206,6 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
                                     onPressed: () {
                                       updateData(
                                           dataProvider, firebaseProvider);
-                                      setState(() {
-                                        data = null;
-                                      });
                                     },
                                     child: Text(
                                       'UPDATE BANNER',
@@ -246,6 +243,7 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
         firebaseProvider,
       );
     } else {
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -258,7 +256,7 @@ class _UpdateTelevisionRateChartState extends State<UpdateTelevisionRateChart> {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
+
           setState(() {
             imageUrl = downloadUrl;
           });

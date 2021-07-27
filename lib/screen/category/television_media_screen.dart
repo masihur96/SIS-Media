@@ -1165,6 +1165,8 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                     children: [
                       _textFormBuilderForTelevision('Name'),
                       SizedBox(height: 20),
+                      _textFormBuilderForTelevision('Contact'),
+                      SizedBox(height: 20),
                       _textFormBuilderForTelevision('Address'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('PABX'),
@@ -1178,8 +1180,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                       _textFormBuilderForTelevision('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Mobile'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Contact'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Facebook'),
                       SizedBox(height: 20),
@@ -1202,7 +1202,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                     children: [
                       _textFormBuilderForTelevision('Business Type'),
                       SizedBox(height: 20),
-                      _textFormBuilderForTelevision('Camera'),
+                      _textFormBuilderForTelevision('House Name'),
                       SizedBox(height: 20),
                       _textFormBuilderForTelevision('Mac Pro'),
                       SizedBox(height: 20),
@@ -1238,7 +1238,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
             child: Column(
               children: [
                 SizedBox(height: 20),
-                _textFormBuilderForTelevision('House Name'),
+                _textFormBuilderForTelevision('Camera'),
               ],
             ),
           )

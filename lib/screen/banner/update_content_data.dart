@@ -196,9 +196,6 @@ class _UpdateContentDataState extends State<UpdateContentData> {
                                     onPressed: () {
                                       updateData(
                                           dataProvider, firebaseProvider);
-                                      setState(() {
-                                        data = null;
-                                      });
                                     },
                                     child: Text(
                                       'UPDATE BANNER',
@@ -236,6 +233,7 @@ class _UpdateContentDataState extends State<UpdateContentData> {
         firebaseProvider,
       );
     } else {
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -248,7 +246,7 @@ class _UpdateContentDataState extends State<UpdateContentData> {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
+
           setState(() {
             imageUrl = downloadUrl;
           });

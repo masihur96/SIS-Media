@@ -77,7 +77,7 @@ class _AudioRateChartInsertState extends State<AudioRateChartInsert> {
                     ),
                   )
                 : Container(
-                   height: size.height * .55,
+                    height: size.height * .55,
                     width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -229,9 +229,6 @@ class _AudioRateChartInsertState extends State<AudioRateChartInsert> {
                           onPressed: () {
                             final String uuid = Uuid().v1();
                             uploadData(firebaseProvider, uuid);
-                            setState(() {
-                              data = null;
-                            });
                           },
                           child: Text(
                             'UPLOAD CHART',
@@ -256,7 +253,7 @@ class _AudioRateChartInsertState extends State<AudioRateChartInsert> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -275,6 +272,8 @@ class _AudioRateChartInsertState extends State<AudioRateChartInsert> {
           _submitData(firebaseProvider, uuid);
         });
       });
+    } else {
+      showToast('Please Select an image First');
     }
   }
 
@@ -294,6 +293,9 @@ class _AudioRateChartInsertState extends State<AudioRateChartInsert> {
     };
     await firebaseProvider.addRateChartData(map).then((value) {
       if (value) {
+        setState(() {
+          data = null;
+        });
         setState(() => _isLoading = false);
         showToast('Success');
       } else {

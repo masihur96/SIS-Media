@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   String? uuid;
 
   bool _isLoading = false;
-  String error = 'Welcome to SIS Media Admin Panel';
+  String error = 'Welcome to Wizard Media Admin Panel';
   bool? _passwordVisible;
   @override
   void initState() {

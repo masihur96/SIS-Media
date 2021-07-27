@@ -439,7 +439,7 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
               ),
             ],
           ),
-              SizedBox(height: 20),
+          SizedBox(height: 20),
           _textFormBuilderForAudio('Status'),
         ],
       ),
@@ -489,11 +489,11 @@ class _UpdateAdioDataState extends State<UpdateAdioData> {
                                                                           ? _business_type
                                                                           : hint == 'Channel Name'
                                                                               ? _channelName
-                                                                               : hint == 'Status'
-                                                                              ? _statusData
-                                                                              : hint == 'DDG (Program)'
-                                                                                  ? _ddgProgram
-                                                                                  : _ddgNews,
+                                                                              : hint == 'Status'
+                                                                                  ? _statusData
+                                                                                  : hint == 'DDG (Program)'
+                                                                                      ? _ddgProgram
+                                                                                      : _ddgNews,
       decoration: InputDecoration(
         hintText: hint,
         border: new OutlineInputBorder(

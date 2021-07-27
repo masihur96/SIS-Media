@@ -63,7 +63,7 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
             ),
             data != null
                 ? Container(
-                        height: size.height * .55,
+                    height: size.height * .55,
                     width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -77,7 +77,7 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
                     ),
                   )
                 : Container(
-               height: size.height * .55,
+                    height: size.height * .55,
                     width: size.height * .35,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -229,9 +229,6 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
                           onPressed: () {
                             final String uuid = Uuid().v1();
                             uploadData(firebaseProvider, uuid);
-                            setState(() {
-                              data = null;
-                            });
                           },
                           child: Text(
                             'UPLOAD IMAGE',
@@ -256,11 +253,11 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('ManagmentData')
+          .child('ManagementData')
           .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -275,6 +272,8 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
           _submitData(firebaseProvider, uuid);
         });
       });
+    } else {
+      showToast('image is required!');
     }
   }
 
@@ -295,6 +294,9 @@ class _AudioManagmentInsertState extends State<AudioManagmentInsert> {
     await firebaseProvider.addManagmentData(map).then((value) {
       if (value) {
         setState(() => _isLoading = false);
+        setState(() {
+          data = null;
+        });
         showToast('Success');
       } else {
         setState(() => _isLoading = false);

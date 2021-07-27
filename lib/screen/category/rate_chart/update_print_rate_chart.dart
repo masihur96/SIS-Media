@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
+import 'dart:html' as html;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class UpdateBannerData extends StatefulWidget {
+class UpdatePrintRateChart extends StatefulWidget {
   @override
-  _UpdateBannerDataState createState() => _UpdateBannerDataState();
+  _UpdatePrintRateChartState createState() => _UpdatePrintRateChartState();
 }
 
-class _UpdateBannerDataState extends State<UpdateBannerData> {
+class _UpdatePrintRateChartState extends State<UpdatePrintRateChart> {
   bool _isLoading = false;
   Uint8List? data;
   var file;
@@ -30,7 +31,7 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
       counter++;
     });
 
-    statusValue = dataProvider.indexBannerModel.status.toString();
+    statusValue = dataProvider.rateChartModel.status.toString();
   }
 
   @override
@@ -61,8 +62,8 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
                     children: <Widget>[
                       data == null
                           ? Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -70,14 +71,14 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
                                     Border.all(color: Colors.grey, width: 1),
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      dataProvider.indexBannerModel.image!),
+                                      dataProvider.rateChartModel.image!),
                                   fit: BoxFit.fill,
                                 ),
                               ),
                             )
                           : Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -222,7 +223,7 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
       DataProvider dataProvider, FirebaseProvider firebaseProvider) async {
     if (data == null) {
       setState(() {
-        imageUrl = dataProvider.indexBannerModel.image!;
+        imageUrl = dataProvider.rateChartModel.image!;
       });
       _submitData(
         dataProvider,
@@ -233,8 +234,8 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('Banner')
-          .child(dataProvider.indexBannerModel.id!);
+          .child('RateChartData')
+          .child(dataProvider.rateChartModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
       firebase_storage.TaskSnapshot taskSnapshot;
@@ -265,21 +266,23 @@ class _UpdateBannerDataState extends State<UpdateBannerData> {
       setState(() => _isLoading = true);
       Map<String, String> mapData = {
         'image': imageUrl,
-        'id': dataProvider.indexBannerModel.id!,
+        'id': dataProvider.rateChartModel.id!,
         'date': dateData,
         'status': statusValue.toLowerCase(),
       };
       setState(() => _isLoading = true);
-      await firebaseProvider.updateBanerData(mapData, context).then((value) {
+      await firebaseProvider
+          .updateRateChartData(mapData, context)
+          .then((value) {
         if (value) {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Index Banner";
+          dataProvider.subCategory = "Print Media Chart Screen";
           showToast('Data updated successful');
         } else {
           setState(() => _isLoading = false);
           dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Index Banner";
+          dataProvider.subCategory = "Print Media Chart Screen";
           showToast('Data update failed!');
         }
       });

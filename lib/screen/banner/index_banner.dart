@@ -80,6 +80,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
         _isLoading = false;
       });
     }
+    getData(fatchDataHelper);
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -640,9 +641,6 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
                               final String uuid = Uuid().v1();
 
                               uploadData(firebaseProvider, uuid);
-                              setState(() {
-                                data = null;
-                              });
                             },
                             child: Text(
                               'UPLOAD BANNER',
@@ -668,7 +666,7 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -706,6 +704,9 @@ class _IndexBannerScreenState extends State<IndexBannerScreen> {
       };
       await firebaseProvider.addBannerData(map).then((value) {
         if (value) {
+          setState(() {
+            data = null;
+          });
           setState(() => _isLoading = false);
           showToast('Success');
         } else {

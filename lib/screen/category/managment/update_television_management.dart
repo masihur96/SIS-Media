@@ -68,8 +68,8 @@ class _UpdateTelevisionManagementState
                     children: <Widget>[
                       data == null
                           ? Container(
-                              height: size.height * .35,
-                              width: size.width * .35,
+                              height: size.height * .55,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -84,7 +84,7 @@ class _UpdateTelevisionManagementState
                             )
                           : Container(
                               height: size.height * .55,
-                              width: size.width * .35,
+                              width: size.height * .35,
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -199,9 +199,6 @@ class _UpdateTelevisionManagementState
                                     onPressed: () {
                                       updateData(
                                           dataProvider, firebaseProvider);
-                                      setState(() {
-                                        data = null;
-                                      });
                                     },
                                     child: Text(
                                       'UPDATE BANNER',
@@ -239,6 +236,7 @@ class _UpdateTelevisionManagementState
         firebaseProvider,
       );
     } else {
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -251,7 +249,7 @@ class _UpdateTelevisionManagementState
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
+
           setState(() {
             imageUrl = downloadUrl;
           });
@@ -285,21 +283,25 @@ class _UpdateTelevisionManagementState
         if (value) {
           setState(() => _isLoading = false);
 
-          if (Pages == 'Television Media') {
+          if (Pages == 'Film Media') {
+            dataProvider.category = dataProvider.subCategory;
+            dataProvider.subCategory = "Film Management Screen";
+          } else if (Pages == 'Television Media') {
             dataProvider.category = dataProvider.subCategory;
             dataProvider.subCategory = "Television Management Screen";
           } else if (Pages == 'Audio Media') {
             dataProvider.category = dataProvider.subCategory;
             dataProvider.subCategory = "Audio Management Screen";
+          } else if (Pages == 'Important & Emergency') {
+            dataProvider.category = dataProvider.subCategory;
+            dataProvider.subCategory = "Important Management Screen";
           } else {
             dataProvider.category = dataProvider.subCategory;
             dataProvider.subCategory = "Print Management Screen";
           }
           showToast('Data updated successful');
-        } else if (Pages == 'Important & Emergency') {
+        } else {
           setState(() => _isLoading = false);
-          dataProvider.category = dataProvider.subCategory;
-          dataProvider.subCategory = "Important Management Screen";
           showToast('Data update failed!');
         }
       });

@@ -95,6 +95,8 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
         _filterCategoryList(categoryValue);
       });
     }
+
+    getData(fatchDataHelper);
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -626,9 +628,6 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
                               _isLoading = true;
                               final String uuid = Uuid().v1();
                               uploadData(firebaseProvider, uuid);
-                              setState(() {
-                                data = null;
-                              });
                             },
                             child: Text(
                               'UPLOAD BANNER',
@@ -654,7 +653,7 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -702,6 +701,9 @@ class _PopUpBannerScreenState extends State<PopUpBannerScreen> {
       };
       await firebaseProvider.addBannerData(map).then((value) {
         if (value) {
+          setState(() {
+            data = null;
+          });
           setState(() => _isLoading = false);
           showToast('Success');
         } else {

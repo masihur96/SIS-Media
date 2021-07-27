@@ -1031,6 +1031,8 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                   child: Column(
                     children: [
                       _textFormBuilderForAudio('Name'),
+                         SizedBox(height: 20),
+                      _textFormBuilderForAudio('Contact'),
                       SizedBox(height: 20),
                       _textFormBuilderForAudio('Address'),
                       SizedBox(height: 20),
@@ -1045,8 +1047,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                       _textFormBuilderForAudio('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForAudio('Mobile'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForAudio('Contact'),
+                   
                       SizedBox(height: 20),
                       _textFormBuilderForAudio('FaceBook'),
                     ],

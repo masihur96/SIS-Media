@@ -9,6 +9,8 @@ import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/managment/print_managment_alldata.dart';
 import 'package:media_directory_admin/screen/category/managment/print_managment_insert.dart';
+import 'package:media_directory_admin/screen/category/rate_chart/print_rate_chart_alldata.dart';
+import 'package:media_directory_admin/screen/category/rate_chart/print_rate_chart_insert.dart';
 import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
@@ -238,7 +240,8 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     ),
                   ),
                   Visibility(
-                    visible: dropdownValue != "Management Information",
+                    visible: dropdownValue != 'Rate Chart' &&
+                        dropdownValue != "Management Information",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
@@ -257,7 +260,8 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     ),
                   ),
                   Visibility(
-                    visible: dropdownValue != "Management Information",
+                    visible: dropdownValue != 'Rate Chart' &&
+                        dropdownValue != "Management Information",
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
@@ -290,51 +294,54 @@ class _PrintingMediaState extends State<PrintingMedia> {
                 ],
               ),
             ),
-            dropdownValue == 'Management Information'
-                ? PrintManagmentAllData()
-                : _isLoading
-                    ? Container(
-                        child: Column(
-                        children: [
-                          SizedBox(
-                            height: size.height * .4,
-                          ),
-                          fadingCircle,
-                          Text(
-                            'Please Wait ..........',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
-                        ],
-                      ))
-                    : _filteredList.isEmpty
+            dropdownValue == 'Rate Chart'
+                ? AllDataPrintRateChart()
+                : dropdownValue == 'Management Information'
+                    ? PrintManagmentAllData()
+                    : _isLoading
                         ? Container(
                             child: Column(
                             children: [
-                              SizedBox(height: 200),
-                              Text("Item is Not Found",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      letterSpacing: 2,
-                                      color: Colors.grey)),
+                              SizedBox(
+                                height: size.height * .4,
+                              ),
+                              fadingCircle,
+                              Text(
+                                'Please Wait ..........',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
                             ],
                           ))
-                        : Expanded(
-                            child: SizedBox(
-                              height: 500.0,
-                              child: new ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: _filteredList.length,
-                                itemBuilder: (context, index) {
-                                  return _listItem(
-                                      index,
-                                      size,
-                                      firebaseProvider,
-                                      dataProvider,
-                                      fatchDataHelper);
-                                },
+                        : _filteredList.isEmpty
+                            ? Container(
+                                child: Column(
+                                children: [
+                                  SizedBox(height: 200),
+                                  Text("Item is Not Found",
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          letterSpacing: 2,
+                                          color: Colors.grey)),
+                                ],
+                              ))
+                            : Expanded(
+                                child: SizedBox(
+                                  height: 500.0,
+                                  child: new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: _filteredList.length,
+                                    itemBuilder: (context, index) {
+                                      return _listItem(
+                                          index,
+                                          size,
+                                          firebaseProvider,
+                                          dataProvider,
+                                          fatchDataHelper);
+                                    },
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
           ],
         ),
       );
@@ -634,7 +641,8 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Visibility(
-                        visible: dropdownValue != 'Management Information',
+                        visible: dropdownValue != 'Rate Chart' &&
+                            dropdownValue != 'Management Information',
                         child: Stack(
                           alignment: Alignment.bottomRight,
                           children: [
@@ -713,7 +721,8 @@ class _PrintingMediaState extends State<PrintingMedia> {
                         ),
                       ),
                       Visibility(
-                        visible: dropdownValue != 'Management Information',
+                        visible: dropdownValue != 'Rate Chart' &&
+                            dropdownValue != 'Management Information',
                         child: Container(
                           decoration: BoxDecoration(
                             border:
@@ -759,18 +768,24 @@ class _PrintingMediaState extends State<PrintingMedia> {
                   ),
                 ),
                 Visibility(
+                  visible: dropdownValue == "Rate Chart",
+                  child: PrintRateChartInsert(),
+                ),
+                Visibility(
                   visible: dropdownValue == "Management Information",
                   child: PrintManagmentInsert(),
                 ),
                 Visibility(
-                  visible: dropdownValue != "Management Information",
+                  visible: dropdownValue != "Rate Chart" &&
+                      dropdownValue != "Management Information",
                   child: PrintMediaWidget(size),
                 ),
                 SizedBox(
                   height: size.height * .04,
                 ),
                 Visibility(
-                  visible: dropdownValue != "Management Information",
+                  visible: dropdownValue != "Rate Chart" &&
+                      dropdownValue != "Management Information",
                   child: _isLoading
                       ? Container(child: fadingCircle)
                       : ElevatedButton(
@@ -880,6 +895,10 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     children: [
                       _textFormBuilderForPrintMedia('Name'),
                       SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Contact'),
+                      SizedBox(height: 20),
+                      _textFormBuilderForPrintMedia('Editor'),
+                      SizedBox(height: 20),
                       _textFormBuilderForPrintMedia('Address'),
                       SizedBox(height: 20),
                       _textFormBuilderForPrintMedia('PABX'),
@@ -887,10 +906,6 @@ class _PrintingMediaState extends State<PrintingMedia> {
                       _textFormBuilderForPrintMedia('E-mail'),
                       SizedBox(height: 20),
                       _textFormBuilderForPrintMedia('Web'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForPrintMedia('FAX'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForPrintMedia('Phone(T&T)'),
                     ],
                   ),
                 ),
@@ -903,11 +918,11 @@ class _PrintingMediaState extends State<PrintingMedia> {
                     children: [
                       _textFormBuilderForPrintMedia('Mobile'),
                       SizedBox(height: 20),
-                      _textFormBuilderForPrintMedia('Contact'),
+                      _textFormBuilderForPrintMedia('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForPrintMedia('FaceBook'),
                       SizedBox(height: 20),
-                      _textFormBuilderForPrintMedia('Editor'),
+                      _textFormBuilderForPrintMedia('FAX'),
                       SizedBox(height: 20),
                       _textFormBuilderForPrintMedia('Business Type'),
                       SizedBox(height: 20),

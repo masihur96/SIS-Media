@@ -41,10 +41,10 @@ class Variables {
     'Film Institution',
     'Film Producer & Distributor',
     'Film Director',
-    'Film Editor',
     'Film Artist',
     'Film Story Writer',
     'Cinematographer',
+    'Film Editor',
     'Film Art Director',
     'Film Fight Director',
     'Film Dance Director',
@@ -126,6 +126,18 @@ class Variables {
 
   List getTVChannelList() {
     return televidionChennelList;
+  }
+
+  List filmManagmentList = [
+    'BANGLADESH FILM PRODUCERS DISTRIBUTORS ASSOCIATION',
+    'BANGLADESH FILM DIRECTORS ASSOCIATION',
+    'BANGLADESH CINEMATOGRAPHERS ASSOCIATION',
+    'BANGLADESH FILM ARTIST ASSOCIATION',
+    'BANGLADESH SHORT FILM FORUM'
+  ];
+
+  List getFilmManagmentList() {
+    return filmManagmentList;
   }
 
   List televidionManagmentList = [
@@ -260,6 +272,34 @@ class Variables {
   ];
   List getPrintingMediaList() {
     return printingMediaList;
+  }
+
+  List printChannelList = [
+    'Protom Alo',
+    'Ittefaq',
+    'Kaler Kanto',
+    'Jugantar',
+    'Janakantha',
+    'Inqulab',
+    'Nayadigant',
+    'Amar Desh',
+    'Somakal',
+    'Jai Jai Din',
+    'BD Protidin',
+    'BorerKagoj',
+    'A Somoy',
+    'Sangbad',
+    'M. Jamin',
+    'Arthoniti p',
+    'Daily Star',
+    'Daily Sun',
+    'F. Express',
+    'New Nation',
+    'New Age',
+    'Independent',
+  ];
+  List getprintChannelList() {
+    return printChannelList;
   }
 
   List newMediaList = [

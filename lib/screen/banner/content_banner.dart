@@ -115,6 +115,7 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
         _filterCategoryList(categoryValue);
       });
     }
+    getData(fatchDataHelper);
   }
 
   getData(FatchDataHelper fatchDataHelper) async {
@@ -743,9 +744,6 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
                               _isLoading = true;
                               final String uuid = Uuid().v1();
                               uploadData(firebaseProvider, uuid);
-                              setState(() {
-                                data = null;
-                              });
                             },
                             child: Text(
                               'UPLOAD BANNER',
@@ -820,6 +818,9 @@ class _ContentBannerScreenState extends State<ContentBannerScreen> {
       };
       await firebaseProvider.addBannerData(map).then((value) {
         if (value) {
+          setState(() {
+            data = null;
+          });
           setState(() => _isLoading = false);
           showToast('Success');
         } else {

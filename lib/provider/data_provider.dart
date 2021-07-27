@@ -16,13 +16,16 @@ import 'package:media_directory_admin/screen/banner/update_content_data.dart';
 import 'package:media_directory_admin/screen/banner/update_popup_data.dart';
 import 'package:media_directory_admin/screen/category/change_password_screen.dart';
 import 'package:media_directory_admin/screen/category/managment/audio_managment_alldata.dart';
+import 'package:media_directory_admin/screen/category/managment/film_management_alldata.dart';
 import 'package:media_directory_admin/screen/category/managment/important_managment_alldata.dart';
 import 'package:media_directory_admin/screen/category/managment/print_managment_alldata.dart';
 import 'package:media_directory_admin/screen/category/managment/television_managment_alldata.dart';
 import 'package:media_directory_admin/screen/category/managment/update_television_management.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/audio_rate_chart_alldata.dart';
+import 'package:media_directory_admin/screen/category/rate_chart/print_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/television_rate_chart_alldata.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/update_audio_rate_chart.dart';
+import 'package:media_directory_admin/screen/category/rate_chart/update_print_rate_chart.dart';
 import 'package:media_directory_admin/screen/category/rate_chart/update_television_rate_chart.dart';
 import 'package:media_directory_admin/screen/category/update_screen/update_audio_media_data.dart';
 import 'package:media_directory_admin/screen/category/update_screen/update_film_media_page.dart';
@@ -179,8 +182,12 @@ class DataProvider extends ChangeNotifier {
       return UpdateTelevisionRateChart();
     else if (subCategory == 'Audio Media Chart Screen')
       return AllDataAudioRateChart();
+    else if (subCategory == 'Print Media Chart Screen')
+      return AllDataPrintRateChart();
     else if (subCategory == 'Update Audio Media Chart')
       return UpdateAudioRateChart();
+    else if (subCategory == 'Update Print Media Chart')
+      return UpdatePrintRateChart();
     else if (subCategory == 'Index Banner')
       return IndexBannerScreen();
     else if (subCategory == 'Update Index Media')
@@ -195,6 +202,8 @@ class DataProvider extends ChangeNotifier {
       return UpdatePopUpData();
     else if (subCategory == 'Update Television Management')
       return UpdateTelevisionManagement();
+    else if (subCategory == 'Film Management Screen')
+      return FilmManagmentAllData();
     else if (subCategory == 'Television Management Screen')
       return TelevisionManagmentAllData();
     else if (subCategory == 'Audio Management Screen')

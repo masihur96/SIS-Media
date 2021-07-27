@@ -230,9 +230,6 @@ class _PrintManagmentInsertState extends State<PrintManagmentInsert> {
                           onPressed: () {
                             final String uuid = Uuid().v1();
                             uploadData(firebaseProvider, uuid);
-                            setState(() {
-                              data = null;
-                            });
                           },
                           child: Text(
                             'UPLOAD IMAGE',
@@ -257,11 +254,11 @@ class _PrintManagmentInsertState extends State<PrintManagmentInsert> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('ManagmentData')
+          .child('ManagementData')
           .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -276,6 +273,8 @@ class _PrintManagmentInsertState extends State<PrintManagmentInsert> {
           _submitData(firebaseProvider, uuid);
         });
       });
+    } else {
+      showToast('image is required!');
     }
   }
 
@@ -295,6 +294,9 @@ class _PrintManagmentInsertState extends State<PrintManagmentInsert> {
     };
     await firebaseProvider.addManagmentData(map).then((value) {
       if (value) {
+        setState(() {
+          data = null;
+        });
         setState(() => _isLoading = false);
         showToast('Success');
       } else {

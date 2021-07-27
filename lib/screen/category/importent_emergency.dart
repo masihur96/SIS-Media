@@ -1019,6 +1019,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                     children: [
                       _textFormBuilderForImport('Name'),
                       SizedBox(height: 20),
+                      _textFormBuilderForImport('Contact'),
+                      SizedBox(height: 20),
                       _textFormBuilderForImport('Address'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('PABX'),
@@ -1028,8 +1030,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       _textFormBuilderForImport('Web'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('FAX'),
-                      SizedBox(height: 20),
-                      _textFormBuilderForImport('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('Company Name'),
                       SizedBox(height: 20),
@@ -1050,7 +1050,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                     children: [
                       _textFormBuilderForImport('Mobile'),
                       SizedBox(height: 20),
-                      _textFormBuilderForImport('Contact'),
+                      _textFormBuilderForImport('Phone(T&T)'),
                       SizedBox(height: 20),
                       _textFormBuilderForImport('FaceBook'),
                       SizedBox(height: 20),

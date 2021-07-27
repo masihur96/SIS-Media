@@ -193,9 +193,6 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
                                     onPressed: () {
                                       updateData(
                                           dataProvider, firebaseProvider);
-                                      setState(() {
-                                        data = null;
-                                      });
                                     },
                                     child: Text(
                                       'UPDATE BANNER',
@@ -233,10 +230,11 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
         firebaseProvider,
       );
     } else {
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('AudioRateChart')
+          .child('RateChartData')
           .child(dataProvider.rateChartModel.id!);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -245,7 +243,7 @@ class _UpdateAudioRateChartState extends State<UpdateAudioRateChart> {
         taskSnapshot = value;
         taskSnapshot.ref.getDownloadURL().then((newImageDownloadUrl) {
           final downloadUrl = newImageDownloadUrl;
-          showToast(downloadUrl);
+
           setState(() {
             imageUrl = downloadUrl;
           });

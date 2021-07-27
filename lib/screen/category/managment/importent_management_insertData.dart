@@ -231,9 +231,6 @@ class _ImportantManagementInsertDataState
                           onPressed: () {
                             final String uuid = Uuid().v1();
                             uploadData(firebaseProvider, uuid);
-                            setState(() {
-                              data = null;
-                            });
                           },
                           child: Text(
                             'UPLOAD IMAGE',
@@ -258,11 +255,11 @@ class _ImportantManagementInsertDataState
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
-          .child('ManagmentData')
+          .child('ManagementData')
           .child(uuid);
       firebase_storage.UploadTask storageUploadTask =
           storageReference.putBlob(file);
@@ -277,6 +274,8 @@ class _ImportantManagementInsertDataState
           _submitData(firebaseProvider, uuid);
         });
       });
+    } else {
+      showToast('image is required!');
     }
   }
 
@@ -296,6 +295,9 @@ class _ImportantManagementInsertDataState
     };
     await firebaseProvider.addManagmentData(map).then((value) {
       if (value) {
+        setState(() {
+          data = null;
+        });
         setState(() => _isLoading = false);
         showToast('Success');
       } else {

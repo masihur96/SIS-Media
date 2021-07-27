@@ -230,9 +230,6 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
                           onPressed: () {
                             final String uuid = Uuid().v1();
                             uploadData(firebaseProvider, uuid);
-                            setState(() {
-                              data = null;
-                            });
                           },
                           child: Text(
                             'UPLOAD IMAGE',
@@ -257,7 +254,7 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
   Future<void> uploadData(
       FirebaseProvider firebaseProvider, String uuid) async {
     if (data != null) {
-      _isLoading = true;
+      setState(() => _isLoading = true);
       firebase_storage.Reference storageReference = firebase_storage
           .FirebaseStorage.instance
           .ref()
@@ -276,6 +273,8 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
           _submitData(firebaseProvider, uuid);
         });
       });
+    } else {
+      showToast('image is required!');
     }
   }
 
@@ -295,6 +294,9 @@ class _TelevisionManagmentInsertState extends State<TelevisionManagmentInsert> {
     };
     await firebaseProvider.addManagmentData(map).then((value) {
       if (value) {
+        setState(() {
+          data = null;
+        });
         setState(() => _isLoading = false);
         showToast('Success');
       } else {
