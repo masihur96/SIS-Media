@@ -91,132 +91,152 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
     if (counter == 0) {
       customInit(fatchDataHelper);
     }
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(10.0),
-        height: size.height,
-        width: size.width,
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 2,
-              width: size.width * .8,
-              color: Colors.blueGrey,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.blueGrey),
-                    ),
-                    // width: size.width * .2,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Channel Name : ",
-                            style: TextStyle(fontSize: size.height * .025),
-                          ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: channelValue,
-                              elevation: 0,
-                              dropdownColor: Colors.white,
-                              style: TextStyle(color: Colors.black),
-                              items: channels.map((itemValue) {
-                                return DropdownMenuItem<String>(
-                                  value: itemValue,
-                                  child: Text(itemValue),
-                                );
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  channelValue = newValue!;
-                                });
-                                _filterChannelList(channelValue);
-                              },
+    return Container(
+        color: Color(0xffedf7fd),
+        width: dataProvider.pageWidth(size),
+        height: size.height * .73,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+              height: size.height * .73,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(size.height * .01),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1, color: Colors.blueGrey),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          // width: size.width * .2,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.height * .01, vertical: 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Channel Name : ",
+                                  style:
+                                      TextStyle(fontSize: size.height * .025),
+                                ),
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: channelValue,
+                                    elevation: 0,
+                                    dropdownColor: Colors.white,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    items: channels.map((itemValue) {
+                                      return DropdownMenuItem<String>(
+                                        value: itemValue,
+                                        child: Text(itemValue),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        channelValue = newValue!;
+                                      });
+
+                                      _filterChannelList(channelValue);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * .02,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      getData(fatchDataHelper);
-                    },
-                    child: Container(
-                      // width: size.width * .1,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(color: Colors.blueGrey)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text('Refresh '),
-                            SizedBox(
-                              width: size.width * .02,
-                            ),
-                            Icon(Icons.refresh_outlined),
-                          ],
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            _isLoading
-                ? Container(
-                    child: Column(
-                    children: [
-                      SizedBox(
-                        height: size.height * .4,
-                      ),
-                      fadingCircle,
-                      Text(
-                        'Please Wait ..........',
-                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                            size.height * .01,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              getData(fatchDataHelper);
+                            },
+                            child: Container(
+                              width: size.height * .3,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  border: Border.all(color: Colors.blueGrey)),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                  size.height * .01,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Text('Refresh'),
+                                    SizedBox(
+                                      width: size.width * .02,
+                                    ),
+                                    Icon(Icons.refresh_outlined),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
-                  ))
-                : Expanded(
-                    child: SizedBox(
-                      child: new GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: _filteredList.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: size.width < 800
-                              ? 1
-                              : size.width < 1200
-                                  ? 2
-                                  : 3,
-                          childAspectRatio: (itemHeight / itemWidth),
-                          crossAxisSpacing: 5.0,
-                          mainAxisSpacing: 5.0,
-                        ),
-                        itemBuilder: (context, index) {
-                          return _listItem(index, size, firebaseProvider,
-                              dataProvider, fatchDataHelper);
-                        },
-                      ),
-                    ),
                   ),
-          ],
-        ),
-      ),
-    );
+                  Container(
+                    child: _isLoading
+                        ? Container(
+                            child: Column(
+                            children: [
+                              SizedBox(
+                                height: size.height * .4,
+                              ),
+                              fadingCircle,
+                              Text(
+                                'Please Wait ..........',
+                                style: TextStyle(
+                                    fontSize: size.height * .03,
+                                    color: Colors.black),
+                              ),
+                            ],
+                          ))
+                        : Expanded(
+                            child: SizedBox(
+                              child: new GridView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: _filteredList.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: size.width < 800
+                                      ? 1
+                                      : size.width < 1200
+                                          ? 2
+                                          : 3,
+                                  childAspectRatio: (itemHeight / itemWidth),
+                                  crossAxisSpacing: 5.0,
+                                  mainAxisSpacing: 5.0,
+                                ),
+                                itemBuilder: (context, index) {
+                                  return _listItem(
+                                      index,
+                                      size,
+                                      firebaseProvider,
+                                      dataProvider,
+                                      fatchDataHelper);
+                                },
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
+              )),
+        ));
   }
 
   _listItem(index, Size size, FirebaseProvider firebaseProvider,
@@ -349,7 +369,7 @@ class _AllDataAudioRateChartState extends State<AllDataAudioRateChart> {
                         ],
                       ).show();
                     },
-                     style: ElevatedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(
                         primary: Colors.red,
                         padding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 15),

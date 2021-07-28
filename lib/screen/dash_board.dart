@@ -203,7 +203,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
             _requestTodayRequestList.add(_requestTotalDataList[i]);
           }
         }
-
         _isLoading = false;
       });
     }
