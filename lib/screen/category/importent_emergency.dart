@@ -73,11 +73,12 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
 
   List<ImportentEmergencyModel> _subList = [];
   List<ImportentEmergencyModel> _filteredList = [];
+  List<ImportentEmergencyModel> _filteredListForSearch = [];
 
   ///SearchList builder
   _filterList(String searchItem) {
     setState(() {
-      _filteredList = _subList
+      _filteredList = _filteredListForSearch
           .where((element) =>
               (element.name!.toLowerCase().contains(searchItem.toLowerCase())))
           .toList();
@@ -91,8 +92,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
               .toLowerCase()
               .contains(searchItem.toLowerCase())))
           .toList();
+      _filteredListForSearch = _filteredList;
     });
-    return _filteredList.sort();
   }
 
   int counter = 0;
@@ -392,12 +393,34 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _filteredList[index].address!.isEmpty
+                  _filteredList[index].contact!.isEmpty
                       ? Container()
-                      : Text('Address: ${_filteredList[index].address}',
+                      : Text(
+                          'Contact: ${_filteredList[index].contact}',
                           style: TextStyle(
                             fontSize: 12,
-                          )),
+                          ),
+                        ),
+                  _filteredList[index].phone!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Phone: ${_filteredList[index].phone}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].mobile!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Mobile: ${_filteredList[index].mobile}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].fax!.isEmpty
+                      ? Container()
+                      : Text('Fax: ${_filteredList[index].fax}',
+                          style: TextStyle(fontSize: 12)),
                   _filteredList[index].pabx!.isEmpty
                       ? Container()
                       : Text(
@@ -416,34 +439,12 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                           style: TextStyle(
                             fontSize: 12,
                           )),
-                  _filteredList[index].fax!.isEmpty
+                  _filteredList[index].address!.isEmpty
                       ? Container()
-                      : Text('Fax: ${_filteredList[index].fax}',
-                          style: TextStyle(fontSize: 12)),
-                  _filteredList[index].phone!.isEmpty
-                      ? Container()
-                      : Text(
-                          'Phone: ${_filteredList[index].phone}',
+                      : Text('Address: ${_filteredList[index].address}',
                           style: TextStyle(
                             fontSize: 12,
-                          ),
-                        ),
-                  _filteredList[index].mobile!.isEmpty
-                      ? Container()
-                      : Text(
-                          'Mobile: ${_filteredList[index].mobile}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                  _filteredList[index].contact!.isEmpty
-                      ? Container()
-                      : Text(
-                          'Contact: ${_filteredList[index].contact}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
+                          )),
                   _filteredList[index].facebook!.isEmpty
                       ? Container()
                       : Text(

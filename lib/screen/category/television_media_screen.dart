@@ -82,10 +82,11 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
 
   List<TelevisionMediaModel> _subList = [];
   List<TelevisionMediaModel> _filteredList = [];
+  List<TelevisionMediaModel> _filteredListForSearch = [];
 
   _filterList(String searchItem) {
     setState(() {
-      _filteredList = _subList
+      _filteredList = _filteredListForSearch
           .where((element) =>
               (element.name!.toLowerCase().contains(searchItem.toLowerCase())))
           .toList();
@@ -95,10 +96,9 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   _filterSubCategoryList(String searchItem) {
     setState(() {
       _filteredList = _subList
-          .where((element) => (element.subCategory!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
+          .where((element) => (element.subCategory!.contains(searchItem)))
           .toList();
+      _filteredListForSearch = _filteredList;
     });
   }
 
@@ -402,34 +402,15 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _filteredList[index].address!.isEmpty
-                      ? Container()
-                      : Text('Address: ${_filteredList[index].address}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          )),
-                  _filteredList[index].pabx!.isEmpty
+                  _filteredList[index].contact!.isEmpty
                       ? Container()
                       : Text(
-                          'PABX: ${_filteredList[index].pabx}',
-                          style: TextStyle(fontSize: 12),
+                          'Contact: ${_filteredList[index].contact}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
                         ),
-                  _filteredList[index].email!.isEmpty
-                      ? Container()
-                      : Text('E-mail: ${_filteredList[index].email}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          )),
-                  _filteredList[index].web!.isEmpty
-                      ? Container()
-                      : Text('Web: ${_filteredList[index].web}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          )),
-                  _filteredList[index].fax!.isEmpty
-                      ? Container()
-                      : Text('Fax: ${_filteredList[index].fax}',
-                          style: TextStyle(fontSize: 12)),
+
                   _filteredList[index].phone!.isEmpty
                       ? Container()
                       : Text(
@@ -446,14 +427,36 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                             fontSize: 12,
                           ),
                         ),
-                  _filteredList[index].contact!.isEmpty
+                  _filteredList[index].pabx!.isEmpty
                       ? Container()
                       : Text(
-                          'Contact: ${_filteredList[index].contact}',
+                          'PABX: ${_filteredList[index].pabx}',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                  _filteredList[index].fax!.isEmpty
+                      ? Container()
+                      : Text('Fax: ${_filteredList[index].fax}',
+                          style: TextStyle(fontSize: 12)),
+                  _filteredList[index].address!.isEmpty
+                      ? Container()
+                      : Text('Address: ${_filteredList[index].address}',
                           style: TextStyle(
                             fontSize: 12,
-                          ),
-                        ),
+                          )),
+
+                  _filteredList[index].email!.isEmpty
+                      ? Container()
+                      : Text('E-mail: ${_filteredList[index].email}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+                  _filteredList[index].web!.isEmpty
+                      ? Container()
+                      : Text('Web: ${_filteredList[index].web}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          )),
+
                   _filteredList[index].facebook!.isEmpty
                       ? Container()
                       : Text(

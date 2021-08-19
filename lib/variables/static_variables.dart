@@ -62,7 +62,7 @@ class Variables {
   List televisionList = [
     'Television Channel',
     'Audiovisual Technical Support',
-    'AudioVisual Equipment Sales & Service',
+    'Audiovisual Equipment Sales & Service',
     'Production House, Advertising Agency & Event Organizer',
     'Mass Media Education (University)',
     'Mass Media Education (Training Institute)',

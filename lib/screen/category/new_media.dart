@@ -68,11 +68,12 @@ class _NewMediaState extends State<NewMedia> {
 
   List<NewMediaModel> _subList = [];
   List<NewMediaModel> _filteredList = [];
+  List<NewMediaModel> _filteredListForSearch = [];
 
   ///SearchList builder
   _filterList(String searchItem) {
     setState(() {
-      _filteredList = _subList
+      _filteredList = _filteredListForSearch
           .where((element) =>
               (element.name!.toLowerCase().contains(searchItem.toLowerCase())))
           .toList();
@@ -86,6 +87,7 @@ class _NewMediaState extends State<NewMedia> {
               .toLowerCase()
               .contains(searchItem.toLowerCase())))
           .toList();
+      _filteredListForSearch = _filteredList;
     });
   }
 
@@ -369,13 +371,36 @@ class _NewMediaState extends State<NewMedia> {
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                  _filteredList[index].address!.isEmpty
+                  _filteredList[index].contact!.isEmpty
                       ? Container()
-                      : Text('Address: ${_filteredList[index].address}',
+                      : Text(
+                          'Contact: ${_filteredList[index].contact}',
                           style: TextStyle(
                             fontSize: 12,
-                          )),
-                  _filteredList[index].pabx!.isEmpty
+                          ),
+                        ),
+                          _filteredList[index].phone!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Phone: ${_filteredList[index].phone}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  _filteredList[index].mobile!.isEmpty
+                      ? Container()
+                      : Text(
+                          'Mobile: ${_filteredList[index].mobile}',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                         _filteredList[index].fax!.isEmpty
+                      ? Container()
+                      : Text('Fax: ${_filteredList[index].fax}',
+                          style: TextStyle(fontSize: 12)),
+
+                           _filteredList[index].pabx!.isEmpty
                       ? Container()
                       : Text(
                           'PABX: ${_filteredList[index].pabx}',
@@ -393,34 +418,15 @@ class _NewMediaState extends State<NewMedia> {
                           style: TextStyle(
                             fontSize: 12,
                           )),
-                  _filteredList[index].fax!.isEmpty
+                  _filteredList[index].address!.isEmpty
                       ? Container()
-                      : Text('Fax: ${_filteredList[index].fax}',
-                          style: TextStyle(fontSize: 12)),
-                  _filteredList[index].phone!.isEmpty
-                      ? Container()
-                      : Text(
-                          'Phone: ${_filteredList[index].phone}',
+                      : Text('Address: ${_filteredList[index].address}',
                           style: TextStyle(
                             fontSize: 12,
-                          ),
-                        ),
-                  _filteredList[index].mobile!.isEmpty
-                      ? Container()
-                      : Text(
-                          'Mobile: ${_filteredList[index].mobile}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                  _filteredList[index].contact!.isEmpty
-                      ? Container()
-                      : Text(
-                          'Contact: ${_filteredList[index].contact}',
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
+                          )),
+                 
+                 
+                
                   _filteredList[index].facebook!.isEmpty
                       ? Container()
                       : Text(
