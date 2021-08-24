@@ -215,9 +215,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
     final FatchDataHelper fatchDataHelper =
         Provider.of<FatchDataHelper>(context);
 
-    if (counter == 0) {
-      customInit(fatchDataHelper);
-    }
+    // if (counter == 0) {
+    //   customInit(fatchDataHelper);
+    // }
 
     return Container(
       width: dataProvider.pageWidth(size),

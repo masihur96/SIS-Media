@@ -21,10 +21,13 @@ class Variables {
         Entry('Content Banner'),
         Entry('Pop Up Banner'),
       ]),
-      Entry('Page NavBar', Icons.branding_watermark, <Entry>[
+      Entry('Page NavBar', Icons.more, <Entry>[
         Entry('Editors View'),
         Entry('Set Cover Photo'),
         Entry('Set Rate Chart Banner'),
+      ]),
+      Entry('Add Sub-Category', Icons.collections, <Entry>[
+        Entry('Add Sub-Category'),
       ]),
       Entry('Settings', Icons.settings_applications_outlined, <Entry>[
         Entry('Change Password'),
@@ -37,59 +40,74 @@ class Variables {
     return data;
   }
 
-  List filmMediaList = [
-    'Film Institution',
-    'Film Producer & Distributor',
-    'Film Director',
-    'Film Artist',
-    'Film Story Writer',
-    'Cinematographer',
-    'Film Editor',
-    'Film Art Director',
-    'Film Fight Director',
-    'Film Dance Director',
-    'Film Assistant Director',
-    'Management Information',
-    'BACCPro Member',
-    'Important Telephone Number',
-    'Cinema Hall',
+  List categoryList = [
+    'Film Media',
+    'Television Media',
+    'Audio Media',
+    'Print Media',
+    'New Media',
+    'Important & Emergency',
   ];
 
-  List getFilmMediaList() {
-    return filmMediaList;
+  List getCategoryList() {
+    return categoryList;
   }
 
-  List televisionList = [
-    'Television Channel',
-    'Audiovisual Technical Support',
-    'Audiovisual Equipment Sales & Service',
-    'Production House, Advertising Agency & Event Organizer',
-    'Mass Media Education (University)',
-    'Mass Media Education (Training Institute)',
-    'Photo Session Studio',
-    'Archive & Media Monitoring Company',
-    'Shooting Location',
-    'Satellite Channel Distributor',
-    'Group Theater',
-    'Artist',
-    'Magician',
-    'Script Writer & Director',
-    'Mass Media Teacher(University)',
-    'Cameraman',
-    'Art Director',
-    'Engineer',
-    'Video Editor & Animator',
-    'Assistant Director',
-    'Choreographer',
-    'Professional Photographer',
-    'DJ',
-    'Make-up Artist',
-    'Management Information',
-    'Rate Chart'
-  ];
-  List getTelevisionList() {
-    return televisionList;
-  }
+  //from Database List
+
+  // List filmMediaList = [
+  //   'Film Institution',
+  //   'Film Producer & Distributor',
+  //   'Film Director',
+  //   'Film Artist',
+  //   'Film Story Writer',
+  //   'Cinematographer',
+  //   'Film Editor',
+  //   'Film Art Director',
+  //   'Film Fight Director',
+  //   'Film Dance Director',
+  //   'Film Assistant Director',
+  //   'Management Information',
+  //   'BACCPro Member',
+  //   'Important Telephone Number',
+  //   'Cinema Hall',
+  // ];
+
+  // List getFilmMediaList() {
+  //   return filmMediaList;
+  // }
+
+  // List televisionList = [
+  //   'Television Channel',
+  //   'Audiovisual Technical Support',
+  //   'Audiovisual Equipment Sales & Service',
+  //   'Production House, Advertising Agency & Event Organizer',
+  //   'Mass Media Education (University)',
+  //   'Mass Media Education (Training Institute)',
+  //   'Photo Session Studio',
+  //   'Archive & Media Monitoring Company',
+  //   'Shooting Location',
+  //   'Satellite Channel Distributor',
+  //   'Group Theater',
+  //   'Artist',
+  //   'Magician',
+  //   'Script Writer & Director',
+  //   'Mass Media Teacher(University)',
+  //   'Cameraman',
+  //   'Art Director',
+  //   'Engineer',
+  //   'Video Editor & Animator',
+  //   'Assistant Director',
+  //   'Choreographer',
+  //   'Professional Photographer',
+  //   'DJ',
+  //   'Make-up Artist',
+  //   'Management Information',
+  //   'Rate Chart'
+  // ];
+  // List getTelevisionList() {
+  //   return televisionList;
+  // }
 
   List televidionChennelList = [
     'Bangladesh Television',
@@ -234,45 +252,45 @@ class Variables {
     return audioChannelList;
   }
 
-  List audioMediaList = [
-    'FM Radio Channel',
-    'Community FM Radio Channel',
-    'Music Industries Producer',
-    'Audio Recording Studio',
-    'Music Equipment Sales Center',
-    'Sound System & Color Light Rent House',
-    'Singer',
-    'Music Director',
-    'Lyricist',
-    'Voice Artist',
-    'Reciter (Abritteekar)',
-    'Musician',
-    'Rate Chart',
-    'Management Information',
-  ];
-  List getAudioMediaList() {
-    return audioMediaList;
-  }
+  // List audioMediaList = [
+  //   'FM Radio Channel',
+  //   'Community FM Radio Channel',
+  //   'Music Industries Producer',
+  //   'Audio Recording Studio',
+  //   'Music Equipment Sales Center',
+  //   'Sound System & Color Light Rent House',
+  //   'Singer',
+  //   'Music Director',
+  //   'Lyricist',
+  //   'Voice Artist',
+  //   'Reciter (Abritteekar)',
+  //   'Musician',
+  //   'Rate Chart',
+  //   'Management Information',
+  // ];
+  // List getAudioMediaList() {
+  //   return audioMediaList;
+  // }
 
-  List printingMediaList = [
-    'Daily News Paper',
-    'Magazine',
-    'Cultural Journalist',
-    'Rate Chart',
-    'Offset Print',
-    'Flexible Print',
-    'Digital Print',
-    'Pre Press',
-    'Printing Machine Equipment & Accessories',
-    'Packaging Industries',
-    'Paper House',
-    'All Printing Works Service Provider',
-    'Freelance Graphic Designer',
-    'Management Information',
-  ];
-  List getPrintingMediaList() {
-    return printingMediaList;
-  }
+  // List printingMediaList = [
+  //   'Daily News Paper',
+  //   'Magazine',
+  //   'Cultural Journalist',
+  //   'Rate Chart',
+  //   'Offset Print',
+  //   'Flexible Print',
+  //   'Digital Print',
+  //   'Pre Press',
+  //   'Printing Machine Equipment & Accessories',
+  //   'Packaging Industries',
+  //   'Paper House',
+  //   'All Printing Works Service Provider',
+  //   'Freelance Graphic Designer',
+  //   'Management Information',
+  // ];
+  // List getPrintingMediaList() {
+  //   return printingMediaList;
+  // }
 
   List printChannelList = [
     'Protom Alo',
@@ -302,32 +320,32 @@ class Variables {
     return printChannelList;
   }
 
-  List newMediaList = [
-    'Digital Audio - Video Content Provider',
-    'Online News Portal',
-    'Online Television Channel',
-    'Online Radio Channel',
-    'Online Bazar',
-    'Website Developer',
-    'Honorable Media Personality Death List',
-  ];
-  List getNewMediaList() {
-    return newMediaList;
-  }
+  // List newMediaList = [
+  //   'Digital Audio - Video Content Provider',
+  //   'Online News Portal',
+  //   'Online Television Channel',
+  //   'Online Radio Channel',
+  //   'Online Bazar',
+  //   'Website Developer',
+  //   'Honorable Media Personality Death List',
+  // ];
+  // List getNewMediaList() {
+  //   return newMediaList;
+  // }
 
-  List importentEmergencyList = [
-    'Bangladesh : At A Glance',
-    'Corporate Information',
-    'Education Service-National & International',
-    'Management Information (Education Service Company)',
-    'Fashion House',
-    'Parlor',
-    'Interior ,Exterior & Architect',
-    'Importent & Emergency',
-  ];
-  List getImportentEmergencyList() {
-    return importentEmergencyList;
-  }
+  // List importentEmergencyList = [
+  //   'Bangladesh : At A Glance',
+  //   'Corporate Information',
+  //   'Education Service-National & International',
+  //   'Management Information (Education Service Company)',
+  //   'Fashion House',
+  //   'Parlor',
+  //   'Interior ,Exterior & Architect',
+  //   'Importent & Emergency',
+  // ];
+  // List getImportentEmergencyList() {
+  //   return importentEmergencyList;
+  // }
 }
 
 class Entry {

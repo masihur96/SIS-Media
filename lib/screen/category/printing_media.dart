@@ -49,7 +49,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
   String imageUrl = '';
   var file;
 
-  String dropdownValue = "Daily News Paper";
+  String dropdownValue = "";
   final _ktabs = <Tab>[
     const Tab(
       text: 'All Data',
@@ -60,7 +60,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
   ];
 
   final _formKey = GlobalKey<FormState>();
-  List prints = Variables().getPrintingMediaList();
+
   List<PrintMediaModel> _subList = [];
   List<PrintMediaModel> _filteredList = [];
   List<PrintMediaModel> _filteredListForSearch = [];
@@ -76,54 +76,80 @@ class _PrintingMediaState extends State<PrintingMedia> {
   }
 
   _filterSubCategoryList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.subCategory!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
-          .toList();
-
-      _filteredListForSearch = _filteredList;
-    });
+    _filteredList.clear();
+    for (int i = 0; i < _subList.length; i++) {
+      if (_subList[i].subCategory == searchItem) {
+        _filteredList.add(_subList[i]);
+      }
+    }
+    _filteredListForSearch = _filteredList;
   }
 
+  List prints = [];
   int counter = 0;
-  customInit(FatchDataHelper fatchDataHelper) async {
+  customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    if (dataProvider.printSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          prints = dataProvider.printSubCategoryList;
+          dropdownValue = prints[0];
+        });
+      });
+    } else {
+      setState(() {
+        prints = dataProvider.printSubCategoryList;
+
+        dropdownValue = prints[0];
+      });
+    }
+
     if (fatchDataHelper.printMediaDataList.isEmpty) {
       setState(() {
         _isLoading = true;
       });
       await fatchDataHelper.fetchPrintData().then((value) {
-        setState(() {
-          _subList = fatchDataHelper.printMediaDataList;
-          _filteredList = _subList;
-          _filterSubCategoryList(dropdownValue);
-          _isLoading = false;
-        });
+        _subList = fatchDataHelper.printMediaDataList;
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(prints[0]);
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.printMediaDataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(prints[0]);
       });
     }
   }
 
-  getData(FatchDataHelper fatchDataHelper) async {
+  getData(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       _isLoading = true;
     });
-    await fatchDataHelper.fetchPrintData().then((value) {
-      setState(() {
-        _subList = fatchDataHelper.printMediaDataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
-        _isLoading = false;
+    if (dataProvider.printSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          prints = dataProvider.printSubCategoryList;
+          dropdownValue = prints[0];
+        });
       });
+    } else {
+      setState(() {
+        prints = dataProvider.printSubCategoryList;
+
+        dropdownValue = prints[0];
+      });
+    }
+    await fatchDataHelper.fetchPrintData().then((value) {
+      _subList = fatchDataHelper.printMediaDataList;
+      _filteredList.addAll(_subList);
+      _isLoading = false;
+      _filterSubCategoryList(prints[0]);
     });
   }
 
@@ -137,7 +163,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
         Provider.of<FatchDataHelper>(context);
 
     if (counter == 0) {
-      customInit(fatchDataHelper);
+      customInit(fatchDataHelper, dataProvider);
     }
     return Container(
         width: dataProvider.pageWidth(size),
@@ -269,7 +295,7 @@ class _PrintingMediaState extends State<PrintingMedia> {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          getData(fatchDataHelper);
+                          getData(fatchDataHelper, dataProvider);
                         },
                         child: Container(
                           // width: size.width * .1,

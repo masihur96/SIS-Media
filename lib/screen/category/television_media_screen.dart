@@ -68,12 +68,11 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   String statusValue = "Public";
 
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'Television Channel';
+  String dropdownValue = '';
 
   List channels = Variables().getTVChannelList();
   String channelValue = 'Bangladesh Television';
 
-  List televisions = Variables().getTelevisionList();
   String name = '';
   String? error;
   Uint8List? data;
@@ -94,19 +93,36 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   }
 
   _filterSubCategoryList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.subCategory!.contains(searchItem)))
-          .toList();
-      _filteredListForSearch = _filteredList;
-    });
+    _filteredList.clear();
+    for (int i = 0; i < _subList.length; i++) {
+      if (_subList[i].subCategory == searchItem) {
+        _filteredList.add(_subList[i]);
+      }
+    }
+    _filteredListForSearch = _filteredList;
   }
 
+  List televisions = [];
   int counter = 0;
-  customInit(FatchDataHelper fatchDataHelper) async {
+  customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    if (dataProvider.televisionSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          televisions = dataProvider.televisionSubCategoryList;
+          dropdownValue = televisions[0];
+        });
+      });
+    } else {
+      setState(() {
+        televisions = dataProvider.televisionSubCategoryList;
+        dropdownValue = televisions[0];
+      });
+    }
+
     if (fatchDataHelper.televisionMediadataList.isEmpty) {
       setState(() {
         _isLoading = true;
@@ -114,30 +130,45 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       await fatchDataHelper.fetchTelevisionData().then((value) {
         setState(() {
           _subList = fatchDataHelper.televisionMediadataList;
-          _filteredList = _subList;
-          _filterSubCategoryList(dropdownValue);
+          _filteredList.addAll(_subList);
           _isLoading = false;
+          _filterSubCategoryList(televisions[0]);
         });
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.televisionMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(televisions[0]);
       });
     }
   }
 
-  getData(FatchDataHelper fatchDataHelper) async {
+  getData(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       _isLoading = true;
     });
+    if (dataProvider.televisionSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          televisions = dataProvider.televisionSubCategoryList;
+          dropdownValue = televisions[0];
+        });
+      });
+    } else {
+      setState(() {
+        televisions = dataProvider.televisionSubCategoryList;
+        dropdownValue = televisions[0];
+      });
+    }
+
     await fatchDataHelper.fetchTelevisionData().then((value) {
       setState(() {
         _subList = fatchDataHelper.televisionMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
         _isLoading = false;
+        _filterSubCategoryList(televisions[0]);
       });
     });
   }
@@ -152,7 +183,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         Provider.of<FatchDataHelper>(context);
 
     if (counter == 0) {
-      customInit(fatchDataHelper);
+      customInit(fatchDataHelper, dataProvider);
     }
     return Container(
         color: Color(0xffedf7fd),
@@ -287,7 +318,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          getData(fatchDataHelper);
+                          getData(fatchDataHelper, dataProvider);
                         },
                         child: Container(
                           // width: size.width * .1,

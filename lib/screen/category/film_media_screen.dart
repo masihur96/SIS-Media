@@ -45,7 +45,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
   final _formKey = GlobalKey<FormState>();
 
   Variables filmmedialist = Variables();
-  String dropdownValue = "Film Institution";
+  String dropdownValue = "";
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
   String name = '';
@@ -56,20 +56,8 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
 
   List<FilmMediaModel> _subList = [];
   List<FilmMediaModel> _filteredList = [];
+
   List<FilmMediaModel> _filteredListForSearch = [];
-
-  ///SearchList builder
-
-  _filterSubCategoryList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.subCategory!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
-          .toList();
-      _filteredListForSearch = _filteredList;
-    });
-  }
 
   _filterList(String searchItem) {
     setState(() {
@@ -80,48 +68,84 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
     });
   }
 
+  _filterSubCategoryList(String searchItem) {
+    _filteredList.clear();
+    for (int i = 0; i < _subList.length; i++) {
+      if (_subList[i].subCategory == searchItem) {
+        _filteredList.add(_subList[i]);
+      }
+    }
+    _filteredListForSearch = _filteredList;
+  }
+
+  List films = [];
+
   int counter = 0;
-  customInit(FatchDataHelper fatchDataHelper) async {
+  customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    if (dataProvider.filmSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          films = dataProvider.filmSubCategoryList;
+          dropdownValue = films[0];
+        });
+      });
+    } else {
+      setState(() {
+        films = dataProvider.filmSubCategoryList;
+        dropdownValue = films[0];
+      });
+    }
 
     if (fatchDataHelper.filmMediadataList.isEmpty) {
       setState(() {
         _isLoading = true;
       });
       await fatchDataHelper.fetchFilmMediaData().then((value) {
-        setState(() {
-          _subList = fatchDataHelper.filmMediadataList;
-          _filteredList = _subList;
-          _filterSubCategoryList(dropdownValue);
-          _isLoading = false;
-        });
+        _subList = fatchDataHelper.filmMediadataList;
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(films[0]);
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(films[0]);
       });
     }
   }
 
-  getData(FatchDataHelper fatchDataHelper) async {
+  getData(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       _isLoading = true;
     });
-    await fatchDataHelper.fetchFilmMediaData().then((value) {
-      setState(() {
-        _subList = fatchDataHelper.filmMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
-        _isLoading = false;
+
+    if (dataProvider.filmSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          films = dataProvider.filmSubCategoryList;
+          dropdownValue = films[0];
+        });
       });
+    } else {
+      setState(() {
+        films = dataProvider.filmSubCategoryList;
+        dropdownValue = films[0];
+      });
+    }
+
+    await fatchDataHelper.fetchFilmMediaData().then((value) {
+      _subList = fatchDataHelper.filmMediadataList;
+      _filteredList.addAll(_subList);
+      _isLoading = false;
+      _filterSubCategoryList(films[0]);
     });
   }
-
-  List films = Variables().getFilmMediaList();
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +157,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
         Provider.of<FatchDataHelper>(context);
 
     if (counter == 0) {
-      customInit(fatchDataHelper);
+      customInit(fatchDataHelper, dataProvider);
     }
 
     return Container(
@@ -263,7 +287,7 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          getData(fatchDataHelper);
+                          getData(fatchDataHelper, dataProvider);
                         },
                         child: Container(
                           // width: size.width * .1,
@@ -565,10 +589,10 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
                                         .child(_filteredList[index].id!)
                                         .delete();
 
-                                    _subList.removeWhere((item) =>
-                                        item.id == _filteredList[index].id!);
-                                    _filteredList.removeWhere((item) =>
-                                        item.id == _filteredList[index].id!);
+                                    // _subList.removeWhere((item) =>
+                                    //     item.id == _filteredList[index].id!);
+                                    // _filteredList.removeWhere((item) =>
+                                    //     item.id == _filteredList[index].id!);
                                     setState(() => _isLoading = false);
 
                                     showToast('Data deleted successful');

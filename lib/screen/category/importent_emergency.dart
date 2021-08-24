@@ -58,7 +58,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   String imageUrl = '';
   var file;
 
-  String dropdownValue = "Bangladesh : At A Glance";
+  String dropdownValue = "";
 
   final _ktabs = <Tab>[
     const Tab(
@@ -69,7 +69,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     ),
   ];
   final _formKey = GlobalKey<FormState>();
-  List importentEmergency = Variables().getImportentEmergencyList();
 
   List<ImportentEmergencyModel> _subList = [];
   List<ImportentEmergencyModel> _filteredList = [];
@@ -86,21 +85,37 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   }
 
   _filterSubCategoryList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.subCategory!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
-          .toList();
-      _filteredListForSearch = _filteredList;
-    });
+    _filteredList.clear();
+    for (int i = 0; i < _subList.length; i++) {
+      if (_subList[i].subCategory == searchItem) {
+        _filteredList.add(_subList[i]);
+      }
+    }
+    _filteredListForSearch = _filteredList;
   }
 
+  List importentEmergency = [];
+
   int counter = 0;
-  customInit(FatchDataHelper fatchDataHelper) async {
+  customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    if (dataProvider.importantSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          importentEmergency = dataProvider.importantSubCategoryList;
+          dropdownValue = importentEmergency[0];
+        });
+      });
+    } else {
+      setState(() {
+        importentEmergency = dataProvider.importantSubCategoryList;
+
+        dropdownValue = importentEmergency[0];
+      });
+    }
     if (fatchDataHelper.importentMediadataList.isEmpty) {
       setState(() {
         _isLoading = true;
@@ -108,31 +123,39 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
       await fatchDataHelper.fetchImportentEmergencyData().then((value) {
         setState(() {
           _subList = fatchDataHelper.importentMediadataList;
-          _filteredList = _subList;
-
-          _filterSubCategoryList(dropdownValue);
+          _filteredList.addAll(_subList);
+          _isLoading = false;
+          _filterSubCategoryList(importentEmergency[0]);
           _isLoading = false;
         });
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.importentMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
+
+        _filterSubCategoryList(importentEmergency[0]);
         _isLoading = false;
       });
     }
   }
 
-  getData(FatchDataHelper fatchDataHelper) async {
+  getData(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       _isLoading = true;
+    });
+    await dataProvider.fetchSubCategoryData().then((value) {
+      setState(() {
+        importentEmergency = dataProvider.importantSubCategoryList;
+        dropdownValue = importentEmergency[0];
+      });
     });
     await fatchDataHelper.fetchImportentEmergencyData().then((value) {
       setState(() {
         _subList = fatchDataHelper.importentMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(importentEmergency[0]);
         _isLoading = false;
       });
     });
@@ -147,7 +170,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     final FatchDataHelper fatchDataHelper =
         Provider.of<FatchDataHelper>(context);
     if (counter == 0) {
-      customInit(fatchDataHelper);
+      customInit(fatchDataHelper, dataProvider);
     }
 
     return Container(
@@ -280,7 +303,7 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          getData(fatchDataHelper);
+                          getData(fatchDataHelper, dataProvider);
                         },
                         child: Container(
                           // width: size.width * .1,

@@ -47,7 +47,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   TextEditingController _ddgNews = TextEditingController();
   TextEditingController _statusData = TextEditingController();
 
-  String dropdownValue = "FM Radio Channel";
+  String dropdownValue = "";
   String channelValue = 'Bangladesh Betar';
   List staatus = ['Public', 'Private'];
   String statusValue = "Public";
@@ -69,7 +69,6 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   final _formKey = GlobalKey<FormState>();
 
   List Channels = Variables().getaudioChannelList();
-  List audios = Variables().getAudioMediaList();
 
   int counter = 0;
   List<AudioMediaModel> _subList = [];
@@ -87,52 +86,78 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
   }
 
   _filterSubCategoryList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.subCategory!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
-          .toList();
-      _filteredListForSearch = _filteredList;
-    });
+    _filteredList.clear();
+    for (int i = 0; i < _subList.length; i++) {
+      if (_subList[i].subCategory == searchItem) {
+        _filteredList.add(_subList[i]);
+      }
+    }
+    _filteredListForSearch = _filteredList;
   }
 
-  customInit(FatchDataHelper fatchDataHelper) async {
+  List audios = [];
+  customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    if (dataProvider.audioSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          audios = dataProvider.audioSubCategoryList;
+          dropdownValue = audios[0];
+        });
+      });
+    } else {
+      setState(() {
+        audios = dataProvider.audioSubCategoryList;
+
+        dropdownValue = audios[0];
+      });
+    }
     if (fatchDataHelper.audioMediadataList.isEmpty) {
       setState(() {
         _isLoading = true;
       });
       await fatchDataHelper.fetchAudioData().then((value) {
-        setState(() {
-          _subList = fatchDataHelper.audioMediadataList;
-          _filteredList = _subList;
-          _filterSubCategoryList(dropdownValue);
-          _isLoading = false;
-        });
+        _subList = fatchDataHelper.audioMediadataList;
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(audios[0]);
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.audioMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(audios[0]);
       });
     }
   }
 
-  getData(FatchDataHelper fatchDataHelper) async {
+  getData(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       _isLoading = true;
     });
-    await fatchDataHelper.fetchAudioData().then((value) {
-      setState(() {
-        _subList = fatchDataHelper.audioMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
-        _isLoading = false;
+    if (dataProvider.audioSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          audios = dataProvider.audioSubCategoryList;
+          dropdownValue = audios[0];
+        });
       });
+    } else {
+      setState(() {
+        audios = dataProvider.audioSubCategoryList;
+
+        dropdownValue = audios[0];
+      });
+    }
+    await fatchDataHelper.fetchAudioData().then((value) {
+      _subList = fatchDataHelper.audioMediadataList;
+      _filteredList.addAll(_subList);
+      _isLoading = false;
+      _filterSubCategoryList(audios[0]);
     });
   }
 
@@ -146,7 +171,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
         Provider.of<FatchDataHelper>(context);
 
     if (counter == 0) {
-      customInit(fatchDataHelper);
+      customInit(fatchDataHelper, dataProvider);
     }
 
     return Container(
@@ -283,7 +308,7 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
                       alignment: Alignment.topRight,
                       child: InkWell(
                         onTap: () {
-                          getData(fatchDataHelper);
+                          getData(fatchDataHelper, dataProvider);
                         },
                         child: Container(
                           // width: size.width * .1,

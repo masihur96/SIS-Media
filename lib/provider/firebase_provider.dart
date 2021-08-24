@@ -9,7 +9,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("FilmMediaData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -23,7 +23,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("TelevisionMediaData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -37,7 +37,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("AudioData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -51,7 +51,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("AdminPanel")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -65,7 +65,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("PrintMediaData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -79,7 +79,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("NewMediaData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -93,7 +93,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("ImportentEmergency")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -107,7 +107,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("Banner")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -121,7 +121,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("SingleBanner")
           .doc('123456')
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -135,7 +135,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("ManagementData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -149,7 +149,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("ContactInfo")
           .doc('123456789')
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -163,7 +163,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("SingleBanner")
           .doc('1234567')
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -177,7 +177,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("SingleBanner")
           .doc('12345678')
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -191,7 +191,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("TelevisionMediaChart")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -205,7 +205,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection("RateChartData")
           .doc(map['id'])
           .set(map);
-
+      notifyListeners();
       return true;
     } catch (err) {
       showToast(err.toString());
@@ -220,6 +220,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('RateChartData')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -234,6 +235,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('ManagementData')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -248,6 +250,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('Banner')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -261,6 +264,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('FilmMediaData')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -274,6 +278,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('TelevisionMediaData')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -284,6 +289,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> deleteAudioData(String id, BuildContext context) async {
     try {
       await FirebaseFirestore.instance.collection('AudioData').doc(id).delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -297,6 +303,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('SingleBanner')
           .doc('123456')
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -310,6 +317,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('SingleBanner')
           .doc('1234567')
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -323,6 +331,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('SingleBanner')
           .doc('12345678')
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -336,6 +345,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('RateChartData')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -349,6 +359,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('ManagementData')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -362,6 +373,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('PrintMediaData')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -375,6 +387,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('NewMediaData')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -385,6 +398,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> deleteBannerData(String id, BuildContext context) async {
     try {
       await FirebaseFirestore.instance.collection('Banner').doc(id).delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -395,6 +409,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> deleteTelevisioData(String id, BuildContext context) async {
     try {
       await FirebaseFirestore.instance.collection('Banner').doc(id).delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -408,6 +423,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('UserRequest')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -422,6 +438,7 @@ class FirebaseProvider extends ChangeNotifier {
           .collection('SubmittedInformation')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());

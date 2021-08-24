@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
-
 import 'package:media_directory_admin/model/celebrity_request_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +47,7 @@ class FatchDataHelper extends ChangeNotifier {
   List<CelebrityRequestModel> _celebrityRequestdataList = [];
   get celebrityRequestdataList => _celebrityRequestdataList;
 
-  Future<List<IndexBannerModel>> fetchBannerData() async {
+  Future fetchBannerData() async {
     try {
       await FirebaseFirestore.instance
           .collection('Banner')
@@ -67,13 +66,13 @@ class FatchDataHelper extends ChangeNotifier {
           _indexdataList.add(indexBannerModel);
         });
       });
-      return indexdataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<IndexBannerModel>> fetchEditorsData() async {
+  Future fetchEditorsData() async {
     try {
       await FirebaseFirestore.instance
           .collection('EditorsView')
@@ -92,13 +91,14 @@ class FatchDataHelper extends ChangeNotifier {
           _indexdataList.add(indexBannerModel);
         });
       });
-      return indexdataList;
+
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<FilmMediaModel>> fetchFilmMediaData() async {
+  Future fetchFilmMediaData() async {
     try {
       await FirebaseFirestore.instance
           .collection('FilmMediaData')
@@ -128,10 +128,9 @@ class FatchDataHelper extends ChangeNotifier {
           _filmMediadataList.add(filmMediaModel);
         });
       });
-
-      return filmMediadataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
@@ -142,7 +141,7 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('FilmMediaData')
           .doc(map['id'])
           .update(map);
-
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -158,6 +157,7 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('TelevisionMediaData')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -173,6 +173,8 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('AudioData')
           .doc(map['id'])
           .update(map);
+
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -188,6 +190,7 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('PrintMediaData')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -203,6 +206,7 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('NewMediaData')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -218,6 +222,7 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('ImportentEmergency')
           .doc(map['id'])
           .update(map);
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -232,6 +237,7 @@ class FatchDataHelper extends ChangeNotifier {
           .collection('ImportentEmergency')
           .doc(id)
           .delete();
+      notifyListeners();
       return true;
     } catch (error) {
       showToast(error.toString());
@@ -239,7 +245,7 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  Future<List<TelevisionMediaModel>> fetchTelevisionData() async {
+  Future fetchTelevisionData() async {
     try {
       await FirebaseFirestore.instance
           .collection('TelevisionMediaData')
@@ -286,13 +292,13 @@ class FatchDataHelper extends ChangeNotifier {
           _televisionMediadataList.add(televisionMediaModel);
         });
       });
-      return televisionMediadataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<RateChartModel>> fetchRateChartData() async {
+  Future fetchRateChartData() async {
     try {
       await FirebaseFirestore.instance
           .collection('RateChartData')
@@ -313,13 +319,13 @@ class FatchDataHelper extends ChangeNotifier {
           _rateChartList.add(rateChartModel);
         });
       });
-      return rateChartList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<ManagementDataModel>> fetchManagementData() async {
+  Future fetchManagementData() async {
     try {
       await FirebaseFirestore.instance
           .collection('ManagementData')
@@ -339,13 +345,13 @@ class FatchDataHelper extends ChangeNotifier {
           _managementDataList.add(managementDataModel);
         });
       });
-      return rateChartList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<AudioMediaModel>> fetchAudioData() async {
+  Future fetchAudioData() async {
     try {
       await FirebaseFirestore.instance
           .collection('AudioData')
@@ -386,13 +392,13 @@ class FatchDataHelper extends ChangeNotifier {
           _audioMediadataList.add(audioMediaModel);
         });
       });
-      return audioMediadataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<PrintMediaModel>> fetchPrintData() async {
+  Future fetchPrintData() async {
     try {
       await FirebaseFirestore.instance
           .collection('PrintMediaData')
@@ -424,13 +430,13 @@ class FatchDataHelper extends ChangeNotifier {
           _printMediaDataList.add(printMediaModel);
         });
       });
-      return printMediaDataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<NewMediaModel>> fetchNewData() async {
+  Future fetchNewData() async {
     try {
       await FirebaseFirestore.instance
           .collection('NewMediaData')
@@ -471,13 +477,13 @@ class FatchDataHelper extends ChangeNotifier {
           _newMediadataList.add(newMediaModel);
         });
       });
-      return _newMediadataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<ImportentEmergencyModel>> fetchImportentEmergencyData() async {
+  Future fetchImportentEmergencyData() async {
     try {
       await FirebaseFirestore.instance
           .collection('ImportentEmergency')
@@ -519,13 +525,13 @@ class FatchDataHelper extends ChangeNotifier {
           _importentMediadataList.add(importentEmergencyModel);
         });
       });
-      return importentMediadataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<UserRequestModel>> fetchRequestData() async {
+  Future fetchRequestData() async {
     try {
       await FirebaseFirestore.instance
           .collection('UserRequest')
@@ -548,13 +554,13 @@ class FatchDataHelper extends ChangeNotifier {
           _userRequestdataList.add(userRequestModel);
         });
       });
-      return userRequestdataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 
-  Future<List<CelebrityRequestModel>> fetchCelebrityRequestData() async {
+  Future fetchCelebrityRequestData() async {
     try {
       await FirebaseFirestore.instance
           .collection('SubmittedInformation')
@@ -574,9 +580,9 @@ class FatchDataHelper extends ChangeNotifier {
           _celebrityRequestdataList.add(celebrityRequestModel);
         });
       });
-      return celebrityRequestdataList;
+      notifyListeners();
     } catch (error) {
-      return [];
+      showToast(error.toString());
     }
   }
 }

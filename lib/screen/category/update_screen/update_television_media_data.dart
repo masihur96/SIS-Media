@@ -166,7 +166,6 @@ class _UpdateTelevisionDataState extends State<UpdateTelevisionData> {
   }
 
   String dropdownValue = 'Television Channel';
-  List televisions = Variables().getTelevisionList();
 
   @override
   Widget build(BuildContext context) {

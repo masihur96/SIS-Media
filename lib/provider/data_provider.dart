@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
+import 'package:media_directory_admin/model/category_model.dart';
 import 'package:media_directory_admin/model/management_data_model.dart';
 import 'package:media_directory_admin/model/rate_chart_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
@@ -40,6 +43,8 @@ import 'package:media_directory_admin/screen/editors_view.dart';
 import 'package:media_directory_admin/screen/request_details.dart';
 import 'package:media_directory_admin/screen/set_cover_photo.dart';
 import 'package:media_directory_admin/screen/set_ratechart_banner.dart';
+import 'package:media_directory_admin/screen/sis_home_page.dart';
+import 'package:media_directory_admin/widgets/notificastion.dart';
 import '../screen/category/audio_media_screen.dart';
 import '../screen/category/importent_emergency.dart';
 import '../screen/category/new_media.dart';
@@ -226,9 +231,312 @@ class DataProvider extends ChangeNotifier {
       return CoverBanner();
     else if (subCategory == 'Set Rate Chart Banner')
       return RateChartBanner();
+    else if (subCategory == 'Add Sub-Category')
+      return SisHomePage();
     else if (subCategory == 'DashBoard')
       return DashBoardPage();
     else
       return DashBoardPage();
+  }
+
+  // List _categoryList = [];
+  // get categoryList => _categoryList;
+
+  List<CategoryModel> _subCategorydataList = [];
+  get subCategorydataList => _subCategorydataList;
+
+  //  String? categoryId;
+  String? categoryName;
+
+  // Future fetchCategoryListData() async {
+  //   await Firebase.initializeApp();
+  //   try {
+  //     _categoryList.clear();
+  //     await FirebaseFirestore.instance
+  //         .collection('CategoryList')
+  //         .get()
+  //         .then((snapshot) {
+  //       snapshot.docChanges.forEach((element) {
+  //         _categoryList.add(element.doc['name']);
+
+  //         //  categoryName = element.doc['category'];
+  //       });
+
+  //       //  print(_categoryList);
+  //     });
+
+  //     notifyListeners();
+  //     return categoryList;
+  //   } catch (error) {
+  //     print('err:{$error}');
+  //     return [];
+  //   }
+  // }
+
+  List _filmSubCategoryList = [];
+  get filmSubCategoryList => _filmSubCategoryList;
+
+  List _televisionSubCategoryList = [];
+  get televisionSubCategoryList => _televisionSubCategoryList;
+
+  List _audioSubCategoryList = [];
+  get audioSubCategoryList => _audioSubCategoryList;
+
+  List _printSubCategoryList = [];
+  get printSubCategoryList => _printSubCategoryList;
+
+  List _newSubCategoryList = [];
+  get newSubCategoryList => _newSubCategoryList;
+
+  List _importantSubCategoryList = [];
+  get importantSubCategoryList => _importantSubCategoryList;
+
+  Future fetchSubCategoryData() async {
+    await Firebase.initializeApp();
+    try {
+      _filmSubCategoryList.clear();
+
+      await FirebaseFirestore.instance
+          .collection('SubCategoryList')
+          .orderBy('subCategory')
+          .get()
+          .then((snapshot) {
+        snapshot.docChanges.forEach((element) {
+          if (element.doc['category'] == 'Film Media') {
+            _filmSubCategoryList.add(element.doc['subCategory']);
+          }
+
+          if (element.doc['category'] == 'Television Media') {
+            _televisionSubCategoryList.add(element.doc['subCategory']);
+          }
+
+          if (element.doc['category'] == 'Audio Media') {
+            _audioSubCategoryList.add(element.doc['subCategory']);
+          }
+
+          if (element.doc['category'] == 'Print Media') {
+            _printSubCategoryList.add(element.doc['subCategory']);
+          }
+
+          if (element.doc['category'] == 'New Media') {
+            _newSubCategoryList.add(element.doc['subCategory']);
+          }
+
+          if (element.doc['category'] == 'Important & Emergency') {
+            _importantSubCategoryList.add(element.doc['subCategory']);
+          }
+        });
+      });
+
+      notifyListeners();
+    } catch (error) {
+      print('err:{$error}');
+      return [];
+    }
+  }
+
+  Future fetchSubCategoryListData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('SubCategoryList')
+          .orderBy('subCategory')
+          .get()
+          .then((snapshot) {
+        _subCategorydataList.clear();
+        snapshot.docChanges.forEach((element) {
+          if (element.doc['subCategory'] != 'Rate Chart' &&
+              element.doc['subCategory'] != 'Management Information' &&
+              element.doc['subCategory'] !=
+                  'Management Information (Education Service Company)') {
+            CategoryModel categoryModel = CategoryModel(
+              category: element.doc['category'],
+              id: element.doc['id'],
+              subCategory: element.doc['subCategory'],
+            );
+
+            _subCategorydataList.add(categoryModel);
+          }
+
+          // print(_subCategorydataList.length);
+        });
+      });
+      notifyListeners();
+    } catch (error) {
+      showToast(error.toString());
+    }
+  }
+
+  Future addSubCategoryData(
+    String categoryname,
+    String subCategoryName,
+    String uuid,
+  ) async {
+    print(categoryname);
+    try {
+      await FirebaseFirestore.instance
+          .collection('SubCategoryList')
+          .doc(uuid)
+          .set({
+        'category': categoryname.isEmpty ? 'NULL' : categoryname,
+        'subCategory': subCategoryName,
+        'id': uuid,
+      });
+      notifyListeners();
+      return true;
+    } catch (error) {}
+    return false;
+  }
+
+  Future<void> batchDeleteSub(
+    String categoryForDelete,
+    String selectSub,
+    String id,
+  ) async {
+    print('Batch Category: $categoryForDelete');
+    print('Batch Old Text : $selectSub');
+
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    try {
+      showToast('Deleting...');
+
+      if (categoryForDelete == 'FilmMediaData' ||
+          categoryForDelete == 'TelevisionMediaData' ||
+          categoryForDelete == 'AudioData' ||
+          categoryForDelete == 'PrintMediaData') {
+        await FirebaseFirestore.instance
+            .collection(categoryForDelete)
+            .where('sub-category', isEqualTo: selectSub)
+            .get()
+            .then((snapshot) {
+          snapshot.docChanges.forEach((element) {
+            batch.delete(
+              FirebaseFirestore.instance
+                  .collection(categoryForDelete)
+                  .doc(element.doc.id),
+            );
+          });
+          return batch.commit();
+        }).then((value) async {
+          try {
+            await FirebaseFirestore.instance
+                .collection('SubCategoryList')
+                .doc(id)
+                .delete();
+
+            notifyListeners();
+            return true;
+          } catch (error) {
+            showToast(error.toString());
+            return false;
+          }
+        });
+      } else {
+        await FirebaseFirestore.instance
+            .collection(categoryForDelete)
+            .where('subCategory', isEqualTo: selectSub)
+            .get()
+            .then((snapshot) {
+          snapshot.docChanges.forEach((element) {
+            batch.delete(
+              FirebaseFirestore.instance
+                  .collection(categoryForDelete)
+                  .doc(element.doc.id),
+            );
+          });
+          return batch.commit();
+        }).then((value) async {
+          try {
+            await FirebaseFirestore.instance
+                .collection('SubCategoryList')
+                .doc(id)
+                .delete();
+
+            notifyListeners();
+            return true;
+          } catch (error) {
+            showToast(error.toString());
+            return false;
+          }
+        });
+      }
+
+      showToast('Delete Success');
+    } catch (error) {
+      showToast((error.toString()));
+    }
+  }
+
+  Future<void> batchUpdateSub(Map<String, String> map, String collectionName,
+      String oldSubtext, String newSubText) async {
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    try {
+      print('Updating...');
+
+      if (collectionName == 'FilmMediaData' ||
+          collectionName == 'TelevisionMediaData' ||
+          collectionName == 'AudioData' ||
+          collectionName == 'PrintMediaData') {
+        await FirebaseFirestore.instance
+            .collection(collectionName)
+            .where('sub-category', isEqualTo: oldSubtext)
+            .get()
+            .then((snapshot) {
+          snapshot.docChanges.forEach((element) {
+            batch.update(
+                FirebaseFirestore.instance
+                    .collection(collectionName)
+                    .doc(element.doc.id),
+                {'sub-category': newSubText});
+          });
+          return batch.commit();
+        }).then((value) async {
+          try {
+            await FirebaseFirestore.instance
+                .collection('SubCategoryList')
+                .doc(map['id'])
+                .update(map);
+            notifyListeners();
+            return true;
+          } catch (error) {
+            // showToast(error.toString());
+            return false;
+          }
+        });
+      } else {
+        await FirebaseFirestore.instance
+            .collection(collectionName)
+            .where('subCategory', isEqualTo: oldSubtext)
+            .get()
+            .then((snapshot) {
+          snapshot.docChanges.forEach((element) {
+            batch.update(
+                FirebaseFirestore.instance
+                    .collection(collectionName)
+                    .doc(element.doc.id),
+                {'subCategory': newSubText});
+          });
+          return batch.commit();
+        }).then((value) async {
+          try {
+            await FirebaseFirestore.instance
+                .collection('SubCategoryList')
+                .doc(map['id'])
+                .update(map);
+            notifyListeners();
+            return true;
+          } catch (error) {
+            // showToast(error.toString());
+            return false;
+          }
+        });
+      }
+
+      print('Update Success');
+    } catch (error) {
+      print((error.toString()));
+    }
+
+    notifyListeners();
   }
 }

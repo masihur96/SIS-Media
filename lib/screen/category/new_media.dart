@@ -46,7 +46,7 @@ class _NewMediaState extends State<NewMedia> {
   TextEditingController _hotline = TextEditingController();
   TextEditingController _salesSupport = TextEditingController();
 
-  String dropdownValue = "Digital Audio - Video Content Provider";
+  String dropdownValue = "";
   final _ktabs = <Tab>[
     const Tab(
       text: 'All Data',
@@ -64,7 +64,6 @@ class _NewMediaState extends State<NewMedia> {
   String imageUrl = '';
   var file;
   final _formKey = GlobalKey<FormState>();
-  List newMedia = Variables().getNewMediaList();
 
   List<NewMediaModel> _subList = [];
   List<NewMediaModel> _filteredList = [];
@@ -81,54 +80,71 @@ class _NewMediaState extends State<NewMedia> {
   }
 
   _filterSubCategoryList(String searchItem) {
-    setState(() {
-      _filteredList = _subList
-          .where((element) => (element.subCategory!
-              .toLowerCase()
-              .contains(searchItem.toLowerCase())))
-          .toList();
-      _filteredListForSearch = _filteredList;
-    });
+    _filteredList.clear();
+    for (int i = 0; i < _subList.length; i++) {
+      if (_subList[i].subCategory == searchItem) {
+        _filteredList.add(_subList[i]);
+      }
+    }
+    _filteredListForSearch = _filteredList;
   }
 
+  List newMedia = [];
   int counter = 0;
-  customInit(FatchDataHelper fatchDataHelper) async {
+  customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       counter++;
     });
+
+    if (dataProvider.newSubCategoryList.isEmpty) {
+      await dataProvider.fetchSubCategoryData().then((value) {
+        setState(() {
+          newMedia = dataProvider.newSubCategoryList;
+          dropdownValue = newMedia[0];
+        });
+      });
+    } else {
+      setState(() {
+        newMedia = dataProvider.newSubCategoryList;
+        dropdownValue = newMedia[0];
+      });
+    }
     if (fatchDataHelper.newMediadataList.isEmpty) {
       setState(() {
         _isLoading = true;
       });
       await fatchDataHelper.fetchNewData().then((value) {
-        setState(() {
-          _subList = fatchDataHelper.newMediadataList;
-          _filteredList = _subList;
-          _filterSubCategoryList(dropdownValue);
-          _isLoading = false;
-        });
+        _subList = fatchDataHelper.newMediadataList;
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(newMedia[0]);
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.newMediadataList;
-        _filteredList = _subList;
-
+        _filteredList.addAll(_subList);
+        _isLoading = false;
+        _filterSubCategoryList(newMedia[0]);
         _isLoading = false;
       });
     }
   }
 
-  getData(FatchDataHelper fatchDataHelper) async {
+  getData(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
     setState(() {
       _isLoading = true;
     });
-    await fatchDataHelper.fetchNewData().then((value) {
+    await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
-        _subList = fatchDataHelper.newMediadataList;
-        _filteredList = _subList;
-        _filterSubCategoryList(dropdownValue);
-        _isLoading = false;
+        newMedia = dataProvider.newSubCategoryList;
+        dropdownValue = newMedia[0];
       });
+    });
+    await fatchDataHelper.fetchNewData().then((value) {
+      _subList = fatchDataHelper.newMediadataList;
+      _filteredList.addAll(_subList);
+      _isLoading = false;
+      _filterSubCategoryList(newMedia[0]);
     });
   }
 
@@ -141,7 +157,7 @@ class _NewMediaState extends State<NewMedia> {
     final FatchDataHelper fatchDataHelper =
         Provider.of<FatchDataHelper>(context);
     if (counter == 0) {
-      customInit(fatchDataHelper);
+      customInit(fatchDataHelper, dataProvider);
     }
     return Container(
         width: dataProvider.pageWidth(size),
@@ -266,7 +282,7 @@ class _NewMediaState extends State<NewMedia> {
                     alignment: Alignment.topRight,
                     child: InkWell(
                       onTap: () {
-                        getData(fatchDataHelper);
+                        getData(fatchDataHelper, dataProvider);
                       },
                       child: Container(
                         // width: size.width * .1,
@@ -379,7 +395,7 @@ class _NewMediaState extends State<NewMedia> {
                             fontSize: 12,
                           ),
                         ),
-                          _filteredList[index].phone!.isEmpty
+                  _filteredList[index].phone!.isEmpty
                       ? Container()
                       : Text(
                           'Phone: ${_filteredList[index].phone}',
@@ -395,12 +411,11 @@ class _NewMediaState extends State<NewMedia> {
                             fontSize: 12,
                           ),
                         ),
-                         _filteredList[index].fax!.isEmpty
+                  _filteredList[index].fax!.isEmpty
                       ? Container()
                       : Text('Fax: ${_filteredList[index].fax}',
                           style: TextStyle(fontSize: 12)),
-
-                           _filteredList[index].pabx!.isEmpty
+                  _filteredList[index].pabx!.isEmpty
                       ? Container()
                       : Text(
                           'PABX: ${_filteredList[index].pabx}',
@@ -424,9 +439,6 @@ class _NewMediaState extends State<NewMedia> {
                           style: TextStyle(
                             fontSize: 12,
                           )),
-                 
-                 
-                
                   _filteredList[index].facebook!.isEmpty
                       ? Container()
                       : Text(
