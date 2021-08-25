@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:media_directory_admin/model/audio_media_model.dart';
+import 'package:media_directory_admin/model/celebrity_request_model.dart';
 import 'package:media_directory_admin/model/film_media_model.dart';
 import 'package:media_directory_admin/model/importent_emergency_model.dart';
 import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
-import 'package:media_directory_admin/model/user_request_model.dart';
+
 import 'package:media_directory_admin/provider/data_provider.dart';
 import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
@@ -36,8 +37,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
   List<ImportentEmergencyModel> _importentTotalDataList = [];
   List<ImportentEmergencyModel> _importentPrivateDataList = [];
 
-  List<UserRequestModel> _requestTotalDataList = [];
-  List<UserRequestModel> _requestTodayRequestList = [];
+  List<CelebrityRequestModel> _requestTotalDataList = [];
+  List<CelebrityRequestModel> _requestTodayRequestList = [];
 
   customInit(
     FatchDataHelper fatchDataHelper,
@@ -182,10 +183,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
     DateTime date = DateTime.now();
     String dateData = '${date.day}-${date.month}-${date.year}';
 
-    if (fatchDataHelper.userRequestdataList.isEmpty) {
-      await fatchDataHelper.fetchRequestData().then((value) {
+    if (fatchDataHelper.celebrityRequestdataList.isEmpty) {
+      await fatchDataHelper.fetchCelebrityRequestData().then((value) {
         setState(() {
-          _requestTotalDataList = fatchDataHelper.userRequestdataList;
+          _requestTotalDataList = fatchDataHelper.celebrityRequestdataList;
           for (int i = 0; i < _requestTotalDataList.length; i++) {
             if (_requestTotalDataList[i].request_date == dateData) {
               _requestTodayRequestList.add(_requestTotalDataList[i]);
@@ -197,7 +198,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
       });
     } else {
       setState(() {
-        _requestTotalDataList = fatchDataHelper.userRequestdataList;
+        _requestTotalDataList = fatchDataHelper.celebrityRequestdataList;
         for (int i = 0; i < _requestTotalDataList.length; i++) {
           if (_requestTotalDataList[i].request_date == dateData) {
             _requestTodayRequestList.add(_requestTotalDataList[i]);
@@ -215,9 +216,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
     final FatchDataHelper fatchDataHelper =
         Provider.of<FatchDataHelper>(context);
 
-    // if (counter == 0) {
-    //   customInit(fatchDataHelper);
-    // }
+    if (counter == 0) {
+      customInit(fatchDataHelper);
+    }
 
     return Container(
       width: dataProvider.pageWidth(size),

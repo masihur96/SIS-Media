@@ -199,6 +199,9 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                         ? Container(
                             child: Column(
                             children: [
+                              SizedBox(
+                                height: size.height * .4,
+                              ),
                               fadingCircle,
                             ],
                           ))

@@ -10,7 +10,6 @@ import 'package:media_directory_admin/model/new_media_model.dart';
 import 'package:media_directory_admin/model/print_media_model.dart';
 import 'package:media_directory_admin/model/rate_chart_model.dart';
 import 'package:media_directory_admin/model/television_media_model.dart';
-import 'package:media_directory_admin/model/user_request_model.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 
 class FatchDataHelper extends ChangeNotifier {
@@ -41,8 +40,6 @@ class FatchDataHelper extends ChangeNotifier {
   List<IndexBannerModel> _indexdataList = [];
   get indexdataList => _indexdataList;
 
-  List<UserRequestModel> _userRequestdataList = [];
-  get userRequestdataList => _userRequestdataList;
 
   List<CelebrityRequestModel> _celebrityRequestdataList = [];
   get celebrityRequestdataList => _celebrityRequestdataList;
@@ -531,34 +528,7 @@ class FatchDataHelper extends ChangeNotifier {
     }
   }
 
-  Future fetchRequestData() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('UserRequest')
-          .orderBy('name')
-          .get()
-          .then((snapshot) {
-        _userRequestdataList.clear();
-        snapshot.docChanges.forEach((element) {
-          UserRequestModel userRequestModel = UserRequestModel(
-              name: element.doc['name'],
-              id: element.doc['id'],
-              category: element.doc['category'],
-              request_date: element.doc['request_date'],
-              sub_category: element.doc['sub_category'],
-              user_address: element.doc['user_address'],
-              user_email: element.doc['user_email'],
-              user_name: element.doc['user_name'],
-              user_phone: element.doc['user_phone']);
 
-          _userRequestdataList.add(userRequestModel);
-        });
-      });
-      notifyListeners();
-    } catch (error) {
-      showToast(error.toString());
-    }
-  }
 
   Future fetchCelebrityRequestData() async {
     try {

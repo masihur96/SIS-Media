@@ -5,7 +5,6 @@ class Variables {
     final List<Entry> data = <Entry>[
       Entry('DashBoard', Icons.dashboard, <Entry>[
         Entry('DashBoard'),
-        Entry('Client Request'),
         Entry('User Request'),
       ]),
       Entry('All Category', Icons.category_outlined, <Entry>[

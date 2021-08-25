@@ -40,7 +40,6 @@ import 'package:media_directory_admin/screen/celebrity_request.dart';
 import 'package:media_directory_admin/screen/contact_info.dart';
 import 'package:media_directory_admin/screen/dash_board.dart';
 import 'package:media_directory_admin/screen/editors_view.dart';
-import 'package:media_directory_admin/screen/request_details.dart';
 import 'package:media_directory_admin/screen/set_cover_photo.dart';
 import 'package:media_directory_admin/screen/set_ratechart_banner.dart';
 import 'package:media_directory_admin/screen/sub_category_update.dart';
@@ -218,8 +217,6 @@ class DataProvider extends ChangeNotifier {
     else if (subCategory == 'Important Management Screen')
       return ImportantManagementAllData();
     else if (subCategory == 'User Request')
-      return RequestPage();
-    else if (subCategory == 'Client Request')
       return CelebrityRequest();
     else if (subCategory == 'Change Password')
       return ChangePassword();

@@ -190,7 +190,6 @@ class _CelebrityRequestState extends State<CelebrityRequest> {
                   ))
                 : Expanded(
                     child: SizedBox(
-                      height: 500.0,
                       child: new ListView.builder(
                         scrollDirection: Axis.vertical,
                         itemCount: _filteredList.length,
@@ -227,14 +226,14 @@ class _CelebrityRequestState extends State<CelebrityRequest> {
                 children: [
                   _filteredList[index].category!.isEmpty
                       ? Container()
-                      : Text(
+                      : SelectableText(
                           'Category: ${_filteredList[index].category}',
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                   _filteredList[index].sub_category!.isEmpty
                       ? Container()
-                      : Text(
+                      : SelectableText(
                           'Sub-Category: ${_filteredList[index].sub_category}',
                           style: TextStyle(
                             fontSize: 12,
@@ -248,7 +247,7 @@ class _CelebrityRequestState extends State<CelebrityRequest> {
                           )),
                   _filteredList[index].request_date!.isEmpty
                       ? Container()
-                      : Text(
+                      : SelectableText(
                           'Request Date: ${_filteredList[index].request_date}',
                           style: TextStyle(fontSize: 12),
                         ),
