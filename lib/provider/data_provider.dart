@@ -43,7 +43,7 @@ import 'package:media_directory_admin/screen/editors_view.dart';
 import 'package:media_directory_admin/screen/request_details.dart';
 import 'package:media_directory_admin/screen/set_cover_photo.dart';
 import 'package:media_directory_admin/screen/set_ratechart_banner.dart';
-import 'package:media_directory_admin/screen/sis_home_page.dart';
+import 'package:media_directory_admin/screen/sub_category_update.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import '../screen/category/audio_media_screen.dart';
 import '../screen/category/importent_emergency.dart';
@@ -231,47 +231,18 @@ class DataProvider extends ChangeNotifier {
       return CoverBanner();
     else if (subCategory == 'Set Rate Chart Banner')
       return RateChartBanner();
-    else if (subCategory == 'Add Sub-Category')
-      return SisHomePage();
+    else if (subCategory == 'Update Subcategory')
+      return SubCategoryPage();
     else if (subCategory == 'DashBoard')
       return DashBoardPage();
     else
       return DashBoardPage();
   }
 
-  // List _categoryList = [];
-  // get categoryList => _categoryList;
-
   List<CategoryModel> _subCategorydataList = [];
   get subCategorydataList => _subCategorydataList;
 
-  //  String? categoryId;
   String? categoryName;
-
-  // Future fetchCategoryListData() async {
-  //   await Firebase.initializeApp();
-  //   try {
-  //     _categoryList.clear();
-  //     await FirebaseFirestore.instance
-  //         .collection('CategoryList')
-  //         .get()
-  //         .then((snapshot) {
-  //       snapshot.docChanges.forEach((element) {
-  //         _categoryList.add(element.doc['name']);
-
-  //         //  categoryName = element.doc['category'];
-  //       });
-
-  //       //  print(_categoryList);
-  //     });
-
-  //     notifyListeners();
-  //     return categoryList;
-  //   } catch (error) {
-  //     print('err:{$error}');
-  //     return [];
-  //   }
-  // }
 
   List _filmSubCategoryList = [];
   get filmSubCategoryList => _filmSubCategoryList;
@@ -295,6 +266,11 @@ class DataProvider extends ChangeNotifier {
     await Firebase.initializeApp();
     try {
       _filmSubCategoryList.clear();
+      _televisionSubCategoryList.clear();
+      _audioSubCategoryList.clear();
+      _printSubCategoryList.clear();
+      _newSubCategoryList.clear();
+      _importantSubCategoryList.clear();
 
       await FirebaseFirestore.instance
           .collection('SubCategoryList')
@@ -344,20 +320,13 @@ class DataProvider extends ChangeNotifier {
           .then((snapshot) {
         _subCategorydataList.clear();
         snapshot.docChanges.forEach((element) {
-          if (element.doc['subCategory'] != 'Rate Chart' &&
-              element.doc['subCategory'] != 'Management Information' &&
-              element.doc['subCategory'] !=
-                  'Management Information (Education Service Company)') {
-            CategoryModel categoryModel = CategoryModel(
-              category: element.doc['category'],
-              id: element.doc['id'],
-              subCategory: element.doc['subCategory'],
-            );
+          CategoryModel categoryModel = CategoryModel(
+            category: element.doc['category'],
+            id: element.doc['id'],
+            subCategory: element.doc['subCategory'],
+          );
 
-            _subCategorydataList.add(categoryModel);
-          }
-
-          // print(_subCategorydataList.length);
+          _subCategorydataList.add(categoryModel);
         });
       });
       notifyListeners();
@@ -392,8 +361,9 @@ class DataProvider extends ChangeNotifier {
     String selectSub,
     String id,
   ) async {
-    print('Batch Category: $categoryForDelete');
-    print('Batch Old Text : $selectSub');
+    // print('Batch Category: $categoryForDelete');
+    // print('Batch Old Text : $selectSub');
+    // print('Batch Old Text : $id');
 
     WriteBatch batch = FirebaseFirestore.instance.batch();
     try {
@@ -469,7 +439,10 @@ class DataProvider extends ChangeNotifier {
   Future<void> batchUpdateSub(Map<String, String> map, String collectionName,
       String oldSubtext, String newSubText) async {
     WriteBatch batch = FirebaseFirestore.instance.batch();
-
+    print('Batch Category: $collectionName');
+    print('Batch Old Text : $oldSubtext');
+    print('Batch New Text : $newSubText');
+    print('Batch Map : $map');
     try {
       print('Updating...');
 

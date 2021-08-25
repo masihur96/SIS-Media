@@ -95,6 +95,9 @@ class _NewMediaState extends State<NewMedia> {
     setState(() {
       counter++;
     });
+    setState(() {
+      _isLoading = true;
+    });
 
     if (dataProvider.newSubCategoryList.isEmpty) {
       await dataProvider.fetchSubCategoryData().then((value) {
@@ -116,14 +119,15 @@ class _NewMediaState extends State<NewMedia> {
       await fatchDataHelper.fetchNewData().then((value) {
         _subList = fatchDataHelper.newMediadataList;
         _filteredList.addAll(_subList);
-        _isLoading = false;
+
         _filterSubCategoryList(newMedia[0]);
+        _isLoading = false;
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.newMediadataList;
         _filteredList.addAll(_subList);
-        _isLoading = false;
+
         _filterSubCategoryList(newMedia[0]);
         _isLoading = false;
       });
@@ -134,17 +138,20 @@ class _NewMediaState extends State<NewMedia> {
     setState(() {
       _isLoading = true;
     });
+
     await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
         newMedia = dataProvider.newSubCategoryList;
         dropdownValue = newMedia[0];
       });
     });
+
     await fatchDataHelper.fetchNewData().then((value) {
       _subList = fatchDataHelper.newMediadataList;
       _filteredList.addAll(_subList);
-      _isLoading = false;
+
       _filterSubCategoryList(newMedia[0]);
+      _isLoading = false;
     });
   }
 
@@ -282,6 +289,7 @@ class _NewMediaState extends State<NewMedia> {
                     alignment: Alignment.topRight,
                     child: InkWell(
                       onTap: () {
+                        //customInit(fatchDataHelper, dataProvider);
                         getData(fatchDataHelper, dataProvider);
                       },
                       child: Container(

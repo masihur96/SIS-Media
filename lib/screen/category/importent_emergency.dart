@@ -9,7 +9,6 @@ import 'package:media_directory_admin/provider/fatch_data_helper.dart';
 import 'package:media_directory_admin/provider/firebase_provider.dart';
 import 'package:media_directory_admin/screen/category/managment/important_managment_alldata.dart';
 import 'package:media_directory_admin/screen/category/managment/importent_management_insertData.dart';
-import 'package:media_directory_admin/variables/static_variables.dart';
 import 'package:media_directory_admin/widgets/notificastion.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -58,8 +57,6 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   String imageUrl = '';
   var file;
 
-  String dropdownValue = "";
-
   final _ktabs = <Tab>[
     const Tab(
       text: 'All Data',
@@ -95,6 +92,8 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
   }
 
   List importentEmergency = [];
+
+  String dropdownValue = 'Bangladesh : At A Glance';
 
   int counter = 0;
   customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
@@ -144,20 +143,20 @@ class _ImportentEmergencyState extends State<ImportentEmergency> {
     setState(() {
       _isLoading = true;
     });
+
     await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
         importentEmergency = dataProvider.importantSubCategoryList;
-        dropdownValue = importentEmergency[0];
+        dropdownValue = dataProvider.importantSubCategoryList[0];
       });
     });
+
     await fatchDataHelper.fetchImportentEmergencyData().then((value) {
-      setState(() {
-        _subList = fatchDataHelper.importentMediadataList;
-        _filteredList.addAll(_subList);
-        _isLoading = false;
-        _filterSubCategoryList(importentEmergency[0]);
-        _isLoading = false;
-      });
+      _subList = fatchDataHelper.importentMediadataList;
+      _filteredList.addAll(_subList);
+
+      _filterSubCategoryList(dataProvider.importantSubCategoryList[0]);
+      _isLoading = false;
     });
   }
 

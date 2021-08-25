@@ -107,15 +107,17 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       await fatchDataHelper.fetchFilmMediaData().then((value) {
         _subList = fatchDataHelper.filmMediadataList;
         _filteredList.addAll(_subList);
-        _isLoading = false;
+
         _filterSubCategoryList(films[0]);
+        _isLoading = false;
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.filmMediadataList;
         _filteredList.addAll(_subList);
-        _isLoading = false;
+
         _filterSubCategoryList(films[0]);
+        _isLoading = false;
       });
     }
   }
@@ -125,25 +127,19 @@ class _FilmMediaScreenState extends State<FilmMediaScreen> {
       _isLoading = true;
     });
 
-    if (dataProvider.filmSubCategoryList.isEmpty) {
-      await dataProvider.fetchSubCategoryData().then((value) {
-        setState(() {
-          films = dataProvider.filmSubCategoryList;
-          dropdownValue = films[0];
-        });
-      });
-    } else {
+    await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
         films = dataProvider.filmSubCategoryList;
         dropdownValue = films[0];
       });
-    }
+    });
 
     await fatchDataHelper.fetchFilmMediaData().then((value) {
       _subList = fatchDataHelper.filmMediadataList;
       _filteredList.addAll(_subList);
-      _isLoading = false;
+
       _filterSubCategoryList(films[0]);
+      _isLoading = false;
     });
   }
 

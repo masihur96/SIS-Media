@@ -139,20 +139,14 @@ class _AudioMediaScreenState extends State<AudioMediaScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (dataProvider.audioSubCategoryList.isEmpty) {
-      await dataProvider.fetchSubCategoryData().then((value) {
-        setState(() {
-          audios = dataProvider.audioSubCategoryList;
-          dropdownValue = audios[0];
-        });
-      });
-    } else {
+
+    await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
         audios = dataProvider.audioSubCategoryList;
-
         dropdownValue = audios[0];
       });
-    }
+    });
+
     await fatchDataHelper.fetchAudioData().then((value) {
       _subList = fatchDataHelper.audioMediadataList;
       _filteredList.addAll(_subList);

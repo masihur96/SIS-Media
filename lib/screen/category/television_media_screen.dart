@@ -68,7 +68,6 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
   String statusValue = "Public";
 
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = '';
 
   List channels = Variables().getTVChannelList();
   String channelValue = 'Bangladesh Television';
@@ -102,6 +101,7 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     _filteredListForSearch = _filteredList;
   }
 
+  String dropdownValue = '';
   List televisions = [];
   int counter = 0;
   customInit(FatchDataHelper fatchDataHelper, DataProvider dataProvider) async {
@@ -113,13 +113,13 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
       await dataProvider.fetchSubCategoryData().then((value) {
         setState(() {
           televisions = dataProvider.televisionSubCategoryList;
-          dropdownValue = televisions[0];
+          dropdownValue = dataProvider.televisionSubCategoryList[0];
         });
       });
     } else {
       setState(() {
         televisions = dataProvider.televisionSubCategoryList;
-        dropdownValue = televisions[0];
+        dropdownValue = dataProvider.televisionSubCategoryList[0];
       });
     }
 
@@ -131,16 +131,18 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
         setState(() {
           _subList = fatchDataHelper.televisionMediadataList;
           _filteredList.addAll(_subList);
+
+          _filterSubCategoryList(dataProvider.televisionSubCategoryList[0]);
           _isLoading = false;
-          _filterSubCategoryList(televisions[0]);
         });
       });
     } else {
       setState(() {
         _subList = fatchDataHelper.televisionMediadataList;
         _filteredList.addAll(_subList);
+
+        _filterSubCategoryList(dataProvider.televisionSubCategoryList[0]);
         _isLoading = false;
-        _filterSubCategoryList(televisions[0]);
       });
     }
   }
@@ -149,26 +151,21 @@ class _TelevisionMediaScreenState extends State<TelevisionMediaScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (dataProvider.televisionSubCategoryList.isEmpty) {
-      await dataProvider.fetchSubCategoryData().then((value) {
-        setState(() {
-          televisions = dataProvider.televisionSubCategoryList;
-          dropdownValue = televisions[0];
-        });
-      });
-    } else {
+
+    await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
         televisions = dataProvider.televisionSubCategoryList;
-        dropdownValue = televisions[0];
+        dropdownValue = dataProvider.televisionSubCategoryList[0];
       });
-    }
+    });
 
     await fatchDataHelper.fetchTelevisionData().then((value) {
       setState(() {
         _subList = fatchDataHelper.televisionMediadataList;
         _filteredList.addAll(_subList);
+
+        _filterSubCategoryList(dataProvider.televisionSubCategoryList[0]);
         _isLoading = false;
-        _filterSubCategoryList(televisions[0]);
       });
     });
   }

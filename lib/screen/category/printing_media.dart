@@ -131,20 +131,14 @@ class _PrintingMediaState extends State<PrintingMedia> {
     setState(() {
       _isLoading = true;
     });
-    if (dataProvider.printSubCategoryList.isEmpty) {
-      await dataProvider.fetchSubCategoryData().then((value) {
-        setState(() {
-          prints = dataProvider.printSubCategoryList;
-          dropdownValue = prints[0];
-        });
-      });
-    } else {
+
+    await dataProvider.fetchSubCategoryData().then((value) {
       setState(() {
         prints = dataProvider.printSubCategoryList;
-
         dropdownValue = prints[0];
       });
-    }
+    });
+
     await fatchDataHelper.fetchPrintData().then((value) {
       _subList = fatchDataHelper.printMediaDataList;
       _filteredList.addAll(_subList);

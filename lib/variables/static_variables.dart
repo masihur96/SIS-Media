@@ -26,10 +26,10 @@ class Variables {
         Entry('Set Cover Photo'),
         Entry('Set Rate Chart Banner'),
       ]),
-      Entry('Add Sub-Category', Icons.collections, <Entry>[
-        Entry('Add Sub-Category'),
+      Entry('Subcategory', Icons.collections, <Entry>[
+        Entry('Update Subcategory'),
       ]),
-      Entry('Settings', Icons.settings_applications_outlined, <Entry>[
+      Entry('Settings', Icons.settings, <Entry>[
         Entry('Change Password'),
       ]),
       Entry('About Us', Icons.info_outlined, <Entry>[
