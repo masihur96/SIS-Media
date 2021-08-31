@@ -179,8 +179,10 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                         IconButton(
                           onPressed: () {
                             _textFieldController.clear();
+
                             setState(() {
                               addOrEdit = 'add';
+                              oldText = '';
                             });
 
                             _displayTextInputDialog(
