@@ -345,8 +345,6 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                                                                 _filteredList[index].id!);
                                                                             setState(() =>
                                                                                 _isLoading = false);
-
-                                                                            showToast('Data deleted successful');
                                                                           } else {
                                                                             setState(() =>
                                                                                 _isLoading = false);
@@ -455,6 +453,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
                                       .addSubCategoryData(dropdownValue,
                                           _textFieldController.text, uuid)
                                       .then((value) {
+                                    getData(dataProvider);
                                     Navigator.pop(context);
                                     _isLoading = false;
                                     _textFieldController.clear();
